@@ -54,7 +54,56 @@ class ChainWorker(multiprocessing.Process):
 class ChainPool:
     """Multiprocess worker pool to run video processing chains"""
 
-    def __init__(self, workers=os.cpu_count()):
+    def __init__(self, chain, workers=os.cpu_count()):
+        self.iq = queue.Queue()
+        self.oq = queue.Queue()
+
+        self.workers = [ChainWorker(iq, oq, chain) for x in range(workers)]
+
+    def map(self, frames):
+        """Take an iterable of Numpy frames, run them concurrently through the
+        video processing chain, and return the processed frames in order."""
+        itr = iter(frames)
+
+        pushed = 0
+        next_return = 0
+        returned = 0
+
+        res_accum = {}
+
+        while True:
+            if (returned - pushed) < 2*len(self.workers):
+                try:
+                    f = frames.next()
+                except StopIteration:
+                    break
+                self.iq.put((pushed, f.shape, f))
+                pushed += 1
+            try:
+                fn,rf = self.oq.get(timeout=0.5)
+                res_accum[fn] = rf
+                returned += 1
+            except queue.Empty:
+                continue
+
+            if next_return in res_accum:
+                yield res_accum[next_return]
+                del res_accum[next_return]
+                next_return += 1
+
+        while returned < pushed:
+            fn,rf = self.oq.get()
+            res_accum[fn] = rf
+            returned += 1
+            if next_return in res_accum:
+                yield res_accum[next_return]
+                del res_accum[next_return]
+                next_return += 1
+
+        while next_return < pushed:
+            yield res_accum[next_return]
+            del res_accum[next_return]
+            next_return += 1
 
 # Parse common arguments
 parser = argparse.ArgumentParser("testsize",
@@ -91,3 +140,4 @@ if len(pass_chain) == 0 and not base_args.allow_nop:
     exit(0)
 
 # Start decoding the input file
+pool = ChainPool(pass_chain, base_args.threads)
