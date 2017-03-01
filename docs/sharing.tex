@@ -12,6 +12,15 @@
 \section{Overview}
 
 \section{Sharing flow between UI and backend}
+To initiate a share operation, the UI implementation will call into the backend
+code, which will prepare the data for transmission, launch a background thread
+to handle incoming clients, and generate a QR code, which will be passed back to
+the UI thread as a \texttt{Drawable}.
+
+Once the background process has launched, notifications of errors or successful
+transmission will be sent to the UI thread via a passed handler object, if one
+was given.
+
 \begin{figure}[h]\centering
     \caption{UI/Backend Sharing Process}
     \begin{tikzpicture}
@@ -105,6 +114,16 @@
 \end{figure}
 
 \section{QR Code format}
+The QR Code used for encryption key and wireless credential transmission is a
+Version 6 at ECC level Q. This code can store 74 bytes of binary data, of which
+the first 16 are the host's randomly-generated SSID, the next 32 are a 256-bit
+AES key used to secure data during transmission, and the remainder is a
+variable-length field (padded with null bytes after the data ends) containing the
+random network password.
+
+Rather than include an internal checksum, the format relies on the checksum and
+error correction of the containing QR code to ensure that data is transmitted
+correctly.
 
 \section{Network protocol}
 
