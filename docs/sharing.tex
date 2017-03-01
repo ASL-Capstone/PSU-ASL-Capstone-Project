@@ -12,10 +12,11 @@
 \section{Overview}
 
 \section{Sharing flow between UI and backend}
-\begin{figure}
+\begin{figure}[h]\centering
+    \caption{UI/Backend Sharing Process}
     \begin{tikzpicture}
         \draw (0,0) -- (16,0);
-        \draw[loosely dotted] (8,2em) -- (8,-20em);
+        \draw[loosely dotted] (8,2em) -- (8,-16em);
         \draw (4,1em) node {Backend}
               (12,1em) node {Frontend};
         \node (Bsharing)    at (4,-2em)  [draw,minimum height=2em,minimum width=10em] {Sharing};
@@ -50,7 +51,58 @@
     \end{tikzpicture}
 \end{figure}
 
-\section{Sharing flow between server and client devices}
+\pagebreak\section{Sharing flow between server and client devices}
+\begin{figure}[h]\centering
+    \caption{Inter-Device Sharing Process}
+    \begin{tikzpicture}
+        \draw (0,0) -- (16,0);
+        \draw[loosely dotted] (8,2em) -- (8,-30em);
+        \draw (4,1em) node {Sender} (12,1em) node {Receiver};
+
+        \node (Sopenwifi)   at (4,-2em)  [draw,minimum height=2em,minimum width=12em] {Open ad-hoc WiFi};
+        \node (Slisten)     at (4,-5em)  [draw,minimum height=2em,minimum width=12em] {Listen for connections};
+        \node (Saccept)     at (4,-8em)  [draw,minimum height=2em,minimum width=12em] {Accept connection};
+        \node (Schallenge)  at (4,-11em) [draw,minimum height=2em,minimum width=12em] {Generate challenge};
+        \node (Scheck)      at (4,-14em) [draw,minimum height=2em,minimum width=12em] {Check response};
+        \node (Ssend)       at (4,-17em) [draw,minimum height=2em,minimum width=12em] {Send deck content};
+        \node (Sverify)     at (4,-20em) [draw,minimum height=2em,minimum width=12em] {Verify checksums};
+        \node (Sclose)      at (4,-23em) [draw,minimum height=2em,minimum width=12em] {Close connection};
+        \node (Sterm)       at (4,-26em) [draw,minimum height=2em,minimum width=12em] {Terminate listener};
+
+        \node (Rreadqr)     at (12,-2em)  [draw,minimum height=2em,minimum width=12em] {Read QR code};
+        \node (Rwifi)       at (12,-5em)  [draw,minimum height=2em,minimum width=12em] {Connect to WiFi network};
+        \node (Rconnect)    at (12,-8em)  [draw,minimum height=2em,minimum width=12em] {Connect to sender};
+        \node (Rreadchal)   at (12,-11em) [draw,minimum height=2em,minimum width=12em] {Read challenge};
+        \node (Rrespond)    at (12,-14em) [draw,minimum height=2em,minimum width=12em] {Generate response};
+        \node (Rread)       at (12,-17em) [draw,minimum height=2em,minimum width=12em] {Read content};
+        \node (Rgenhash)    at (12,-20em) [draw,minimum height=2em,minimum width=12em] {Generate checksums};
+        \node (Rclose)      at (12,-23em) [draw,minimum height=2em,minimum width=12em] {Close connection};
+        \node (Rimport)     at (12,-26em) [draw,minimum height=2em,minimum width=12em] {Import deck};
+
+        % Vertical sequence arrows
+        \foreach \x in {Rreadqr,Rwifi,Rconnect,Rreadchal,Rrespond,Rread,Rgenhash,Rclose}
+            \draw[->] (\x) ++(0,-1em) -- ++(0,-1em);
+        \foreach \x in {Sopenwifi,Slisten,Saccept,Schallenge,Scheck,Ssend,Sverify,Sclose}
+            \draw[->] (\x) ++(0,-1em) -- ++(0,-1em);
+
+        % Cross-process arrows
+        \draw[->] (Rconnect) ++ (-6em,0) -- ++(-7.36em,0) node[pos=0.5,above]{};
+        \draw[->] (Schallenge) ++ (6em,0) -- ++(7.36em,0) node[pos=0.5,above]{Challenge};
+        \draw[->] (Rrespond) ++ (-6em,0) -- ++(-7.36em,0) node[pos=0.5,above]{Response};
+        \draw[->] (Ssend) ++ (6em,0) -- ++(7.36em,0) node[pos=0.5,above]{Encoded deck};
+        \draw[->] (Rgenhash) ++ (-6em,-0.6em) -- ++(-7.36em,0) node[pos=0.5,below]{Checksum};
+        \draw[->] (Sverify) ++ (6em,0.6em) -- ++(7.36em,0) node[pos=0.5,above]{Confirm valid};
+        \draw[<->] (Rclose) ++ (-6em,0) -- ++(-7.36em,0);
+
+        % Draw dotted box around per-client server thread
+        \draw[dashed] (Saccept)++(-6.5em,1.5em) -- ++(13em,0)
+                                                -- ++(0,-18em)
+                                                -- ++(-13em,0)
+                                                -- cycle
+                                                node[pos=0.5,above,rotate=90]
+                                                {Per-client thread};
+    \end{tikzpicture}
+\end{figure}
 
 \section{QR Code format}
 
