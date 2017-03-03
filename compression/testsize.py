@@ -4,6 +4,8 @@ import multiprocessing
 import queue
 import sys
 import os
+import tempfile
+from skvideo import io as vidio
 
 import numpy as np
 
@@ -33,16 +35,13 @@ class ChainWorker(multiprocessing.Process):
         while not self.term_evt.is_set():
             # Read a frame
             try:
-                frame_num, shape, arr = self.in_q.get(timeout=2)
+                frame_num, shape, arr = self.in_q.get(timeout=0.5)
             except queue.Empty:
                 continue
-            with arr.get_lock():
-                frame = np.frombuffer(arr.get_obj())
-                frame.reshape(shape)
-                
-                # Actually run the processing chain
-                for c in chain:
-                    c.process(frame)
+            
+            # Actually run the processing chain
+            for c in chain:
+                c.process(frame)
 
             # Write the result back to the output queue
             self.out_q.put((frame_num, arr))
@@ -55,10 +54,12 @@ class ChainPool:
     """Multiprocess worker pool to run video processing chains"""
 
     def __init__(self, chain, workers=os.cpu_count()):
-        self.iq = queue.Queue()
-        self.oq = queue.Queue()
+        self.iq = multiprocessing.Queue()
+        self.oq = multiprocessing.Queue()
 
-        self.workers = [ChainWorker(iq, oq, chain) for x in range(workers)]
+        self.workers = [ChainWorker(self.iq, self.oq, chain) for x in range(workers)]
+        for i in self.workers:
+            i.start()
 
     def map(self, frames):
         """Take an iterable of Numpy frames, run them concurrently through the
@@ -74,7 +75,7 @@ class ChainPool:
         while True:
             if (returned - pushed) < 2*len(self.workers):
                 try:
-                    f = frames.next()
+                    f = next(frames)
                 except StopIteration:
                     break
                 self.iq.put((pushed, f.shape, f))
@@ -105,6 +106,10 @@ class ChainPool:
             del res_accum[next_return]
             next_return += 1
 
+    def stop(self):
+        for w in self.workers:
+            w.stop()
+
 # Parse common arguments
 parser = argparse.ArgumentParser("testsize",
         description="Test specific video compression pipeline")
@@ -116,9 +121,13 @@ parser.add_argument("-p", "--perf", action="store_true",
         help="Collect and print performance metrics")
 parser.add_argument("-n", "--allow-nop", action="store_true",
         help="Allow execution of zero-length pass chains")
-parser.add_argument("input", type=argparse.FileType('rb'),
+parser.add_argument("input", type=str,
         help="The video file to use as input")
 base_args, remain = parser.parse_known_args()
+
+if not os.path.exists(base_args.input):
+    print("Error: Cannot open file '{}'".format(base_args.input))
+    sys.exit(1)
 
 # Parse pass chain
 pass_chain = []
@@ -139,5 +148,31 @@ if len(pass_chain) == 0 and not base_args.allow_nop:
     print("No passes specified. Terminating.")
     exit(0)
 
-# Start decoding the input file
+# Start processing the input file
 pool = ChainPool(pass_chain, base_args.threads)
+video = vidio.vreader(base_args.input)
+print("Processing video...")
+out_frames = list(pool.map(video))
+print("Done. Waiting for worker processes...")
+pool.stop()
+print("Filter chain complete")
+
+# Run size analysis on the results. This re-encodes the input to eliminate the
+# input file's encoding parameters as a source of error.
+
+def get_size(vid):
+    with tempfile.NamedTemporaryFile(suffix='.mkv') as f:
+        wr = vidio.FFmpegWriter(f.name, outputdict={
+            '-vcodec': 'libx264',
+            '-crf': '10'})
+        for frame in vid:
+            wr.writeFrame(frame)
+        return os.stat(f.name).st_size
+print("Analyzing original video...")
+orig_size = get_size(vidio.vreader(base_args.input))
+print("Analyzing filtered video...")
+result_size = get_size(out_frames)
+print("----------------------")
+print("Initial size:   {} bytes".format(orig_size))
+print("Final size:     {} bytes".format(result_size))
+print("Size reduction: {:.02}%".format((result_size-orig_size)/orig_size))

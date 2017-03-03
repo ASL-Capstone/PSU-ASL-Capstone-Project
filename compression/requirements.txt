@@ -3,4 +3,4 @@ scipy
 Pillow
 opencv-python
 ipython
-scikit-video
+sk-video
