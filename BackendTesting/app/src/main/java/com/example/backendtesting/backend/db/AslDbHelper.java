@@ -1,11 +1,10 @@
-package com.example.backendtesting;
+package com.example.backendtesting.backend.db;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
-import android.provider.ContactsContract;
 
-import com.example.backendtesting.AslDbContract.*;
+import com.example.backendtesting.backend.db.AslDbContract.*;
 
 
 public class AslDbHelper extends SQLiteOpenHelper {
@@ -51,7 +50,7 @@ public class AslDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_RELATION_TABLE);
     }
 
-    public void drop_tables(SQLiteDatabase db){
+    public void dropTables(SQLiteDatabase db){
         db.execSQL(SQL_DROP_CARD);
         db.execSQL(SQL_DROP_DECK);
         db.execSQL(SQL_DROP_RELATION);

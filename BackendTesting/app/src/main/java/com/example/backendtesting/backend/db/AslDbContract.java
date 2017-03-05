@@ -1,4 +1,4 @@
-package com.example.backendtesting;
+package com.example.backendtesting.backend.db;
 
 
 import android.provider.BaseColumns;

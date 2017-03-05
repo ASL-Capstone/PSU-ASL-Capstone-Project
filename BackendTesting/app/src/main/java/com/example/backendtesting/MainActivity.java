@@ -5,7 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import com.example.backendtesting.AslDbContract.*;
+import com.example.backendtesting.backend.db.AslDbContract.*;
+import com.example.backendtesting.backend.db.AslDbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
