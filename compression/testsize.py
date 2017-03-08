@@ -30,7 +30,7 @@ class ChainWorker(multiprocessing.Process):
         self.term_evt = multiprocessing.Event()
 
     def run(self):
-        chain = [p(ns) for p, ns in self.chain]
+        chain = [p(ns, meta) for p, ns, meta in self.chain]
 
         while not self.term_evt.is_set():
             # Read a frame
@@ -53,11 +53,15 @@ class ChainWorker(multiprocessing.Process):
 class ChainPool:
     """Multiprocess worker pool to run video processing chains"""
 
-    def __init__(self, chain, workers=os.cpu_count()):
+    def __init__(self, chain, frames, num_workers=os.cpu_count()):
         self.iq = multiprocessing.Queue()
         self.oq = multiprocessing.Queue()
+        
+        subchain = [(p, ns, p.prepare(ns, np.asarray(frames))) for p, ns in chain]
 
-        self.workers = [ChainWorker(self.iq, self.oq, chain) for x in range(workers)]
+        self.workers = []
+        for i in range(num_workers):
+            self.workers.append(ChainWorker(self.iq, self.oq, subchain))
         for i in self.workers:
             i.start()
 
@@ -75,7 +79,7 @@ class ChainPool:
         while True:
             if (returned - pushed) < 2*len(self.workers):
                 try:
-                    f = next(frames)
+                    f = next(itr)
                 except StopIteration:
                     break
                 self.iq.put((pushed, f.shape, f))
@@ -149,10 +153,11 @@ if len(pass_chain) == 0 and not base_args.allow_nop:
     exit(0)
 
 # Start processing the input file
-pool = ChainPool(pass_chain, base_args.threads)
-video = vidio.vreader(base_args.input)
+frames = list(vidio.vreader(base_args.input))
+print("Setting up pipeline...")
+pool = ChainPool(pass_chain, frames, base_args.threads)
 print("Processing video...")
-out_frames = list(pool.map(video))
+out_frames = list(pool.map(frames))
 print("Done. Waiting for worker processes...")
 pool.stop()
 print("Filter chain complete")
