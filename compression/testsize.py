@@ -165,18 +165,30 @@ print("Filter chain complete")
 # Run size analysis on the results. This re-encodes the input to eliminate the
 # input file's encoding parameters as a source of error.
 
-def get_size(vid):
-    with tempfile.NamedTemporaryFile(suffix='.mkv') as f:
-        wr = vidio.FFmpegWriter(f.name, outputdict={
-            '-vcodec': 'libx264',
-            '-crf': '10'})
-        for frame in vid:
-            wr.writeFrame(frame)
-        return os.stat(f.name).st_size
+def get_size(vid, filename=None):
+    if filename:
+            wr = vidio.FFmpegWriter(filename, outputdict={
+                '-vcodec': 'libx264',
+                '-crf': '10'})
+            for frame in vid:
+                wr.writeFrame(frame)
+            wr.close()
+            return os.stat(filename).st_size
+    else:
+        with tempfile.NamedTemporaryFile(suffix='.mkv') as f:
+            wr = vidio.FFmpegWriter(f.name, outputdict={
+                '-vcodec': 'libx264',
+                '-crf': '10'})
+            for frame in vid:
+                wr.writeFrame(frame)
+            wr.close()
+            return os.stat(f.name).st_size
 print("Analyzing original video...")
 orig_size = get_size(vidio.vreader(base_args.input))
 print("Analyzing filtered video...")
-result_size = get_size(out_frames)
+result_size = get_size(out_frames,
+        "out_{}.mkv".format(os.path.basename(base_args.input))
+            if base_args.save else None)
 print("----------------------")
 print("Initial size:   {} bytes".format(orig_size))
 print("Final size:     {} bytes".format(result_size))
