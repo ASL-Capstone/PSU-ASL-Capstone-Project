@@ -4,6 +4,7 @@ import multiprocessing
 import queue
 import sys
 import os
+import shutil
 import tempfile
 from skvideo import io as vidio
 
@@ -30,12 +31,12 @@ class ChainWorker(multiprocessing.Process):
         self.term_evt = multiprocessing.Event()
 
     def run(self):
-        chain = [p(ns, meta) for p, ns, meta in self.chain]
+        chain = [p.MAIN_CLASS(ns, meta) for p, ns, meta in self.chain]
 
         while not self.term_evt.is_set():
             # Read a frame
             try:
-                frame_num, shape, arr = self.in_q.get(timeout=0.5)
+                frame_num, shape, frame = self.in_q.get(timeout=0.5)
             except queue.Empty:
                 continue
             
@@ -44,7 +45,7 @@ class ChainWorker(multiprocessing.Process):
                 c.process(frame)
 
             # Write the result back to the output queue
-            self.out_q.put((frame_num, arr))
+            self.out_q.put((frame_num, frame))
 
     def stop(self):
         self.term_evt.set()
@@ -156,9 +157,22 @@ if len(pass_chain) == 0 and not base_args.allow_nop:
 frames = list(vidio.vreader(base_args.input))
 print("Setting up pipeline...")
 pool = ChainPool(pass_chain, frames, base_args.threads)
+
 print("Processing video...")
-out_frames = list(pool.map(frames))
-print("Done. Waiting for worker processes...")
+scanned = 0
+out_frames = []
+termsize = shutil.get_terminal_size()
+for f in pool.map(frames):
+    scanned += 1
+    out_frames.append(f)
+
+    # Update UI
+    frac = scanned / len(frames)
+    sys.stdout.write('[{:6.2f}%]'.format(100 * frac))
+    sys.stdout.write('='*int(frac * (termsize.columns-9) - 1) + '>\r')
+    sys.stdout.flush()
+
+print("\nDone. Waiting for worker processes...")
 pool.stop()
 print("Filter chain complete")
 
@@ -192,4 +206,4 @@ result_size = get_size(out_frames,
 print("----------------------")
 print("Initial size:   {} bytes".format(orig_size))
 print("Final size:     {} bytes".format(result_size))
-print("Size reduction: {:.02}%".format((result_size-orig_size)/orig_size))
+print("Size reduction: {:.02f}%".format(100*(orig_size-result_size)/orig_size))
