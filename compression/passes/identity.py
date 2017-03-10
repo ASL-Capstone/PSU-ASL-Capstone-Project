@@ -10,8 +10,8 @@ class IdentityPass:
         self.meta = meta
 
     def process(self, frame):
-        """Process an input frame in place"""
-        pass
+        """Process an input frame"""
+        return frame
 
 def prepare(args, frames):
     """Synchronous preparation step, accepting the entire video. May not

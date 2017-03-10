@@ -42,7 +42,7 @@ class ChainWorker(multiprocessing.Process):
             
             # Actually run the processing chain
             for c in chain:
-                c.process(frame)
+                frame = c.process(frame)
 
             # Write the result back to the output queue
             self.out_q.put((frame_num, frame))
@@ -155,7 +155,9 @@ if len(pass_chain) == 0 and not base_args.allow_nop:
 
 # Start processing the input file
 frames = list(vidio.vreader(base_args.input))
+print(frames[0].shape)
 print("Setting up pipeline...")
+print("Using {} workers".format(base_args.threads))
 pool = ChainPool(pass_chain, frames, base_args.threads)
 
 print("Processing video...")
@@ -182,8 +184,9 @@ print("Filter chain complete")
 def get_size(vid, filename=None):
     if filename:
             wr = vidio.FFmpegWriter(filename, outputdict={
-                '-vcodec': 'libx264',
-                '-crf': '10'})
+                '-vcodec': 'mjpeg',
+                '-s': '{}x{}'.format(vid[0].shape[1], vid[0].shape[0])})
+                #'-crf': '10'})
             for frame in vid:
                 wr.writeFrame(frame)
             wr.close()
@@ -197,11 +200,12 @@ def get_size(vid, filename=None):
                 wr.writeFrame(frame)
             wr.close()
             return os.stat(f.name).st_size
+
 print("Analyzing original video...")
-orig_size = get_size(vidio.vreader(base_args.input))
+orig_size = get_size(list(vidio.vreader(base_args.input)), "/tmp/temp.mkv")
 print("Analyzing filtered video...")
 result_size = get_size(out_frames,
-        "out_{}.mkv".format(os.path.basename(base_args.input))
+        "/tmp/out_{}.mkv".format(os.path.basename(base_args.input))
             if base_args.save else None)
 print("----------------------")
 print("Initial size:   {} bytes".format(orig_size))
