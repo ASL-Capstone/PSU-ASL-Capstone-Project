@@ -8,20 +8,37 @@ public class AslDbContract {
 
     public static class CardEntry implements BaseColumns{
         public static final String TABLE_NAME = "card";
-        public static final String COLUMN_SHA = "video_sha";
-        public static final String COLUMN_PATH = "video_path";
-        public static final String COLUMN_ANSWER = "sign_answer";
+        public static final String COLUMN_ID = "card_id";
+        public static final String COLUMN_VIDEO = "video_id";
+        public static final String COLUMN_ANSWER = "answer";
+    }
+
+    public static class VideoEntry implements BaseColumns{
+        public static final String TABLE_NAME = "video";
+        public static final String COLUMN_ID = "id";
+        public static final String COLUMN_PATH = "path";
+        public static final String COLUMN_SHA = "sha";
+    }
+
+    public static class AnswerEntry implements BaseColumns{
+        public static final String TABLE_NAME = "answer_record";
+        public static final String COLUMN_ID = "answer_id";
+        public static final String COLUMN_CREATED_AT = "created_at";
+        public static final String COLUMN_CARD = "card_id";
+        public static final String COLUMN_DECK = "deck_id";
+        public static final String COLUMN_TYPE = "question_type";
+        public static final String COLUMN_CORRECT = "correct";
     }
 
     public static class DeckEntry implements BaseColumns{
         public static final String TABLE_NAME = "deck";
+        public static final String COLUMN_ID = "deck_id";
         public static final String COLUMN_NAME = "deck_name";
     }
 
     public static class RelationEntry implements BaseColumns{
-        public static final String TABLE_NAME = "deck_rel";
-        public static final String COLUMN_DECK_NAME = "deck_name";
-        public static final String COLUMN_VIDEO_SHA = "video_sha";
+        public static final String TABLE_NAME = "deck_card_relation";
+        public static final String COLUMN_DECK = "deck_id";
+        public static final String COLUMN_CARD = "card_id";
     }
-
 }
