@@ -5,7 +5,83 @@
 \usepackage{tikz}
 
 \begin{document}
+\title{Data Model}
+\date{}
+\maketitle
 
+\section{Overview}
+Compressed videos will be stored on the file system (the original in-app recorded videos will be deleted after compression). All other persistent data will be stored in the \verb|asl.db| database using Android's sqlite3 API.
+
+\section{Schema}
+\begin{tabular}{ | l | l | }
+    \hline
+    \multicolumn{2}{ | l | }{Video Table} \\
+    \hline
+    id	& INTEGER (pkey) \\
+    \hline
+    path & TEXT \\
+    \hline
+    sha & TEXT \\
+    \hline
+\end{tabular}
+\newline
+\vspace*{0.5 cm}
+\newline
+\begin{tabular}{ | l | l | }
+    \hline
+    \multicolumn{2}{ | l | }{Card Table} \\
+    \hline
+    id	 & INTEGER (p\_key) \\
+    \hline
+    video\_id & INTEGER (f\_key to Video.id)\\
+    \hline
+    answer	& TEXT \\
+    \hline
+\end{tabular}
+\newline
+\vspace*{0.5 cm}
+\newline
+\begin{tabular}{ | l | l | }
+    \hline
+    \multicolumn{2}{ | l | }{Deck Table} \\
+    \hline
+    id & INTEGER (p\_key) \\
+    \hline
+    name & TEXT \\
+    \hline
+\end{tabular}
+\newline
+\vspace*{0.5 cm}
+\newline
+\begin{tabular}{ | l | l | }
+    \hline
+    \multicolumn{2}{ | l | }{Answer Table} \\
+    \hline
+    id & INTEGER (p\_key) \\
+    \hline
+    created\_at & TEXT \\
+    \hline
+    card\_id & INTEGER (f\_key to Card.id) \\
+    \hline
+    deck\_id & INTEGER (f\_key to Deck.id) \\
+    \hline
+    question\_type & INTEGER \\
+    \hline
+    correct & BOOL \\
+    \hline
+\end{tabular}
+\newline
+\vspace*{0.5 cm}
+\newline
+\begin{tabular}{ | l | l | }
+    \hline
+    \multicolumn{2}{ | l | }{CardInDeck Table} \\
+    \hline
+    deck\_id & INTEGER (f\_key to Deck.id)\\
+    \hline
+    card\_id & INTEGER (f\_key to Card.id) \\
+    \hline
+\end{tabular}
 
 \end{document}
 
