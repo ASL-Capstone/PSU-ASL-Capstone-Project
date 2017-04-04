@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <VideoView
+        android:layout_width="match_parent"
+        android:layout_height="267dp"
+        android:id="@+id/videoView3" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@drawable/background4"
+        android:text="Type here "
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        tools:ignore="HardcodedText,LabelFor,TextFields" />
+
+
+    <Button
+        android:layout_width="90dp"
+        android:text="submit"
+        android:textSize="18dp"
+        android:textColor="#ffffff"
+        android:background="@drawable/background5"
+        android:layout_height="55dp"
+        android:layout_gravity="end"
+        tools:ignore="HardcodedText,SpUsage" />
+
+</LinearLayout>
