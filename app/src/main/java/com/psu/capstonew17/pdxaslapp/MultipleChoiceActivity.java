@@ -12,7 +12,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.home_screen);
+        setContentView(R.layout.activity_quiz_multiple_choice);
     }
 
     @Override

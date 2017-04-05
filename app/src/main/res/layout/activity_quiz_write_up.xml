@@ -1,48 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 
-    <VideoView
-        android:layout_width="match_parent"
-        android:layout_height="267dp"
-        android:id="@+id/videoView3" />
+    <RelativeLayout
+        android:layout_gravity="bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="60sp"
+        android:layout_alignParentBottom="true"
+        android:gravity="bottom">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="@drawable/background4"
-        android:text="Type here "
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp"
-        tools:ignore="HardcodedText,LabelFor,TextFields" />
-
-    <FrameLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include
-            android:layout_height="match_parent"
+        <include android:layout_height="wrap_content"
             android:layout_width="match_parent"
             layout="@layout/submit_button">
-
         </include>
 
-    </FrameLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp">
+
+        <VideoView
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="264dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/videoView" />
 
 
-</LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:background="@drawable/background4"
+                android:text="Type here "
+                android:gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                tools:ignore="HardcodedText,LabelFor,TextFields" />
 
 
-    <!--<Button-->
-    <!--android:layout_width="90dp"-->
-    <!--android:text="submit"-->
-    <!--android:textSize="18dp"-->
-    <!--android:textColor="#ffffff"-->
-    <!--android:background="@drawable/background5"-->
-    <!--android:layout_height="55dp"-->
-    <!--android:layout_gravity="end"-->
-    <!--tools:ignore="HardcodedText,SpUsage" />-->
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</RelativeLayout>

@@ -1,6 +1,5 @@
 package com.psu.capstonew17.pdxaslapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -33,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.item_multiple_choice:
 
-                Intent intent = new Intent(this, TakeQuizActivity.class);
+                Intent intent = new Intent(this, TakeQuizSubMenuActivity.class);
                 startActivity(intent);
 
                 break;
