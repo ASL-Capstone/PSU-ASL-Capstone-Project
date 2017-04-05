@@ -15,6 +15,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".TakeQuizSubMenuActivity">
+        </activity>
+
+        <activity
+            android:name=".MultipleChoiceActivity">
+        </activity>
+
+        <activity
+            android:name=".FlashCardActivity">
+        </activity>
+
+        <activity
+            android:name=".WriteUpActivity">
+        </activity>
+
+
+
+
+
+
+
+
     </application>
 
 </manifest>

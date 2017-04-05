@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title="CHOOSE QUIZ"
+        android:id="@+id/item_sub_menu_choose_quiz"
+        android:showAsAction="never"
+        tools:ignore="AppCompatResource,HardcodedText">
+        <menu >
+            <item android:title="Multiple Choice"
+                android:id="@+id/item_multiple_choice"
+                android:showAsAction="never" />
+            <item android:title="Flash Cards"
+                android:id="@+id/item_flash_cards"
+                android:showAsAction="never" />
+            <item android:title="Write Up"
+                android:id="@+id/item_write_up"
+                android:showAsAction="never" />
+        </menu>
+    </item>
+    <item android:title="MANAGE CARD"
+        android:id="@+id/item_sub_menu_manage_card"
+        android:showAsAction="never"
+        tools:ignore="AppCompatResource,HardcodedText">
+        <menu >
+            <item android:title="Create Card"
+                android:id="@+id/item_create_card"
+                android:showAsAction="never"
+                tools:ignore="HardcodedText" />
+            <item android:title="Delete Card"
+                android:id="@+id/item_delete_card"
+                android:showAsAction="never"
+                tools:ignore="HardcodedText" />
+        </menu>
+    </item>
+    <item android:title="MANAGE DECKS "
+        android:id="@+id/item_sub_menu_manage_decks"
+        android:showAsAction="never"
+        tools:ignore="AppCompatResource,HardcodedText">
+        <menu >
+            <item android:title="Create/Edit/Delete Decks"
+                android:id="@+id/item_ced_decks"
+                android:showAsAction="never"
+                tools:ignore="HardcodedText" />
+            <item android:title="Share"
+                android:id="@+id/item_share"
+                android:showAsAction="never" />
+            <item android:title="Receive Decks"
+                android:id="@+id/item_receive"
+                android:showAsAction="never"
+                tools:ignore="AppCompatResource,HardcodedText" />
+        </menu>
+    </item>
+</menu>
