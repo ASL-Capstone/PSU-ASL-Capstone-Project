@@ -25,9 +25,4 @@ public class Answer {
         this.type = type;
         this.correct = correct;
     }
-
-    public static void recordAnswer(Context context){
-        AslDbHelper dbHelper = new AslDbHelper(context);
-        //dbHelper.insertAnswer();
-    }
 }

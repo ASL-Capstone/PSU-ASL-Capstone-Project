@@ -1,15 +1,19 @@
 package com.example.backendtesting.backend.db;
 
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.ContentValues;
+import android.util.Log;
 
 import com.example.backendtesting.backend.db.AslDbContract.*;
 import com.example.backendtesting.backend.api.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class AslDbHelper extends SQLiteOpenHelper {
@@ -104,19 +108,11 @@ public class AslDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(VideoEntry.COLUMN_PATH, path);
         values.put(VideoEntry.COLUMN_SHA, sha);
-        long id = db.insert(VideoEntry.TABLE_NAME, null, values);
-        Cursor cursor = db.rawQuery("select * from " + VideoEntry.TABLE_NAME + " where " +
-            VideoEntry.COLUMN_ID + "=" + Long.toString(id), null);
-
-        if(cursor != null){
-            cursor.moveToFirst();
-            int uid = cursor.getInt(cursor.getColumnIndex(VideoEntry.COLUMN_ID));
-            String vPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
-            String vSha = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_SHA));
-            cursor.close();
-            return new Video(uid, vPath, vSha);
-        }
-        else{
+        try {
+            int id = (int) db.insertOrThrow(VideoEntry.TABLE_NAME, null, values);
+            return new Video(id, path, sha);
+        } catch (SQLException e){
+            Log.println(Log.DEBUG, "sql exception", e.toString());
             return null;
         }
     }
@@ -125,18 +121,11 @@ public class AslDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DeckEntry.COLUMN_NAME, deckName);
-        long id = db.insert(DeckEntry.TABLE_NAME, null, values);
-        Cursor cursor = db.rawQuery("select * from " + DeckEntry.TABLE_NAME + " where " +
-                DeckEntry.COLUMN_ID + "=" + Long.toString(id), null);
-
-        if(cursor != null){
-            cursor.moveToFirst();
-            int uid = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
-            String name = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
-            cursor.close();
-            return new Deck(uid, name);
-        }
-        else{
+        try {
+            int id = (int) db.insertOrThrow(DeckEntry.TABLE_NAME, null, values);
+            return new Deck(id ,deckName);
+        } catch (SQLException e){
+            Log.println(Log.DEBUG, "sql exception", e.toString());
             return null;
         }
     }
@@ -146,24 +135,16 @@ public class AslDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(CardEntry.COLUMN_VIDEO, video.videoId);
         values.put(CardEntry.COLUMN_ANSWER, answer);
-        long id = db.insert(CardEntry.TABLE_NAME, null, values);
-        Cursor cursor = db.rawQuery("select * from " + CardEntry.TABLE_NAME + " where " +
-                CardEntry.COLUMN_ID + "=" + Long.toString(id), null);
-
-        if(cursor != null){
-            cursor.moveToFirst();
-            int uid = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_ID));
-            int videoId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_VIDEO));
-            String ans = cursor.getString(cursor.getColumnIndex(CardEntry.COLUMN_ANSWER));
-            cursor.close();
-            return new Card(uid, videoId, ans);
-        }
-        else{
+        try {
+            int id = (int) db.insertOrThrow(CardEntry.TABLE_NAME, null, values);
+            return new Card(id, video.videoId, answer);
+        } catch (SQLException e){
+            Log.println(Log.DEBUG, "sql exception", e.toString());
             return null;
         }
     }
 
-    public void insertAnswer(Date date, Card card, Deck deck, Answer.QuestionType type, Boolean correct){
+    public Answer insertAnswer(Date date, Card card, Deck deck, Answer.QuestionType type, Boolean correct){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(AnswerEntry.COLUMN_CREATED_AT, date.toString());
@@ -171,15 +152,173 @@ public class AslDbHelper extends SQLiteOpenHelper {
         values.put(AnswerEntry.COLUMN_DECK, deck.deckId);
         values.put(AnswerEntry.COLUMN_TYPE, type.ordinal());
         values.put(AnswerEntry.COLUMN_CORRECT, correct);
-        db.insert(AnswerEntry.TABLE_NAME, null, values);
+        try {
+            int id = (int) db.insertOrThrow(AnswerEntry.TABLE_NAME, null, values);
+            return new Answer(id, date.toString(), card.cardId, deck.deckId, type, correct);
+        } catch (SQLException e){
+            Log.println(Log.DEBUG, "sql exception", e.toString());
+            return null;
+        }
     }
+
     public void insertRelation(Card card, Deck deck){
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(RelationEntry.COLUMN_CARD, card.cardId);
         values.put(RelationEntry.COLUMN_DECK, deck.deckId);
-        db.insert(RelationEntry.TABLE_NAME, null, values);
+        values.put(RelationEntry.COLUMN_CARD, card.cardId);
+        try {
+            db.insertOrThrow(RelationEntry.TABLE_NAME, null, values);
+        } catch (SQLException e){
+            Log.println(Log.DEBUG, "sql exception", e.toString());
+        }
+
     }
 
+    public Deck findDeck(Integer deckId){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + DeckEntry.TABLE_NAME + " where " +
+                DeckEntry.COLUMN_ID + "=" + Integer.toString(deckId), null
+        );
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            String name = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
+            cursor.close();
+            return new Deck(deckId, name);
+        }
+        return null;
+    }
 
+    public Deck findDeck(String deckName){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + DeckEntry.TABLE_NAME + " where " +
+            DeckEntry.COLUMN_NAME + "='" + deckName + "'", null
+        );
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            int uid = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
+            cursor.close();
+            return new Deck(uid, deckName);
+        }
+        return null;
+    }
+
+    public Card findCard(Integer cardId){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + CardEntry.TABLE_NAME + " where " +
+            CardEntry.COLUMN_ID + "=" + Integer.toString(cardId), null
+        );
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            int videoId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_VIDEO));
+            String answer = cursor.getString(cursor.getColumnIndex(CardEntry.COLUMN_ANSWER));
+            cursor.close();
+            return new Card(cardId, videoId, answer);
+        }
+        return null;
+    }
+
+    public Card findCard(Video video, String answer){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + CardEntry.TABLE_NAME + " where " +
+            CardEntry.COLUMN_VIDEO + "=" + video.videoId + " and " + CardEntry.COLUMN_ANSWER +
+                "='" + answer + "'" , null
+        );
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            int cardId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_ID));
+            cursor.close();
+            return new Card(cardId, video.videoId, answer);
+        }
+        return null;
+    }
+
+    public Video findVideo(String videoSha){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + VideoEntry.TABLE_NAME + " where " +
+            VideoEntry.COLUMN_SHA + "='" + videoSha + "'", null);
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            int videoId = cursor.getInt(cursor.getColumnIndex(VideoEntry.COLUMN_ID));
+            String videoPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
+            cursor.close();
+            return new Video(videoId, videoPath, videoSha);
+        }
+        return null;
+    }
+
+    public boolean relationExists(Card card, Deck deck){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + RelationEntry.TABLE_NAME + " where " +
+            RelationEntry.COLUMN_CARD + "=" + card.cardId + " and " + RelationEntry.COLUMN_DECK +
+                "=" + deck.deckId, null
+        );
+        if(cursor != null && cursor.moveToFirst() && cursor.getCount() > 0){
+            return true;
+        }
+        return false;
+    }
+
+    public List<Card> getCardsInDeck(Deck deck){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + RelationEntry.TABLE_NAME + " where " +
+                RelationEntry.COLUMN_DECK + " = " + Integer.toString(deck.deckId), null);
+        if(cursor == null){
+            return null;
+        }
+        List<Card> cards = new ArrayList<Card>();
+        while(cursor.moveToNext()){
+            int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
+            cards.add(findCard(cardId));
+        }
+        cursor.close();
+        return cards;
+    }
+
+    public List<Deck> getDecksUsingCard(Card card){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select * from " + RelationEntry.TABLE_NAME + " where " +
+            RelationEntry.COLUMN_CARD + "=" + Integer.toString(card.cardId), null);
+        if(cursor == null){
+            return null;
+        }
+        List<Deck> decks = new ArrayList<Deck>();
+        while(cursor.moveToNext()){
+            int deckId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_DECK));
+            decks.add(findDeck(deckId));
+        }
+        cursor.close();
+        return decks;
+    }
+
+    public void removeCardFromDeck(Card card, Deck deck){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + RelationEntry.TABLE_NAME + " where " +
+                RelationEntry.COLUMN_CARD + "=" + Integer.toString(card.cardId) + " and " +
+                RelationEntry.COLUMN_DECK + "=" + Integer.toString(deck.deckId)
+        );
+    }
+
+    public void removeDeck(Deck deck){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + DeckEntry.TABLE_NAME + " where " +
+            DeckEntry.COLUMN_ID + "=" + Integer.toString(deck.deckId)
+        );
+    }
+
+    public void removeCard(Card card){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + CardEntry.TABLE_NAME + " where " +
+            CardEntry.COLUMN_ID + "=" + Integer.toString(card.cardId)
+        );
+    }
+
+    public void removeAnswer(Card card){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + AnswerEntry.TABLE_NAME + " where " +
+            AnswerEntry.COLUMN_CARD + "=" + Integer.toString(card.cardId)
+        );
+    }
+
+    public void removeAnswer(Card card, Deck deck){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("delete from " + AnswerEntry.TABLE_NAME + " where " +
+            AnswerEntry.COLUMN_DECK + "=" + Integer.toString(deck.deckId) + " and " +
+            AnswerEntry.COLUMN_CARD + "=" + Integer.toString(card.cardId)
+        );
+    }
 }

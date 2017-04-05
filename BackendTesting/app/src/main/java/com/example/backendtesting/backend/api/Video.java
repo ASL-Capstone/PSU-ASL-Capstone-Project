@@ -13,10 +13,4 @@ public class Video {
         videoPath = path;
         videoSha = sha;
     }
-
-    public static Video saveVideo(String path, Context context){
-        AslDbHelper dbHelper = new AslDbHelper(context);
-        // TODO: generate a sha from video, check if it exists before duplicating
-        return dbHelper.insertVideo(path, "somesha123456");
-    }
 }

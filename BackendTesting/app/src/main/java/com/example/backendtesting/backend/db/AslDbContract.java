@@ -15,13 +15,13 @@ public class AslDbContract {
 
     public static class VideoEntry implements BaseColumns{
         public static final String TABLE_NAME = "video";
-        public static final String COLUMN_ID = "id";
-        public static final String COLUMN_PATH = "path";
-        public static final String COLUMN_SHA = "sha";
+        public static final String COLUMN_ID = "video_id";
+        public static final String COLUMN_PATH = "video_path";
+        public static final String COLUMN_SHA = "video_sha";
     }
 
     public static class AnswerEntry implements BaseColumns{
-        public static final String TABLE_NAME = "answer_record";
+        public static final String TABLE_NAME = "answers";
         public static final String COLUMN_ID = "answer_id";
         public static final String COLUMN_CREATED_AT = "created_at";
         public static final String COLUMN_CARD = "card_id";

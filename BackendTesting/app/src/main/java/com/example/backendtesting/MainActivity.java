@@ -10,6 +10,10 @@ import android.util.Log;
 import com.example.backendtesting.backend.api.*;
 import com.example.backendtesting.backend.db.AslDbHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private AslDbHelper dbHelper;
@@ -20,28 +24,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         dbHelper = new AslDbHelper(getApplicationContext());
-        Log.println(Log.INFO, "db path", dbHelper.getReadableDatabase().getPath());
-
         dbHelper.dropTables(dbHelper.getWritableDatabase());
         dbHelper.createTables(dbHelper.getWritableDatabase());
         Context context = getApplicationContext();
+        Log.println(Log.INFO, "db path", dbHelper.getReadableDatabase().getPath());
 
-        // test saving some stuff
-        Video v1 = Video.saveVideo("somepath", getApplicationContext());
-        Video v2 = Video.saveVideo("someOTHERpath", getApplicationContext());
-        Log.println(Log.INFO, "test_video_insert", "id: " + v1.videoId + ", path: " + v1.videoPath + ", sha: " + v1.videoSha);
-        Log.println(Log.INFO, "test_video_insert", "id: " + v2.videoId + ", path: " + v2.videoPath + ", sha: " + v2.videoSha);
+        VideoManager videoManager = new VideoManager(context);
+        Video v1 = videoManager.saveVideo("pathtovideo1");
+        Video v2 = videoManager.saveVideo("pathtovideo2");
+        Video v3 = videoManager.saveVideo("pathtovideo1");
 
-        Card c1 = Card.createCard(v1, "airplane", getApplicationContext());
-        Card c2 = Card.createCard(v2, "boat", getApplicationContext());
-        Log.println(Log.INFO, "test_card_insert", "id: " + c1.cardId + ", vid: " + c1.videoId + ", answer: " + c1.answer);
-        Log.println(Log.INFO, "test_card_insert", "id: " + c2.cardId + ", vid: " + c2.videoId + ", answer: " + c2.answer);
+        DeckManager deckManager = new DeckManager(context);
+        Deck defaultDeck = deckManager.createDeck("default");
+        Deck d1 = deckManager.createDeck("animals");
+        Card c1 = deckManager.createCard(v1, "dog", d1);
+        Card c2 = deckManager.createCard(v2, "cat", d1);
+        Card c3 = deckManager.createCard(v3, "running");
 
-        Deck defaultDeck = Deck.createDeck("default", getApplicationContext());
-        Log.println(Log.INFO, "test_create_deck", "id: " + defaultDeck.deckId + ", name: " + defaultDeck.deckName);
-        defaultDeck.addCardToDeck(c1, getApplicationContext());
-        defaultDeck.addCardToDeck(c2, getApplicationContext());
+        TestManager testManager = new TestManager(context);
+        testManager.recordAnswer(new Date(), c1, d1, Answer.QuestionType.MULTIPLE_CHOICE, true);
+        testManager.recordAnswer(new Date(), c2, d1, Answer.QuestionType.MULTIPLE_CHOICE, true);
+        testManager.recordAnswer(new Date(), c3, defaultDeck, Answer.QuestionType.PHRASE, false);
 
+
+        deckManager.deleteCard(c1);
     }
 
 }

@@ -14,11 +14,5 @@ public class Card {
         videoId = vId;
         answer = ans;
     }
-
-    public static Card createCard(Video video, String answer, Context context){
-        AslDbHelper dbHelper = new AslDbHelper(context);
-        return dbHelper.insertCard(video, answer);
-    }
-
 }
 
