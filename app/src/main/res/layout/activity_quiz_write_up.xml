@@ -19,15 +19,30 @@
         android:layout_marginBottom="30dp"
         tools:ignore="HardcodedText,LabelFor,TextFields" />
 
+    <FrameLayout
 
-    <Button
-        android:layout_width="90dp"
-        android:text="submit"
-        android:textSize="18dp"
-        android:textColor="#ffffff"
-        android:background="@drawable/background5"
-        android:layout_height="55dp"
-        android:layout_gravity="end"
-        tools:ignore="HardcodedText,SpUsage" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            layout="@layout/submit_button">
+
+        </include>
+
+    </FrameLayout>
+
 
 </LinearLayout>
+
+
+    <!--<Button-->
+    <!--android:layout_width="90dp"-->
+    <!--android:text="submit"-->
+    <!--android:textSize="18dp"-->
+    <!--android:textColor="#ffffff"-->
+    <!--android:background="@drawable/background5"-->
+    <!--android:layout_height="55dp"-->
+    <!--android:layout_gravity="end"-->
+    <!--tools:ignore="HardcodedText,SpUsage" />-->
