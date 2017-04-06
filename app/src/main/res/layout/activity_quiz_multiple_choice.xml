@@ -55,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/textView14"
                     tools:ignore="HardcodedText,SpUsage" />
+
                 <TextView
                     android:background="@drawable/background10_option_bg"
                     android:layout_margin="3dp"
@@ -72,24 +73,24 @@
                     android:layout_margin="3dp"
                     android:padding="5dp"
                     android:maxLines="5"
-                    android:textSize="15dp"
-                    android:text="Option 3: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView12"
-                    tools:ignore="HardcodedText,SpUsage" />
-
-                <TextView
-                    android:background="@drawable/background10_option_bg"
-                    android:layout_margin="3dp"
-                    android:padding="5dp"
-                    android:maxLines="5"
                     android:textSize="15sp"
                     android:text="Option 4: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView11"
                     tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:background="@drawable/background10_option_bg"
+                    android:layout_margin="3dp"
+                    android:padding="5dp"
+                    android:maxLines="5"
+                    android:textSize="15dp"
+                    android:text="Option 3: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView12"
+                    tools:ignore="HardcodedText,SpUsage" />
             </LinearLayout>
         </ScrollView>
 
