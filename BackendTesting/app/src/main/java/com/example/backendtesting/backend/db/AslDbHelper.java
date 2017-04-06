@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.ContentValues;
 import android.util.Log;
 
+import com.example.backendtesting.backend.data.Answer;
 import com.example.backendtesting.backend.db.AslDbContract.*;
 import com.example.backendtesting.backend.api.*;
 

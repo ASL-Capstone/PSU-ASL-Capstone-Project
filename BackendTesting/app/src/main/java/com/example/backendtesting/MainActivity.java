@@ -2,16 +2,14 @@ package com.example.backendtesting;
 
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.example.backendtesting.backend.api.*;
+import com.example.backendtesting.backend.data.Answer;
 import com.example.backendtesting.backend.db.AslDbHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.backendtesting.backend.api;
+package com.example.backendtesting.backend.data;
 
 import android.content.Context;
 
