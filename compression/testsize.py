@@ -184,7 +184,7 @@ print("Filter chain complete")
 def get_size(vid, filename=None):
     if filename:
             wr = vidio.FFmpegWriter(filename, outputdict={
-                '-vcodec': 'mjpeg',
+                '-vcodec': 'libx264',
                 '-s': '{}x{}'.format(vid[0].shape[1], vid[0].shape[0])})
                 #'-crf': '10'})
             for frame in vid:
