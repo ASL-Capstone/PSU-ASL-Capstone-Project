@@ -5,6 +5,7 @@
     android:layout_height="fill_parent">
 
     <RelativeLayout
+        android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="60sp"
         android:layout_alignParentBottom="true"
@@ -17,85 +18,85 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
+    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+        android:id="@+id/layout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginBottom="60dp">
+        android:layout_height="match_parent">
 
         <VideoView
             android:layout_gravity="top|center"
             android:layout_width="match_parent"
-            android:layout_height="264dp"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:id="@+id/videoView" />
 
-        <ScrollView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="3dp"
+    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+    <ScrollView
+        android:layout_above="@id/bottom_layout"
+        android:layout_below="@id/layout"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
-
-            <LinearLayout
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:orientation="vertical"
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="Option 1: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:id="@+id/textView14"
+                tools:ignore="HardcodedText,SpUsage" />
 
-                <TextView
-                    android:background="@drawable/background10_option_bg"
-                    android:layout_margin="3dp"
-                    android:padding="5dp"
-                    android:maxLines="5"
-                    android:textSize="15dp"
-                    android:text="Option 1: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView14"
-                    tools:ignore="HardcodedText,SpUsage" />
-                <TextView
-                    android:background="@drawable/background10_option_bg"
-                    android:layout_margin="3dp"
-                    android:padding="5dp"
-                    android:maxLines="5"
-                    android:textSize="15dp"
-                    android:text="Option 2: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView13"
-                    tools:ignore="HardcodedText,SpUsage" />
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="Option 2: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView13"
+                tools:ignore="HardcodedText,SpUsage" />
 
-                <TextView
-                    android:background="@drawable/background10_option_bg"
-                    android:layout_margin="3dp"
-                    android:padding="5dp"
-                    android:maxLines="5"
-                    android:textSize="15dp"
-                    android:text="Option 3: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView12"
-                    tools:ignore="HardcodedText,SpUsage" />
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15sp"
+                android:text="Option 4: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView11"
+                tools:ignore="HardcodedText" />
 
-                <TextView
-                    android:background="@drawable/background10_option_bg"
-                    android:layout_margin="3dp"
-                    android:padding="5dp"
-                    android:maxLines="5"
-                    android:textSize="15sp"
-                    android:text="Option 4: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView11"
-                    tools:ignore="HardcodedText" />
-            </LinearLayout>
-        </ScrollView>
-
-
-    </LinearLayout>
-
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="Option 3: this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView12"
+                tools:ignore="HardcodedText,SpUsage" />
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>
 

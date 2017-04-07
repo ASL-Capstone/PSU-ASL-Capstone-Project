@@ -5,6 +5,7 @@
     android:layout_height="fill_parent">
 
     <RelativeLayout
+        android:id="@+id/question_layout"
         android:layout_gravity="bottom"
         android:layout_width="fill_parent"
         android:layout_height="60sp"
@@ -18,50 +19,49 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="8dp"
+        android:textSize="20sp"
+        android:background="@drawable/background6"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:id="@+id/textView_question"
+        tools:ignore="HardcodedText" />
+
+
+
     <LinearLayout
+        android:gravity="center"
+        android:layout_below="@id/textView_question"
+        android:layout_above="@id/question_layout"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp">
+        >
 
-        <TextView
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:background="@drawable/background6"
-            android:gravity="center"
+        <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+            android:id="@+id/layout"
             android:layout_gravity="center"
-            android:text="this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:id="@+id/textView5"
-            tools:ignore="HardcodedText" />
+            android:layout_height="fill_parent">
 
-            <LinearLayout
+            <VideoView
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/videoView" />
 
-                <VideoView
-
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="264dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/videoView" />
-
-
-            </LinearLayout>
-
+        </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
     </LinearLayout>
-
-
 
 
 
