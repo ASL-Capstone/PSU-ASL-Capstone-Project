@@ -24,14 +24,19 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="60dp">
 
-        <VideoView
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="264dp"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/videoView" />
+        <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+            android:id="@+id/layout"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
 
+            <VideoView
+                android:layout_gravity="top|center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/videoView" />
 
+        </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
