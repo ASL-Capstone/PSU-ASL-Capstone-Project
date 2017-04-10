@@ -9,25 +9,25 @@
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:textSize="30sp"
-        android:text="Choose Quiz Type"
+        android:text="@string/header_take_quiz_submenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="HardcodedText" />
 
     <Button
-        android:text="Multiple Choice"
+        android:text="@string/button_multiple_choice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_multiple_choice" />
 
     <Button
-        android:text="Flash Card"
+        android:text="@string/button_flash_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_flash_card" />
 
     <Button
-        android:text="Write Up"
+        android:text="@string/button_write_up"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_write_up" />
