@@ -28,13 +28,16 @@ public interface Card {
     void setAnswer(String a);
 
     /**
-     * Delete the card. Throws an exception if the card is currently used as part of a deck.
+     * Delete the card. Throws an exception if the card is currently used as part of any deck
+     * other than the default deck.
+     *
+     * Once this method is called, this object is invalid and must not be used.
+     * Any use of the object after calling delete() will throw an exception.
      */
     void delete() throws ObjectInUseException;
 
     /**
-     * Return a list of decks which currently use this card. If no decks use the card, returns an
-     * empty list.
+     * Return a list of decks which currently use this card.
      */
     List<Deck> getUsers();
 }
