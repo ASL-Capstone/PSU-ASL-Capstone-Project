@@ -5,7 +5,7 @@
     android:gravity="bottom|center">
 
     <Button
-        android:text="SUBMIT"
+        android:text="@string/button_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button_submit"

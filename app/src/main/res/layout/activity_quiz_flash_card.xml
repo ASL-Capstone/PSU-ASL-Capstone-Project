@@ -34,7 +34,7 @@
             android:background="@drawable/background6"
             android:gravity="center"
             android:layout_gravity="center"
-            android:text="this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video"
+            android:text="@string/placeholder_answer"
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:id="@+id/textView5"
