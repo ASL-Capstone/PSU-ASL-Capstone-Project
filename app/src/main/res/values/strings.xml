@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">PDXASLApp</string>
+
+    <!-- Activities Headers -->
+    <string name="header_home_screen">ASL</string>
+    <string name="header_take_quiz_submenu">Choose Quiz Type</string>
+
+    <!-- Button Strings-->
+    <string name="button_take_quiz">Take Quiz</string>
+    <string name="button_manage_decks">Manage Decks</string>
+    <string name="button_manage_cards">Manage Cards</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_multiple_choice">Multiple Choice</string>
+    <string name="button_flash_card">Flash Card</string>
+    <string name="button_write_up">Write Up</string>
+    <string name="button_share">Share</string>
+
+    <!-- User Help Prompts -->
+    <string name="prompt_text_field">Type Here</string>
+
+    <!-- Place Holders -->
+    <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
+</resources>
