@@ -1,0 +1,79 @@
+package com.example.backendtesting.backend.api;
+
+import android.graphics.Rect;
+import android.content.Context;
+import android.util.Base64;
+
+import com.example.backendtesting.backend.db.AslDbHelper;
+
+import java.lang.Throwable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+public interface VideoManager {
+
+    public class ImportOptions {
+        /**
+         * Whether the video file should be deleted after import.
+         */
+        public boolean deleteAfter;
+
+        /**
+         * The crop region for this video, or null to disable cropping.
+         */
+        public Rect cropRegion;
+
+        /**
+         * The start time (in milliseconds) of the first processed frame.
+         */
+        public int startTime;
+
+        /**
+         * The end time (in milliseconds) of the first processed frame.
+         */
+        public int endTime;
+
+        /**
+         * Define the maximum acceptable quality degradation as a result of
+         * encoding. Ranges from 1 to 20, 20 being the best quality.
+         */
+        public int quality;
+    }
+
+    /**
+     * Listener interface for monitoring vidoe import processes
+     */
+    public interface VideoImportListener {
+        /**
+         * Called on a progress update
+         * 
+         * @param current The current progress value
+         * @param max The maximum progress value
+         */
+        void onProgressUpdate(int current, int max);
+
+        /**
+         * Called when the video import is complete
+         * 
+         * @param vid The resulting video
+         */
+        void onComplete(Video vid);
+
+        /**
+         * Called when the video import fails due to an error
+         */
+        void onFailed(Throwable err);
+    }
+
+    /**
+     * Import a video file with the given options.
+     *
+     * When complete, call appropriate methods in the passed video import
+     * listener.
+     *
+     * @param videoFile The file to import. Must be readable.
+     * @param options The options to use when importing the video
+     * @param handler The listener which will be notified of completion
+     */
+    void importVideo(File videoFile, ImportOptions options, VideoImportListener handler);
+}
