@@ -1,0 +1,9 @@
+# Ignore virtualenv
+bin
+include
+lib
+share
+pip-selfcheck.json
+tags
+.*.swp
+*.pyc
