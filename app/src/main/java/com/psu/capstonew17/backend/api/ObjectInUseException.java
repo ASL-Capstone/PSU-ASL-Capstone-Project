@@ -1,4 +1,4 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
 /**
  * Exception thrown by operations which require exclusive access to an object when the object is in

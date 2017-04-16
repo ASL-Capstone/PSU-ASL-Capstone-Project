@@ -25,6 +25,7 @@
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
+    <string name="prompt_card_name">Card Name</string>
 
     <!-- Place Holders -->
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>

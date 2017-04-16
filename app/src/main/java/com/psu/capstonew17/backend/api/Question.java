@@ -1,4 +1,4 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
 import java.util.List;
 import android.util.Pair;
@@ -35,5 +35,5 @@ public interface Question {
      * @param answer The answer given, as a case-insensitive string
      * @return Whether the given answer is correct
      */
-    Pair<boolean, String> answer(String answer);
+    Pair<Boolean, String> answer(String answer);
 }
