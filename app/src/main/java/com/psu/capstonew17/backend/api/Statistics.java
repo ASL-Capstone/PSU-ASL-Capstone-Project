@@ -1,6 +1,8 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
-import java.time.Duration;
+//import java.time.Duration;
+import java.util.List;
+import javax.xml.datatype.Duration;
 
 /**
  * Represents performance statistics computed over some subset of historical

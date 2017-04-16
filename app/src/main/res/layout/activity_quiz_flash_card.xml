@@ -36,7 +36,6 @@
         tools:ignore="HardcodedText" />
 
 
-
     <LinearLayout
         android:gravity="center"
         android:layout_below="@id/textView_question"
