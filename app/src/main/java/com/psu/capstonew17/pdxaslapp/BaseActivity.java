@@ -1,9 +1,13 @@
 package com.psu.capstonew17.pdxaslapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 /**
  * Created by thanhhoang on 4/4/17.
@@ -72,5 +76,6 @@ public class BaseActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }

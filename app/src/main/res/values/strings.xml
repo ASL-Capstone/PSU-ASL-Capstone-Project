@@ -10,13 +10,22 @@
     <string name="button_manage_decks">Manage Decks</string>
     <string name="button_manage_cards">Manage Cards</string>
     <string name="button_submit">Submit</string>
+    <string name="button_share">Share</string>
+    <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
     <string name="button_flash_card">Flash Card</string>
     <string name="button_write_up">Write Up</string>
-    <string name="button_share">Share</string>
+    <string name="button_ten_questions">10</string>
+    <string name="button_thirty_questions">30</string>
+    <string name="button_fifty_questions">50</string>
+
+    <!-- Labels -->
+    <string name="label_choose_quiz_type">Choose Quiz Type</string>
+    <string name="label_choose_number_of_questions">Choose Number of Questions</string>
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
+    <string name="prompt_card_name">Card Name</string>
 
     <!-- Place Holders -->
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
