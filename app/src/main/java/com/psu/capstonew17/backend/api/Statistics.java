@@ -1,6 +1,10 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
-import java.time.Duration;
+
+
+//TODO Resolve time.Duration imports
+//import java.time.Duration;
+import java.util.List;
 
 /**
  * Represents performance statistics computed over some subset of historical
@@ -30,5 +34,5 @@ public interface Statistics {
     /**
      * Get the average time to answer each question
      */
-    Duration getAverageAnswerTime();
+    //Duration getAverageAnswerTime();
 }

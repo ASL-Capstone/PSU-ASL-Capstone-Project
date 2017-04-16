@@ -1,4 +1,4 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
 import java.util.List;
 

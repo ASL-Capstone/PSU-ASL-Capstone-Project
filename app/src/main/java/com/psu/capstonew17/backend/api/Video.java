@@ -1,9 +1,9 @@
-package com.example.backendtesting.backend.api;
+package com.psu.capstonew17.backend.api;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-
-import com.example.backendtesting.backend.db.AslDbHelper;
+//TODO Get backend.db
+//import com.psu.capstonew17.backend.db.AslDbHelper;
 
 public interface Video {
     /**
