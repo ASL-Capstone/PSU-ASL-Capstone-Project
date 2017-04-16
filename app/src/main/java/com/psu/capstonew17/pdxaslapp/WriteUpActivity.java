@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
+import com.psu.capstonew17.pdxaslapp.BaseActivity;
+import com.psu.capstonew17.pdxaslapp.R;
+
 /**
  * Created by thanhhoang on 4/4/17.
  */
