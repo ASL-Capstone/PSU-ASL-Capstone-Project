@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.psu.capstonew17.pdxaslapp.BaseActivity;
 import com.psu.capstonew17.pdxaslapp.FlashCardActivity;
@@ -40,23 +41,26 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
         Intent intent;
         if(quizOption == quizType.MULTIPLE_CHOICE && numQuestions == 0){
             //Error tell user to make selection
+            Toast.makeText(this, "ERROR Enter number of Questions", Toast.LENGTH_SHORT).show();
         }
-        switch (quizOption){
-            case MULTIPLE_CHOICE:
-                intent = new Intent(this,MultipleChoiceActivity.class);
-                Bundle questionCount = new Bundle();
-                questionCount.putInt("numQuestions",numQuestions);
-                intent.putExtras(questionCount);
-                startActivity(intent);
-                break;
-            case FLASH_CARD:
-                intent = new Intent(this,FlashCardActivity.class);
-                startActivity(intent);
-                break;
-            case WRITE_UP:
-                intent = new Intent(this,WriteUpActivity.class);
-                startActivity(intent);
-                break;
+        else {
+            switch (quizOption) {
+                case MULTIPLE_CHOICE:
+                    intent = new Intent(this, MultipleChoiceActivity.class);
+                    Bundle questionCount = new Bundle();
+                    questionCount.putInt("numQuestions", numQuestions);
+                    intent.putExtras(questionCount);
+                    startActivity(intent);
+                    break;
+                case FLASH_CARD:
+                    intent = new Intent(this, FlashCardActivity.class);
+                    startActivity(intent);
+                    break;
+                case WRITE_UP:
+                    intent = new Intent(this, WriteUpActivity.class);
+                    startActivity(intent);
+                    break;
+            }
         }
     }
 
