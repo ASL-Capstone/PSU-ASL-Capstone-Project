@@ -1,4 +1,9 @@
 <resources>
+    <string-array name="quizTypesArray">
+        <item>Multiple Choice</item>
+        <item>Flash Card</item>
+        <item>Write Up</item>
+    </string-array>
     <string name="app_name">PDXASLApp</string>
 
     <!-- Activities Headers -->
@@ -22,6 +27,7 @@
     <!-- Labels -->
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
     <string name="label_choose_number_of_questions">Choose Number of Questions</string>
+    <string name="label_choose_decks">Choose Decks</string>
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
