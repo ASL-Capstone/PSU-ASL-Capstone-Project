@@ -68,7 +68,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_ten_questions" />
+            android:text="@string/button_ten_questions"
+            android:onClick="onNumQuestionsClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonThirtyQuestions"
@@ -76,7 +77,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_thirty_questions" />
+            android:text="@string/button_thirty_questions"
+            android:onClick="onNumQuestionsClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonFiftyQuestions"
@@ -84,7 +86,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_fifty_questions" />
+            android:text="@string/button_fifty_questions"
+            android:onClick="onNumQuestionsClicked"/>
     </RadioGroup>
 
     <TextView
