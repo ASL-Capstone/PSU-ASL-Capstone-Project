@@ -1,13 +1,5 @@
 package com.psu.capstonew17.backend.api;
-import android.content.Context;
-import java.util.Date;
 import java.util.List;
-
-//TODO Get backend.data and backend.db
-//import com.psu.capstonew17.backend.data.Answer;
-//import com.psu.capstonew17.backend.db.AslDbHelper;
-//import com.example.backendtesting.backend.data.Answer;
-//import com.example.backendtesting.backend.db.AslDbHelper;
 
 public interface TestManager {
     /**

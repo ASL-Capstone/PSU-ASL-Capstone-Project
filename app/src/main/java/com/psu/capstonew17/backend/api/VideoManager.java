@@ -1,17 +1,9 @@
 package com.psu.capstonew17.backend.api;
 
 import android.graphics.Rect;
-import android.content.Context;
-import android.util.Base64;
-
-//TODO Get backend.db
-//import com.psu.capstonew17.backend.db.AslDbHelper;
-//import com.example.backendtesting.backend.db.AslDbHelper;
 
 import java.io.File;
 import java.lang.Throwable;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public interface VideoManager {
 
