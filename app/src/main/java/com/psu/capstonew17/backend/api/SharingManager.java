@@ -1,13 +1,6 @@
 package com.psu.capstonew17.backend.api;
-import com.psu.capstonew17.backend.api.Card;
-import com.psu.capstonew17.backend.api.Deck;
-import com.psu.capstonew17.backend.api.SharingTransmitListener;
 import android.graphics.Bitmap;
-//import com.example.backendtesting.backend.api.Card;
-//import com.example.backendtesting.backend.api.Deck;
-//import com.example.backendtesting.backend.api.SharingTransmitListener;
 
-//import android.graphics.Bitmap;
 import java.util.List;
 
 public interface SharingManager {
