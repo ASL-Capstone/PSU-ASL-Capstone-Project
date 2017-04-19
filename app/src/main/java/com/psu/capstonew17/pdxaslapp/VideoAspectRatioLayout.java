@@ -5,12 +5,8 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 /**
- * Created by thanhhoang on 4/5/17.
- */
-
-/**
  * This custom layout extended LinearLayout, is placeholder for
- * VideoView, the respect ratio is set to 4:3
+ * VideoView, the respect ratio of video is set to 4:3
  */
 public class VideoAspectRatioLayout extends LinearLayout {
     public VideoAspectRatioLayout(Context context) {
