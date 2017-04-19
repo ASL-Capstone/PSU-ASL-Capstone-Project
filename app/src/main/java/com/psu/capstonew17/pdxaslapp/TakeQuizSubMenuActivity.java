@@ -3,17 +3,10 @@ package com.psu.capstonew17.pdxaslapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.psu.capstonew17.pdxaslapp.BaseActivity;
-import com.psu.capstonew17.pdxaslapp.FlashCardActivity;
-import com.psu.capstonew17.pdxaslapp.MultipleChoiceActivity;
-import com.psu.capstonew17.pdxaslapp.R;
-import com.psu.capstonew17.pdxaslapp.WriteUpActivity;
 
 public class TakeQuizSubMenuActivity extends BaseActivity {
     private int numQuestions;
