@@ -11,6 +11,10 @@
     <string name="button_manage_cards">Manage Cards</string>
     <string name="button_submit">Submit</string>
     <string name="button_share">Share</string>
+
+    <string name="button_getvideo">+</string>
+
+
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
     <string name="button_flash_card">Flash Card</string>
@@ -22,6 +26,7 @@
     <!-- Labels -->
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
     <string name="label_choose_number_of_questions">Choose Number of Questions</string>
+    <string name="edit_text_video_description">Enter Video Description</string>
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
@@ -29,4 +34,8 @@
 
     <!-- Place Holders -->
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
+    <string name="button_import_video">+</string>
+    <string name="textView_no_video">No video available</string>
+
+
 </resources>
