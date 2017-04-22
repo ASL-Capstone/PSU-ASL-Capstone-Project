@@ -35,4 +35,7 @@
 
     <!-- Place Holders -->
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
+    <string name="textView_no_video">No Video Imported</string>
+    <string name="button_import_video">+</string>
+    <string name="edit_text_video_description">Enter Video Description</string>
 </resources>

@@ -1,67 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-
-    <RelativeLayout
-        android:id="@+id/question_layout"
-        android:layout_gravity="bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="60sp"
-        android:layout_alignParentBottom="true"
-        android:gravity="bottom">
-
-        <include android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            layout="@layout/submit_button">
-        </include>
-
-    </RelativeLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_margin="20dp"
         android:padding="8dp"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:background="@drawable/background6"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video"
+        android:text="@string/placeholder_answer"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:id="@+id/textView_question"
-        tools:ignore="HardcodedText" />
+        />
 
+    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+        android:id="@+id/layout"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_below="@id/textView_question"
-        android:layout_above="@id/question_layout"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        >
-
-        <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-            android:id="@+id/layout"
+        <VideoView
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/videoView" />
 
-            <VideoView
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/videoView" />
+    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
-        </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+        <include
+            layout="@layout/submit_button"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
 
-    </LinearLayout>
+            >
+        </include>
+    </TableRow>
+
+
+</LinearLayout>
 
 
 
-</RelativeLayout>
