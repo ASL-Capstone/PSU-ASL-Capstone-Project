@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 
 public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
     private LayoutInflater layoutInflater;
-    private ViewHolder viewHolder;
+    private CheckBox checkBox;
     private ArrayList<ListRow> objects;
 
     public CustomArrayAdapter(Context context, int resource, ArrayList<ListRow> objects) {
@@ -32,24 +33,27 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         // check null view and declare view holder
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.list_row, null);
-            viewHolder = new ViewHolder();
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
-            viewHolder.textView = (TextView) convertView.findViewById(R.id.list_row_textView);
+        convertView = layoutInflater.inflate(R.layout.list_row, null);
+        checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
 
-            // enable click listener on checkbox
-            convertView.setTag(viewHolder);
-        }
-
-        viewHolder = (ViewHolder) convertView.getTag();
-        ListRow row = getItem(position);
-        Log.d("size", row.name);
-        viewHolder.checkBox.setChecked(row.isChecked);
-        viewHolder.checkBox.setTag(position);
-
-        // Set state
-
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                View row = (View) buttonView.getParent();
+                ListRow object = objects.get(position);
+                if (isChecked) {
+                    row.setBackgroundResource(R.drawable.background1);
+                    object.isChecked = true;
+                    objects.set(position, object);
+                    Log.d("item", "Item Click at " + position + ": " + object.name + " is " + object.isChecked);
+                } else {
+                    row.setBackgroundResource(android.R.color.transparent);
+                    object.isChecked = false;
+                    objects.set(position, object);
+                    Log.d("item", "Item Click at " + position + ": " + object.name + " is " + object.isChecked);
+                }
+            }
+        });
 
 
 
@@ -62,23 +66,9 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         return objects.get(position);
     }
 
-    private class ViewHolder {
-        public CheckBox checkBox;
-        public TextView textView;
+    public ArrayList<ListRow> getItems() {
+        return objects;
     }
-
-    public boolean isChecked(int index) {
-        return objects.get(index).isChecked;
-    }
-
-//    @Override
-//    public void onClick(View view) {
-//        ListRow row = objects.get((Integer)view.getTag());
-//
-//        row.isChecked = true;
-//
-//        Log.d("item", "Item Click at "+(Integer)view.getTag()+" : "+row.name +" is "+row.isChecked);
-//    }
 }
 
 
