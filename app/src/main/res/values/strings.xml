@@ -28,6 +28,7 @@
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
     <string name="label_choose_number_of_questions">Choose Number of Questions</string>
     <string name="label_choose_decks">Choose Decks</string>
+    <string name="quiz_complete">Quiz Complete!</string>
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
