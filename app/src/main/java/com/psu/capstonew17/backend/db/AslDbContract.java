@@ -23,7 +23,8 @@ public class AslDbContract {
     public static class AnswerEntry implements BaseColumns{
         public static final String TABLE_NAME = "answers";
         public static final String COLUMN_ID = "answer_id";
-        public static final String COLUMN_CREATED_AT = "created_at";
+        public static final String COLUMN_ASKED_AT = "asked_at";
+        public static final String COLUMN_ANSWERED_AT = "answered_at";
         public static final String COLUMN_CARD = "card_id";
         public static final String COLUMN_DECK = "deck_id";
         public static final String COLUMN_TYPE = "question_type";

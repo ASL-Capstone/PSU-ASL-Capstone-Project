@@ -22,6 +22,10 @@ public class ExternalTestManager implements TestManager{
         return INSTANCE;
     }
 
+    public AslDbHelper getDbHelper(){
+        return dbHelper;
+    }
+
     @Override
     public Test buildTest(List<Deck> sources, Options opts) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -41,13 +45,13 @@ public class ExternalTestManager implements TestManager{
                 else{
                     t = Question.Type.TEXT_ENTRY;
                 }
-                Question q = new ExternalQuestion(card, t);
+                Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
                 questions.add(q);
             }
         }
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
         }
-        return new ExternalTest(questions.subList(0, opts.count));
+        return new ExternalTest(questions.subList(0, opts.count), null);
     }
 }

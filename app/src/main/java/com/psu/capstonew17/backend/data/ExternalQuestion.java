@@ -1,25 +1,47 @@
 package com.psu.capstonew17.backend.data;
 
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 import com.psu.capstonew17.backend.api.*;
+import com.psu.capstonew17.backend.db.AslDbContract.*;
+import com.psu.capstonew17.backend.db.AslDbHelper;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Date;
 
 public class ExternalQuestion implements Question {
     private Card card;
+    private int deckId;
     private Type type;
+    private int questionId;
     private List<String> options;
     private static int OPTION_SIZE = 4;
 
-    public ExternalQuestion(Card card, Type type){
+    private AslDbHelper dbHelper;
+
+    public ExternalQuestion(Card card, Type type, int deckId){
         this.card = card;
         this.type = type;
+        this.deckId = deckId;
         this.options = new ArrayList<String>();
+    }
+
+    public void setQuestionId(int id){
+        this.questionId = id;
+    }
+
+    public int getCardId(){
+        return ((ExternalCard) this.card).getId();
+    }
+
+    public int getDeckId(){
+        return this.deckId;
     }
 
     @Override
@@ -70,6 +92,15 @@ public class ExternalQuestion implements Question {
         if(answer.equals(this.card.getAnswer())){
             correct = true;
         }
+        dbHelper = ExternalTestManager.INSTANCE.getDbHelper();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(AnswerEntry.COLUMN_ANSWERED_AT, new Date().getTime());
+        values.put(AnswerEntry.COLUMN_CORRECT, correct);
+        db.update(
+                AnswerEntry.TABLE_NAME, values,
+                AnswerEntry.COLUMN_ID + "=" + this.questionId, null
+        );
         return new Pair<Boolean, String>(correct, this.card.getAnswer());
     }
 }

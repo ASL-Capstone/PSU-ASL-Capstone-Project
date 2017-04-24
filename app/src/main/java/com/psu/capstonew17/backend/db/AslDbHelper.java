@@ -25,7 +25,8 @@ public class AslDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_ANSWER_TABLE =
             "CREATE TABLE " + AnswerEntry.TABLE_NAME + " (" +
                     AnswerEntry.COLUMN_ID + " INTEGER PRIMARY KEY," +
-                    AnswerEntry.COLUMN_CREATED_AT + " TEXT," +
+                    AnswerEntry.COLUMN_ASKED_AT + " INTEGER," +
+                    AnswerEntry.COLUMN_ANSWERED_AT + " INTEGER," +
                     AnswerEntry.COLUMN_CARD + " INTEGER," +
                     AnswerEntry.COLUMN_DECK + " INTEGER," +
                     AnswerEntry.COLUMN_TYPE + " INTEGER," +
@@ -72,6 +73,7 @@ public class AslDbHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db){
+        dropTables(db);
         createTables(db);
     }
 
