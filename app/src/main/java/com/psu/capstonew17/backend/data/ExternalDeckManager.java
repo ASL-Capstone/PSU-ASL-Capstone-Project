@@ -73,20 +73,25 @@ public class ExternalDeckManager implements DeckManager{
     @Override
     public Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String query = "SELECT * FROM " + DeckEntry.TABLE_NAME +
+                " WHERE " + DeckEntry.COLUMN_NAME + "='" + name + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            cursor.close();
+            throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
+        }
+        cursor.close();
+
         ContentValues values = new ContentValues();
         values.put(DeckEntry.COLUMN_NAME, name);
-        try{
-            int deckId = (int) db.insertOrThrow(DeckEntry.TABLE_NAME, null, values);
-            for(Card card : cards){
-                values = new ContentValues();
-                values.put(RelationEntry.COLUMN_DECK, deckId);
-                values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
-                db.insertOrThrow(RelationEntry.TABLE_NAME, null, values);
-            }
-            return new ExternalDeck(deckId, name, cards);
-        } catch (SQLException e){
-            throw new ObjectAlreadyExistsException(e);
+        int deckId = (int) db.insert(DeckEntry.TABLE_NAME, null, values);
+        for(Card card : cards){
+            values = new ContentValues();
+            values.put(RelationEntry.COLUMN_DECK, deckId);
+            values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+            db.insert(RelationEntry.TABLE_NAME, null, values);
         }
+        return new ExternalDeck(deckId, name, cards);
     }
 
     @Override

@@ -41,15 +41,19 @@ public class ExternalCardManager implements CardManager{
     @Override
     public Card buildCard(Video video, String answer) throws ObjectAlreadyExistsException {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String query = "SELECT * FROM " + CardEntry.TABLE_NAME +
+                " WHERE " + CardEntry.COLUMN_VIDEO + "=" + ((ExternalVideo) video).getVideoId();
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            cursor.close();
+            throw new ObjectAlreadyExistsException("A card for this video and answer already exists.");
+        }
+        cursor.close();
         ContentValues values = new ContentValues();
         values.put(CardEntry.COLUMN_VIDEO, ((ExternalVideo) video).getVideoId());
         values.put(CardEntry.COLUMN_ANSWER, answer);
-        try {
-            int id = (int) db.insertOrThrow(CardEntry.TABLE_NAME, null, values);
-            return new ExternalCard(id, video, answer);
-        } catch (SQLException e) {
-            throw new ObjectAlreadyExistsException(e);
-        }
+        int id = (int) db.insert(CardEntry.TABLE_NAME, null, values);
+        return new ExternalCard(id, video, answer);
     }
 
 }
