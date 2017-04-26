@@ -3,8 +3,8 @@ package com.example.backendtesting.backend.api;
 import com.example.backendtesting.backend.api.Card;
 import com.example.backendtesting.backend.api.Deck;
 import com.example.backendtesting.backend.api.SharingTransmitListener;
-
-import android.graphcs.Bitmap;
+import java.util.List;
+import android.graphics.Bitmap;
 
 public interface SharingManager {
     class TxOptions {
