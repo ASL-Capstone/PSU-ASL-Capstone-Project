@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -29,8 +30,10 @@ public class ExternalDeckManager implements DeckManager{
 
     private List<Card> getCardsForDeck(int deckId){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + RelationEntry.TABLE_NAME +
-                " WHERE " + RelationEntry.COLUMN_DECK + "=" + deckId;
+        String query = dbHelper.buildSelectQuery(
+                RelationEntry.TABLE_NAME,
+                Arrays.asList(RelationEntry.COLUMN_DECK + "=" + Integer.toString(deckId))
+        );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> cards = new ArrayList<Card>();
         while(cursor.moveToNext()){
@@ -42,8 +45,10 @@ public class ExternalDeckManager implements DeckManager{
 
     public Deck getDeck(int id){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + DeckEntry.TABLE_NAME +
-                " WHERE " + DeckEntry.COLUMN_ID + "=" + id;
+        String query = dbHelper.buildSelectQuery(
+                DeckEntry.TABLE_NAME,
+                Arrays.asList(DeckEntry.COLUMN_ID + "=" + id)
+        );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             String deckName = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
@@ -59,7 +64,7 @@ public class ExternalDeckManager implements DeckManager{
         List<Deck> decks = new ArrayList<Deck>();
         if(name == null){
             // get all decks
-            String query = "SELECT * FROM " + DeckEntry.TABLE_NAME;
+            String query = dbHelper.buildSelectQuery(DeckEntry.TABLE_NAME, null);
             Cursor cursor = db.rawQuery(query, null);
             while(cursor.moveToNext()){
                 int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
@@ -73,8 +78,10 @@ public class ExternalDeckManager implements DeckManager{
     @Override
     public Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String query = "SELECT * FROM " + DeckEntry.TABLE_NAME +
-                " WHERE " + DeckEntry.COLUMN_NAME + "='" + name + "'";
+        String query = dbHelper.buildSelectQuery(
+                DeckEntry.TABLE_NAME,
+                Arrays.asList(DeckEntry.COLUMN_NAME + "='" + name + "'")
+        );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             cursor.close();
@@ -97,7 +104,7 @@ public class ExternalDeckManager implements DeckManager{
     @Override
     public Deck getDefaultDeck() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + CardEntry.TABLE_NAME;
+        String query = dbHelper.buildSelectQuery(CardEntry.TABLE_NAME, null);
         Cursor cursor = db.rawQuery(query, null);
         List<Card> cards = new ArrayList<Card>();
         while(cursor.moveToNext()){

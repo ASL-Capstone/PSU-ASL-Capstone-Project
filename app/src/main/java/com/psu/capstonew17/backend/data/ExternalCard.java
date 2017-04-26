@@ -9,6 +9,7 @@ import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -83,10 +84,10 @@ public class ExternalCard implements Card {
     public List<Deck> getUsers() {
         dbHelper = ExternalCardManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + RelationEntry.TABLE_NAME +
-                " WHERE " + RelationEntry.COLUMN_CARD + "=" +
-                Integer.toString(this.cardId);
-
+        String query = dbHelper.buildSelectQuery(
+                RelationEntry.TABLE_NAME,
+                Arrays.asList(RelationEntry.COLUMN_CARD + "=" + Integer.toString(this.cardId))
+        );
         Cursor cursor = db.rawQuery(query, null);
         List<Deck> decks = new ArrayList<Deck>();
         while(cursor.moveToNext()){

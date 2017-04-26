@@ -11,6 +11,7 @@ import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -33,9 +34,11 @@ public class ExternalStatisticsManager implements StatisticsManager {
     @Override
     public Statistics forTimeSpan(long start, long length) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + AnswerEntry.TABLE_NAME +
-                " WHERE " + AnswerEntry.COLUMN_ASKED_AT + ">=" + String.valueOf(start) +
-                " AND " + AnswerEntry.COLUMN_ASKED_AT + "<=" + String.valueOf(start+length);
+        String query = dbHelper.buildSelectQuery(
+                AnswerEntry.TABLE_NAME,
+                Arrays.asList(AnswerEntry.COLUMN_ASKED_AT + ">=" + String.valueOf(start),
+                        AnswerEntry.COLUMN_ASKED_AT + "<=" + String.valueOf(start + length))
+        );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();
@@ -64,8 +67,10 @@ public class ExternalStatisticsManager implements StatisticsManager {
     @Override
     public Statistics forCard(Card c) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + AnswerEntry.TABLE_NAME +
-                " WHERE " + AnswerEntry.COLUMN_CARD + "=" + ((ExternalCard) c).getId();
+        String query = dbHelper.buildSelectQuery(
+                AnswerEntry.TABLE_NAME,
+                Arrays.asList(AnswerEntry.COLUMN_CARD + "=" + ((ExternalCard) c).getId())
+        );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();
@@ -93,8 +98,10 @@ public class ExternalStatisticsManager implements StatisticsManager {
     @Override
     public Statistics forDeck(Deck d) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + AnswerEntry.TABLE_NAME +
-                " WHERE " + AnswerEntry.COLUMN_DECK + "=" + ((ExternalDeck) d).getDeckId();
+        String query = dbHelper.buildSelectQuery(
+                AnswerEntry.TABLE_NAME,
+                Arrays.asList(AnswerEntry.COLUMN_DECK + "=" + ((ExternalDeck) d).getDeckId())
+        );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();

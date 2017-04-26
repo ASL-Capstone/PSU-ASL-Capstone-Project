@@ -9,6 +9,7 @@ import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,8 +33,10 @@ public class ExternalTestManager implements TestManager{
         String query;
         List<Question> questions = new ArrayList<Question>();
         for(Deck deck : sources) {
-            query = "SELECT * FROM " + RelationEntry.TABLE_NAME +
-                    " WHERE " + RelationEntry.COLUMN_DECK + "=" + ((ExternalDeck)deck).getDeckId();
+            query = dbHelper.buildSelectQuery(
+                    RelationEntry.TABLE_NAME,
+                    Arrays.asList(RelationEntry.COLUMN_DECK + "=" + ((ExternalDeck) deck).getDeckId())
+            );
             Cursor cursor = db.rawQuery(query, null);
             while(cursor.moveToNext()){
                 int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));

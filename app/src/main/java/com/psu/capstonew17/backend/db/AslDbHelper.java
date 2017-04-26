@@ -3,6 +3,8 @@ package com.psu.capstonew17.backend.db;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
+import android.util.Pair;
+import java.util.List;
 
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 
@@ -93,6 +95,21 @@ public class AslDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DROP_CARD);
         db.execSQL(SQL_DROP_ANSWER);
         db.execSQL(SQL_DROP_RELATION);
+    }
+
+    public String buildSelectQuery(String tableName, List<String> whereConditions){
+        String query =  "SELECT * FROM " + tableName;
+        if(whereConditions == null){
+            return query;
+        }
+        query += " WHERE ";
+        for(String clause : whereConditions){
+            query += clause;
+            if(whereConditions.indexOf(clause) + 1 < whereConditions.size()){
+                query += " AND ";
+            }
+        }
+        return query;
     }
 
 }

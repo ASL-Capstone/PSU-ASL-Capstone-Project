@@ -10,6 +10,8 @@ import com.psu.capstonew17.backend.api.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 
+import java.util.Arrays;
+
 
 public class ExternalCardManager implements CardManager{
     public static ExternalCardManager INSTANCE = new ExternalCardManager();
@@ -27,8 +29,10 @@ public class ExternalCardManager implements CardManager{
 
     public Card getCard(int id){
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = "SELECT * FROM " + CardEntry.TABLE_NAME +
-                " WHERE " + CardEntry.COLUMN_ID + "=" + id;
+        String query = dbHelper.buildSelectQuery(
+                CardEntry.TABLE_NAME,
+                Arrays.asList(CardEntry.COLUMN_ID + "=" + id)
+        );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             int videoId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_VIDEO));
@@ -41,12 +45,14 @@ public class ExternalCardManager implements CardManager{
     @Override
     public Card buildCard(Video video, String answer) throws ObjectAlreadyExistsException {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String query = "SELECT * FROM " + CardEntry.TABLE_NAME +
-                " WHERE " + CardEntry.COLUMN_VIDEO + "=" + ((ExternalVideo) video).getVideoId();
+        String query = dbHelper.buildSelectQuery(
+                CardEntry.TABLE_NAME,
+                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + ((ExternalVideo) video).getVideoId())
+        );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             cursor.close();
-            throw new ObjectAlreadyExistsException("A card for this video and answer already exists.");
+            throw new ObjectAlreadyExistsException("A card for this video already exists.");
         }
         cursor.close();
         ContentValues values = new ContentValues();
