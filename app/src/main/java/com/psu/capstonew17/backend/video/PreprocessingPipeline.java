@@ -22,12 +22,24 @@ public class PreprocessingPipeline {
     private File output;
     private File input;
 
+    private PreprocessingListener listener = null;
+
+    public interface PreprocessingListener {
+        void onCompleted();
+    }
+
     public PreprocessingPipeline(File outFile, File inFile) throws IOException {
         output = outFile;
         input = inFile;
     }
 
+    public void setListener(PreprocessingListener l) {
+        listener = l;
+    }
+
     public void start() throws IOException {
+        PreprocessingOperation op = new PreprocessingOperation();
+        op.execute(input, output);
     }
 
     private class PreprocessingOperation extends AsyncTask<File, Void, Void> {
@@ -175,6 +187,13 @@ public class PreprocessingPipeline {
             decoder.stop();
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(listener != null) {
+                listener.onCompleted();
+            }
         }
     }
 }
