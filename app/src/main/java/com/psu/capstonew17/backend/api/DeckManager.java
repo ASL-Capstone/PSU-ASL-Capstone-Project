@@ -10,7 +10,7 @@ public interface DeckManager {
     /**
      * Create a new deck with the specified name and contents
      */
-    Deck buildDeck(String name, List<Card> cards);
+    Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException;
 
     /**
      * Get the default deck object that all cards are added to automatically.
