@@ -30,5 +30,5 @@ public interface Statistics {
     /**
      * Get the average time to answer each question
      */
-    Duration getAverageAnswerTime();
+    Long getAverageAnswerTime();
 }

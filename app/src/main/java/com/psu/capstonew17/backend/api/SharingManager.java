@@ -16,6 +16,13 @@ public interface SharingManager {
         public int maxTargets;
     }
 
+    class RxOptions {
+        /**
+         * Maximum retries
+         */
+        public int retries;
+    }
+
     /**
      * Start a sharing session with the supplied objects and options.
      *
@@ -31,5 +38,6 @@ public interface SharingManager {
      * Start a receive session with the supplied options
      * TODO: Interface for this
      */
-    void receive();
+    void receive(RxOptions opts, SharingReceiveListener listener);
+    //void receive(QRCode code, RxOptions opts, SharingReceiveListener listener);
 }
