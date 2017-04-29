@@ -56,6 +56,10 @@
         <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".CompleteQuizActivity"
+                  android:parentActivityName=".HomeActivity"
+                  android:screenOrientation="portrait">
+        </activity>
 
         <service
             android:name="com.psu.capstonew17.backend.sharing.SharingServer"

@@ -10,10 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * Created by thanhhoang on 4/4/17.
- */
-
-/**
  * This activity implements behavior of drop down menu
  * and actions of item selected
  */

@@ -17,6 +17,7 @@
 
     <RadioGroup
         android:layout_width="match_parent"
+        android:id="@+id/radioGroupQuizChoice"
         android:layout_height="43dp"
         android:orientation="horizontal">
 
@@ -25,23 +26,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_multiple_choice" />
+            android:text="@string/button_multiple_choice"
+            android:onClick="onQuizTypeClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonFlashCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_flash_card" />
+            android:text="@string/button_flash_card"
+            android:onClick="onQuizTypeClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonWriteUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_write_up" />
+            android:text="@string/button_write_up"
+            android:onClick="onQuizTypeClicked"/>
     </RadioGroup>
 
     <TextView
+        android:id="@+id/textViewChooseNumberOfQuestions"
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_margin="10dp"
@@ -52,6 +57,7 @@
         tools:ignore="HardcodedText" />
 
     <RadioGroup
+        android:id = "@+id/radioGroupQuestionCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -62,7 +68,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_ten_questions" />
+            android:text="@string/button_ten_questions"
+            android:onClick="onNumQuestionsClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonThirtyQuestions"
@@ -70,7 +77,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_thirty_questions" />
+            android:text="@string/button_thirty_questions"
+            android:onClick="onNumQuestionsClicked"/>
 
         <RadioButton
             android:id="@+id/radioButtonFiftyQuestions"
@@ -78,8 +86,20 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_fifty_questions" />
+            android:text="@string/button_fifty_questions"
+            android:onClick="onNumQuestionsClicked"/>
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/promptChooseDecks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="@string/label_choose_decks"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -89,12 +109,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical" >
+
+        </LinearLayout>
     </ScrollView>
 
     <Button
         android:id="@+id/buttonTakeQuiz"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_take_quiz" />
+        android:text="@string/button_take_quiz"
+        android:onClick="takeQuizButtonClicked"/>
 </LinearLayout>
