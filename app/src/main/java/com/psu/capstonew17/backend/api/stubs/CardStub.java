@@ -1,4 +1,8 @@
-package com.psu.capstonew17.backend.api;
+package com.psu.capstonew17.backend.api.stubs;
+
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.Video;
 
 import java.util.List;
 
@@ -6,7 +10,7 @@ import java.util.List;
  * Created by Tim on 4/27/2017.
  */
 
-public class CardStub implements Card{
+public class CardStub implements Card {
     private Video video;
     private String translation;
     private List<Deck> activeDecks;

@@ -1,4 +1,9 @@
-package com.psu.capstonew17.backend.api;
+package com.psu.capstonew17.backend.api.stubs;
+
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.DeckManager;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 
 import java.util.List;
 

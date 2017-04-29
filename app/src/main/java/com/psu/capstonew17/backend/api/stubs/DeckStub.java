@@ -1,4 +1,7 @@
-package com.psu.capstonew17.backend.api;
+package com.psu.capstonew17.backend.api.stubs;
+
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Deck;
 
 import java.util.List;
 
@@ -6,7 +9,7 @@ import java.util.List;
  * Created by Tim on 4/27/2017.
  */
 
-public class DeckStub implements Deck{
+public class DeckStub implements Deck {
     private String name;
     private List<Card> cards;
 

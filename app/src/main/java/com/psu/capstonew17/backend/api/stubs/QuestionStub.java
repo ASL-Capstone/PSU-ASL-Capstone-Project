@@ -1,7 +1,10 @@
-package com.psu.capstonew17.backend.api;
+package com.psu.capstonew17.backend.api.stubs;
 
 import java.util.List;
 import android.util.Pair;
+
+import com.psu.capstonew17.backend.api.Question;
+import com.psu.capstonew17.backend.api.Video;
 
 /**
  * Created by Tim on 4/27/2017.

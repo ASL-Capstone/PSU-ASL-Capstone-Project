@@ -1,4 +1,7 @@
-package com.psu.capstonew17.backend.api;
+package com.psu.capstonew17.backend.api.stubs;
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Statistics;
+
 import java.util.List;
 import javax.xml.datatype.Duration;
 /**
