@@ -13,17 +13,20 @@ public class ExternalSharingTransmitListener implements SharingTransmitListener{
      * Called when a client connects to the sharing server.
      */
     @Override
-    void onClientConnect(String peerID);
+    public void onClientConnect(String peerID) {
+
+    }
 
     /**
      * Called when a client receives the shared object successfully.
      */
     @Override
-    void onTransmittedSuccessfully(String peerID);
+    public void onTransmittedSuccessfully(String peerID) {
 
-    /**
-     * Called when a connected client disconnects before receiving all data.
-     */
+    }
+
     @Override
-    void onClientError(String peerID, DisconnectReason why);
+    public void onClientError(String peerID, SharingTransmitListener.DisconnectReason why) {
+
+    }
 }

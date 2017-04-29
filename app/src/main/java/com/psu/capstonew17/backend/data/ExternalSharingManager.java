@@ -33,12 +33,16 @@ public class ExternalSharingManager implements SharingManager {
      * @return The sharing QR code as a bitmap
      */
     @Override
-    Bitmap transmit(List<Card> cards, List<Deck> decks, SharingManager.TxOptions opts, SharingTransmitListener listener);
+    public Bitmap transmit(List<Card> cards, List<Deck> decks, SharingManager.TxOptions opts, SharingTransmitListener listener) {
+        return null;
+    }
+
     /**
      * Start a receive session with the supplied options
      * TODO: Interface for this
      */
     @Override
-    void receive(SharingManager.RxOptions opts, SharingReceiveListener listener);
+    public void receive(SharingManager.RxOptions opts, SharingReceiveListener listener) {
+    }
     //void receive(QRCode code, RxOptions opts, SharingReceiveListener listener);
 }
