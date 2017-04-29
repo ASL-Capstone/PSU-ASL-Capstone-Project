@@ -20,44 +20,44 @@
         <activity
             android:name=".TakeQuizSubMenuActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".MultipleChoiceActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".FlashCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".WriteUpActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ManageDecksSubMenuActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ManageDecksSubMenuActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ManageCardsSubMenuActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".CreateCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".DeleteCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".CreateEditDeleteDeckActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ReceiveDeckActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ShareDeckActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CompleteQuizActivity"
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CreateDeckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditDeckActivity"
             android:screenOrientation="portrait" />
 
     </application>
