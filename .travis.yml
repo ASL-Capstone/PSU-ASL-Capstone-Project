@@ -1,0 +1,14 @@
+language: android
+android:
+    components:
+        - platform-tools
+        - build-tools-25.0.2
+        - android-24
+script:
+    - ./gradlew build
+before_install:
+    - chmod +x gradlew
+branches:
+    only:
+        - master
+        - Develop
