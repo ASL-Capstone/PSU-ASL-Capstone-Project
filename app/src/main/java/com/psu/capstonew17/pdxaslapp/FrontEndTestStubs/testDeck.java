@@ -14,7 +14,7 @@ public class testDeck implements Deck {
     protected String name;
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override

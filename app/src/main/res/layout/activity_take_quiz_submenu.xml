@@ -102,11 +102,13 @@
         tools:ignore="HardcodedText" />
 
     <ScrollView
+        android:id="@+id/deckListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.24">
 
         <LinearLayout
+            android:id="@+id/deckListLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
