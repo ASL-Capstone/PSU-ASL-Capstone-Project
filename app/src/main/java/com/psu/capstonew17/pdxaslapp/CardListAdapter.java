@@ -1,3 +1,4 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Context;
