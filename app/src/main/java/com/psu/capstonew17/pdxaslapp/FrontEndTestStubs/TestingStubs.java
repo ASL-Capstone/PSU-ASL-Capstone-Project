@@ -52,13 +52,18 @@ public class TestingStubs {
     public static List<Deck> manyDecks(){
         Deck d = new testDeck();
         List<Deck> ret = new ArrayList<>();
-        d.setName("Deck One");
+        for(int i = 1; i < 21; ++i){
+            d.setName("Deck " + i);
+            ret.add(d);
+            d = new testDeck();
+        }
+        d.setName("Deck Twenty-One");
         ret.add(d);
         d = new testDeck();
-        d.setName("Deck Two");
+        d.setName("Deck Twenty-Two");
         ret.add(d);
         d = new testDeck();
-        d.setName("Deck Three");
+        d.setName("Deck Twenty-Three");
         ret.add(d);
         return ret;
     }
