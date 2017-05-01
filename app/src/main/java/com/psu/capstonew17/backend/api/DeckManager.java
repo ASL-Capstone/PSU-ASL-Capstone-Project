@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.api;
 import java.util.List;
 
@@ -10,7 +12,7 @@ public interface DeckManager {
     /**
      * Create a new deck with the specified name and contents
      */
-    Deck buildDeck(String name, List<Card> cards);
+    Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException;
 
     /**
      * Get the default deck object that all cards are added to automatically.

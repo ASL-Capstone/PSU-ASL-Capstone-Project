@@ -1,12 +1,22 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
+
+import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 public class TakeQuizSubMenuActivity extends BaseActivity {
     private int numQuestions;
@@ -14,45 +24,84 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
     private quizType quizOption;
     private RadioGroup numGroup;
     private TextView numPrompt;
+    private LinearLayout deckLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         numQuestions = 0;
         quizOption = quizType.NONE;
 
-        //TODO populate list view of decks
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_take_quiz_submenu);
+        deckLayout = (LinearLayout)findViewById(R.id.deckListLayout);
+
+
+        //get Decks
+        //TODO uncomment back end call in quiz selector activity when ready
+        //get Decks from backend
+        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
+
+        //get Decks from current testing
+        ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
+
+        //set the multiple choice specific part to be invisible
         numGroup = (RadioGroup) findViewById(R.id.radioGroupQuestionCount);
         numGroup.setVisibility(View.GONE);
         numPrompt = (TextView) findViewById(R.id.textViewChooseNumberOfQuestions);
         numPrompt.setVisibility(View.GONE);
+
+        int numDecks = deckList.size();
+        for(int i = 0; i < numDecks; ++i){
+            String deckName = (deckList.get(i).getName());
+            CheckBox ch = new CheckBox(this);
+            ch.setText(deckName);
+            deckLayout.addView(ch);
+        }
     }
 
 
     public void takeQuizButtonClicked(View view){
         Intent intent;
-        if(quizOption == quizType.MULTIPLE_CHOICE && numQuestions == 0){
+        ArrayList<String> decks = new ArrayList<String>();
+        if(quizOption == quizType.MULTIPLE_CHOICE && numQuestions == 0) {
             //Error tell user to make selection
             Toast.makeText(this, "ERROR Enter number of Questions", Toast.LENGTH_SHORT).show();
         }
         else {
-            switch (quizOption) {
-                case MULTIPLE_CHOICE:
-                    intent = new Intent(this, MultipleChoiceActivity.class);
-                    Bundle questionCount = new Bundle();
-                    questionCount.putInt("numQuestions", numQuestions);
-                    intent.putExtras(questionCount);
-                    startActivity(intent);
-                    break;
-                case FLASH_CARD:
-                    intent = new Intent(this, FlashCardActivity.class);
-                    startActivity(intent);
-                    break;
-                case WRITE_UP:
-                    intent = new Intent(this, WriteUpActivity.class);
-                    startActivity(intent);
-                    break;
+            //Bundle the Deck Names to be sent to the quiz.
+            int checks = deckLayout.getChildCount();
+            for (int i = 0; i < checks; ++i) {
+                CheckBox cb = (CheckBox) deckLayout.getChildAt(i);
+                if (cb.isChecked()) {
+                    decks.add(cb.getText().toString());
+                }
+            }
+            // Check for No Checks
+            if (decks.size() == 0) {
+                Toast.makeText(this, "ERROR Select a Deck", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                switch (quizOption) {
+                    case MULTIPLE_CHOICE:
+                        // setup next intent
+                        intent = new Intent(this, MultipleChoiceActivity.class);
+                        Bundle questionCount = new Bundle();
+                        questionCount.putInt("numQuestions", numQuestions);
+                        intent.putExtras(questionCount);
+                        intent.putStringArrayListExtra("Decks",decks);
+                        startActivity(intent);
+                        break;
+                    case FLASH_CARD:
+                        intent = new Intent(this, FlashCardActivity.class);
+                        intent.putStringArrayListExtra("Decks",decks);
+                        startActivity(intent);
+                        break;
+                    case WRITE_UP:
+                        intent = new Intent(this, WriteUpActivity.class);
+                        intent.putStringArrayListExtra("Decks",decks);
+                        startActivity(intent);
+                        break;
+                }
             }
         }
     }

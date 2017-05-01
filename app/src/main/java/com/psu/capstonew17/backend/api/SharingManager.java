@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.api;
 import android.graphics.Bitmap;
 
@@ -16,6 +18,13 @@ public interface SharingManager {
         public int maxTargets;
     }
 
+    class RxOptions {
+        /**
+         * Maximum retries
+         */
+        public int retries;
+    }
+
     /**
      * Start a sharing session with the supplied objects and options.
      *
@@ -31,5 +40,6 @@ public interface SharingManager {
      * Start a receive session with the supplied options
      * TODO: Interface for this
      */
-    void receive();
+    void receive(RxOptions opts, SharingReceiveListener listener);
+    //void receive(QRCode code, RxOptions opts, SharingReceiveListener listener);
 }

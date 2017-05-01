@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.api;
 import java.util.List;
 import javax.xml.datatype.Duration;
@@ -30,5 +32,5 @@ public interface Statistics {
     /**
      * Get the average time to answer each question
      */
-    Duration getAverageAnswerTime();
+    Long getAverageAnswerTime();
 }
