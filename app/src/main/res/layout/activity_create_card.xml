@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_create_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -27,7 +28,7 @@
             android:text="@string/button_import_video"
             android:textSize="30sp"
             android:textStyle="bold"
-             />
+            />
     </RelativeLayout>
 
     <EditText
@@ -35,8 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:labelFor="@+id/edit_text_video_description"
-        android:text="@string/edit_text_video_description"
         android:gravity="center"
+        android:hint="@string/edit_text_card_answer"
+        android:textColorHint="@color/lightGray"
         android:background="@drawable/background_dark_border"
         android:layout_margin="3dp"
         android:ems="10"
@@ -48,6 +50,7 @@
         />
 
 
+<<<<<<< Updated upstream
     <include
         layout="@layout/list_decks"
         android:layout_width="match_parent"
@@ -55,3 +58,11 @@
 
 
 </LinearLayout>
+=======
+    <include layout="@layout/list_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
+>>>>>>> Stashed changes
