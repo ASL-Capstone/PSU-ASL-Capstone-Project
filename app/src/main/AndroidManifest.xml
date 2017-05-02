@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psu.capstonew17.pdxaslapp">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,46 +26,45 @@
         <activity
             android:name=".TakeQuizSubMenuActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".MultipleChoiceActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".FlashCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".WriteUpActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".ManageDecksSubMenuActivity"
-            android:screenOrientation="portrait"/>
-
+        <activity
+            android:name=".ManageDecksSubMenuActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ManageCardsSubMenuActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".CreateCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".DeleteCardActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".CreateEditDeleteDeckActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ReceiveDeckActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".CompleteQuizActivity"
+                  android:parentActivityName=".HomeActivity"
+                  android:screenOrientation="portrait">
+        </activity>
 
+        <service
+            android:name="com.psu.capstonew17.backend.sharing.SharingServer"
+            android:enabled="true"
+            android:exported="false"></service>
     </application>
 
 </manifest>

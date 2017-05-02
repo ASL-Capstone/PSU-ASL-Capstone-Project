@@ -4,11 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
-/**
- * Created by thanhhoang on 4/4/17.
- */
-
 public class FlashCardActivity extends BaseActivity implements View.OnClickListener {
     private Button bttSubmit;
 
