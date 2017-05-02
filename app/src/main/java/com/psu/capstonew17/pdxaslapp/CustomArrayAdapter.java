@@ -3,8 +3,6 @@ package com.psu.capstonew17.pdxaslapp;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,10 +16,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
+/**
+ * Public adapter for display selectable decks in listView layout.
+ **/
 public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
     private LayoutInflater layoutInflater;
     private CheckBox checkBox;
+    private TextView textView;
     private ArrayList<ListRow> objects;
 
     public CustomArrayAdapter(Context context, int resource, ArrayList<ListRow> objects) {
@@ -34,8 +35,11 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
     public View getView(final int position, View convertView, ViewGroup parent) {
 
         // check null view and declare view holder
-        convertView = layoutInflater.inflate(R.layout.list_row, null);
+        convertView = layoutInflater.inflate(R.layout.item, null);
         checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
+        textView = (TextView) convertView.findViewById(R.id.list_row_textView);
+
+        textView.setText(objects.get(position).name);
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -56,8 +60,6 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
             }
         });
 
-
-
         return convertView;
     }
 
@@ -67,9 +69,15 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         return objects.get(position);
     }
 
+
+    /**
+     * Return a modified list of decks.
+     * @return
+     */
     public ArrayList<ListRow> getItems() {
         return objects;
     }
+
 }
 
 

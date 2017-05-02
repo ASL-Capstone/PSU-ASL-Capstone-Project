@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psu.capstonew17.pdxaslapp">
 
+    <uses-permission android:name="android.permission.RECORD_VIDEO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -37,7 +40,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CreateCardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".DeleteCardActivity"
             android:screenOrientation="portrait" />
@@ -50,6 +54,7 @@
         <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
+<<<<<<< Updated upstream
         <activity android:name=".CompleteQuizActivity"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"/>
@@ -60,6 +65,13 @@
             android:name=".EditDeckActivity"
             android:screenOrientation="portrait" />
 
+=======
+        <activity
+            android:name=".CompleteQuizActivity"
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".EditVideoActivity"></activity>
+>>>>>>> Stashed changes
     </application>
 
 </manifest>
