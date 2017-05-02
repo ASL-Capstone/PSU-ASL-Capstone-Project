@@ -54,10 +54,7 @@
         <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
-<<<<<<< Updated upstream
-        <activity android:name=".CompleteQuizActivity"
-            android:parentActivityName=".HomeActivity"
-            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".CreateDeckActivity"
             android:screenOrientation="portrait" />
@@ -65,13 +62,11 @@
             android:name=".EditDeckActivity"
             android:screenOrientation="portrait" />
 
-=======
         <activity
             android:name=".CompleteQuizActivity"
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"></activity>
         <activity android:name=".EditVideoActivity"></activity>
->>>>>>> Stashed changes
     </application>
 
 </manifest>
