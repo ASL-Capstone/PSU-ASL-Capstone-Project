@@ -30,7 +30,7 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
 
 
         // display list of cards
-        listView = (ListView) findViewById(R.id.list_decks);
+        listView = (ListView) findViewById(R.id.list_items);
         myAdapter =  new CustomArrayAdapter(this, 0, list);
         listView.setAdapter(myAdapter);
     }
