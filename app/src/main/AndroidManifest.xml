@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -54,10 +60,11 @@
         <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
-<<<<<<< Updated upstream
         <activity android:name=".CompleteQuizActivity"
-            android:parentActivityName=".HomeActivity"
-            android:screenOrientation="portrait"/>
+                  android:parentActivityName=".HomeActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
         <activity
             android:name=".CreateDeckActivity"
             android:screenOrientation="portrait" />
@@ -65,13 +72,13 @@
             android:name=".EditDeckActivity"
             android:screenOrientation="portrait" />
 
-=======
-        <activity
-            android:name=".CompleteQuizActivity"
-            android:parentActivityName=".HomeActivity"
-            android:screenOrientation="portrait"></activity>
         <activity android:name=".EditVideoActivity"></activity>
->>>>>>> Stashed changes
+
+        <service
+            android:name="com.psu.capstonew17.backend.sharing.SharingServer"
+            android:enabled="true"
+            android:exported="false"></service>
+
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@ package com.psu.capstonew17.backend.api;
 /**
  * Listener interface to handle sharing receive operations
  */
-interface SharingReceiveListener {
+public interface SharingReceiveListener {
     enum ErrorType {
         CONNECTION_FAILED
     }
