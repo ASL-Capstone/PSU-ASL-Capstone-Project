@@ -48,11 +48,10 @@
         />
 
 
-    <include layout="@layout/list_decks"
+    <include
+        layout="@layout/list_decks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>

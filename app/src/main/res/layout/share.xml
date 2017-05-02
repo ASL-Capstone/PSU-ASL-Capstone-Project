@@ -7,52 +7,22 @@
     android:weightSum="1">
 
     <!-- TODO  add scroll view for large sets of decks-->
-    <LinearLayout
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_weight="0.91">
+        android:layout_height="match_parent">
 
-        <CheckBox
-            android:id="@+id/checkBox21"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Deck 1"
-            tools:ignore="HardcodedText,NestedWeights" />
+            android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/checkBox20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Deck 2"
-            tools:ignore="HardcodedText" />
-
-        <CheckBox
-            android:id="@+id/checkBox19"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Deck 3"
-            tools:ignore="HardcodedText" />
-
-        <CheckBox
-            android:id="@+id/checkBox17"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Deck 4"
-            tools:ignore="HardcodedText" />
-
-        <CheckBox
-            android:id="@+id/checkBox16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Other deck"
-            tools:ignore="HardcodedText" />
-    </LinearLayout>
+            <RadioGroup
+                android:id="@+id/deckList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/button3"

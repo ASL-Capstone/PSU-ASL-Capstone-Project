@@ -51,9 +51,15 @@
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".CompleteQuizActivity"
-                  android:parentActivityName=".HomeActivity"
-                  android:screenOrientation="portrait">
-        </activity>
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".CreateDeckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditDeckActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
