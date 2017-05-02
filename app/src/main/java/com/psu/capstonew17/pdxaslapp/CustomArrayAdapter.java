@@ -39,7 +39,12 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
         textView = (TextView) convertView.findViewById(R.id.list_row_textView);
 
-        textView.setText(objects.get(position).name);
+        ListRow aRow = objects.get(position);
+
+        textView.setText(aRow.name);
+        if (aRow.isChecked) {
+            checkBox.setChecked(true);
+        }
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
