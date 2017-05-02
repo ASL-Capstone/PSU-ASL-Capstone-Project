@@ -48,6 +48,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
             row.setBackgroundResource(R.drawable.background1);
         }
 
+
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
