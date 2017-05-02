@@ -13,7 +13,6 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
-import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.tesTestManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
@@ -52,10 +51,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     //currently crashes after first answer: will fix in the morning
     protected void loadQuestion(){
         if(currTest.hasNext()) {
-            int numChild = answers.getChildCount();
-            for(int i = 0; i < numChild; ++i){
-                answers.removeViewAt(i);
-            }
+            answers.removeAllViews();
             curQuestion = currTest.next();
             for (String answer : curQuestion.getOptions()){
                 RadioButton add = new RadioButton(this);
@@ -78,16 +74,16 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             int radioId = answers.indexOfChild(holder);
             RadioButton selectedAnswer = (RadioButton) answers.getChildAt(radioId);
             Pair<Boolean,String> result = curQuestion.answer(selectedAnswer.getText().toString());
-            if (result.first == true){
-                Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
+            if (result.first){
                 return 1;
             }
             else {
-                Toast.makeText(this, "Correct!" + result.second, Toast.LENGTH_SHORT).show();
                 return 0;
             }
         }
-        return -1;
+        else {
+            return -1;
+        }
     }
 
     @Override

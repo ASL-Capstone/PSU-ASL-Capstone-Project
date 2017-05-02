@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Doug Whitley on 5/1/2017.
  */
 
-public class tesTestManager implements TestManager {
+public class testTestManager implements TestManager {
     @Override
     public Test buildTest(List<Deck> sources, Options opts) {
         switch (opts.questionTypes) {
