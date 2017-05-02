@@ -27,7 +27,7 @@ public interface Question {
     Type getType();
 
     /**
-     * Return the available options if this is a multiple-choice question, or null othewise.
+     * Return the available options if this is a multiple-choice question, or null otherwise.
      */
     List<String> getOptions();
 

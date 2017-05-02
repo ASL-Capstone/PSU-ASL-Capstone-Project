@@ -9,32 +9,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
-import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
+import com.psu.capstonew17.backend.api.DeckManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 /**
  * Created by ichel on 4/28/2017.
  */
 
 public class EditDeckActivity extends BaseActivity {
-
     private ListView cardListView;
     private Deck deck;
     private List<Card> allCards;
     private List<Card> cardsInDeck;
     private List<CardListAdapter.CardStruct> cardStructs;
-    EditText textBox;
+    private EditText textBox;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_deck);
 
-        List<Deck> decks = TestingStubs.manyDecks();
-        allCards = TestingStubs.manyCards();
-        cardStructs = new ArrayList<CardListAdapter.CardStruct>();
+        DeckManager deckManager = ExternalDeckManager.getInstance(this);
+        List<Deck>  decks       = deckManager.getDecks(null);
+        allCards                = deckManager.getDefaultDeck().getCards();
+        cardStructs             = new ArrayList<CardListAdapter.CardStruct>();
 
         //get the index of the selected deck to edit
         int checkedIndex = 0;
@@ -45,7 +47,7 @@ public class EditDeckActivity extends BaseActivity {
             }
         }
 
-        deck = decks.get(checkedIndex);
+        deck        = decks.get(checkedIndex);
         cardsInDeck = deck.getCards();
 
         //set the edit text box to the name of the deck
@@ -74,16 +76,21 @@ public class EditDeckActivity extends BaseActivity {
     //needs to be integrated with backend
     //TODO: integration with back end, constrict length of text entered in edit text
     //TODO: force user to select at least one card
-    public void onEditDoneClicked(View view) {
+    public void onEditSubmitClicked(View view) {
         List<Card> cardsInDeck = new ArrayList<Card>();
         for (CardListAdapter.CardStruct curr : cardStructs) {
             if(!cardsInDeck.contains(curr) && curr.selected) {
-                //need way to add cards to an existing deck.
-                //no method in backend api.
+                cardsInDeck.add(curr.card);
             }
         }
-        deck.setName(textBox.getText().toString());
-        deck.commit();
-        finish();
+
+        if(cardsInDeck.isEmpty()) {
+            Toast.makeText(this, "ERROR Select at least one card", Toast.LENGTH_SHORT).show();
+        } else {
+            //TODO: need function to add a card to an existing deck
+            deck.setName(textBox.getText().toString());
+            deck.commit();
+            finish();
+        }
     }
 }
