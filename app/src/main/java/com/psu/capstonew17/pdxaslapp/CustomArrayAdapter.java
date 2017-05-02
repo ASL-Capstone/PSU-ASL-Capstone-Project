@@ -41,9 +41,11 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
 
         ListRow aRow = objects.get(position);
 
-        textView.setText(aRow.name);
+        textView.setText(aRow.rowName);
         if (aRow.isChecked) {
             checkBox.setChecked(true);
+            View row = (View) checkBox.getParent();
+            row.setBackgroundResource(R.drawable.background1);
         }
 
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -55,12 +57,12 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
                     row.setBackgroundResource(R.drawable.background1);
                     object.isChecked = true;
                     objects.set(position, object);
-                    Log.d("item", "Item Click at " + position + ": " + object.name + " is " + object.isChecked);
+                    Log.d("item", "Item Click at " + position + ": " + object.rowName + " is " + object.isChecked);
                 } else {
                     row.setBackgroundResource(android.R.color.transparent);
                     object.isChecked = false;
                     objects.set(position, object);
-                    Log.d("item", "Item Click at " + position + ": " + object.name + " is " + object.isChecked);
+                    Log.d("item", "Item Click at " + position + ": " + object.rowName + " is " + object.isChecked);
                 }
             }
         });

@@ -4,8 +4,10 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -51,10 +53,23 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
 
         int numDecks = deckList.size();
         for(int i = 0; i < numDecks; ++i){
-            String deckName = (deckList.get(i).getName());
+            final String deckName = (deckList.get(i).getName());
             CheckBox ch = new CheckBox(this);
             ch.setText(deckName);
             deckLayout.addView(ch);
+
+            ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    View row = (View) buttonView.getParent();
+                    if (isChecked) {
+                        Log.d("item", "Item " + deckName + " is " + isChecked);
+                    } else {
+                        Log.d("item", "Item " + deckName + " is " + isChecked);
+                    }
+                }
+            });
+
         }
     }
 

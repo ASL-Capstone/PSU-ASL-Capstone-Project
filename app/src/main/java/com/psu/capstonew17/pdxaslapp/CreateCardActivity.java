@@ -6,28 +6,36 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.DeckManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
     private ListRow row;
-    private ArrayList<ListRow> list = new ArrayList<>();
+    private ArrayList<ListRow> listRows = new ArrayList<>();
     private CustomArrayAdapter myAdapter;
 
     private Button bttSubmit;
     private Button bttGetVideo;
     private EditText editText;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_card);
 
-        // Declare buttons, edittext
+        // Declare layout components
         bttSubmit = (Button) findViewById(R.id.button_submit);
         bttGetVideo = (Button) findViewById(R.id.button_get_video);
         bttSubmit.setText("Create");
@@ -38,26 +46,18 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttGetVideo.setOnClickListener(this);
         editText.setOnClickListener(this);
 
-        // TODO load list of decks, and store decks name in list
-        String[] strs = {"deck 1", "deck 2", "deck 3", "deck 4"};
+        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
-        for (String str: strs) {
-            row = new ListRow();
-            row.name = str;
-            row.isChecked = false;
-            list.add(row);
+        //get Decks from current testing
+        ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
+
+        for (int i = 0; i < deckList.size(); ++i) {
+            ListRow listRow = new ListRow(deckList.get(i).getName() , false);
+            listRows.add(listRow);
         }
 
-        row = new ListRow();
-        row.name = "checked deck 5";
-        row.isChecked = true;
-
-        list.add(row);
-
-
-
         listView = (ListView) findViewById(R.id.list_items);
-        myAdapter =  new CustomArrayAdapter(this, 0, list);
+        myAdapter =  new CustomArrayAdapter(this, 0, listRows);
         listView.setAdapter(myAdapter);
     }
 

@@ -54,4 +54,20 @@
         android:layout_height="match_parent"
         />
 
+    <!--<ScrollView-->
+        <!--android:id="@+id/deckListView_create_card"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.24">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/deckListLayout_create_card"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical" >-->
+
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
+
+
 </LinearLayout>
