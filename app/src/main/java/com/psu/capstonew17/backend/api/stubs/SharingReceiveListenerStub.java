@@ -10,8 +10,7 @@ public class SharingReceiveListenerStub implements SharingReceiveListener {
     public void onSuccess() {
         System.out.println("Share successful");
     }
-
     public void onError(ErrorType type) {
-        System.out.println("Share failed of type: " /*Error Type here*/);
+        System.out.println("Connection failed");
     }
 }
