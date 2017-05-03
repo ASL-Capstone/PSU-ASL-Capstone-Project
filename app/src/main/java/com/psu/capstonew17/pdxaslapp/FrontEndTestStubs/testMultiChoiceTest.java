@@ -9,9 +9,14 @@ import com.psu.capstonew17.backend.api.Test;
  */
 
 public class testMultiChoiceTest implements Test {
+    private int count = 0;
     @Override
     public boolean hasNext() {
-        return true;
+        if (count < 5) {
+            ++count;
+            return true;
+        }
+        return false;
     }
 
     @Override

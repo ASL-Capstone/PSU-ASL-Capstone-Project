@@ -1,6 +1,7 @@
 //MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -18,7 +19,7 @@ import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 import java.util.ArrayList;
 
 public class MultipleChoiceActivity extends BaseActivity implements View.OnClickListener {
-    // Names Passed into the activity from qui selection activity.
+    // Names Passed into the activity from quiz selection activity.
     ArrayList<String> deckNamesForQuiz;
     // Used for test generation when the back end is hooked in.
     ArrayList<Deck> decksForQuiz;
@@ -28,6 +29,10 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     Test currTest;
     // Submit button used by this activity
     Button submit;
+    // Tracks number of questions the user has answered
+    int totalQuestions;
+    // Tracks number of correct responses the user gave
+    int totalCorect;
 
     // TODO Hook up actual Test Manager
     TestManager testManager;
@@ -53,13 +58,13 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             finish();
             return;
         }
-        //Testing params passed in
-        //TODO Remove after testing
+        // Testing params passed in
+        // TODO Remove after testing
         Toast.makeText(this, "Number of Questions: " + numQuestions, Toast.LENGTH_SHORT).show();
         for (int i = 0; i < deckNamesForQuiz.size(); ++i){
             Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
         }
-        //get the generic Test
+        // Get the generic Test
         // TODO Update to using the actual backend quiz generation
         currTest = new testMultiChoiceTest();
         // Hook up the Radio Container and the Submit Button
@@ -85,7 +90,14 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 add.setText(answer);
                 answers.addView(add);
             }
-            //TODO hook video up
+            // TODO hook video up
+        }
+        //No more questions leave quiz activity
+        else{
+            Intent intent = new Intent(this,CompleteQuizActivity.class);
+            intent.putExtra("NumCorrect",totalCorect);
+            intent.putExtra("totalNum",totalQuestions);
+            startActivity(intent);
         }
     }
 
@@ -109,7 +121,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             if (result.first){
                 return 1;
             }
-            //Case: Incorrect
+            // Case: Incorrect
             else {
                 return 0;
             }
@@ -129,10 +141,13 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 switch (processAnswer()) {
                     // Case: User entered correct answer
                     case 1:
+                        totalCorect += 1;
+                        totalQuestions += 1;
                         Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                         break;
                     // Case: User Entered incorrect answer
                     case 0:
+                        totalQuestions += 1;
                         Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show();
                         break;
                     // Case: User did'nt enter an answer
