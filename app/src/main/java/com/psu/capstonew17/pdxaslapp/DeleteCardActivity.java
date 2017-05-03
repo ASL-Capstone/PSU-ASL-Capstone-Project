@@ -7,12 +7,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
+
 import java.util.ArrayList;
 
 public class DeleteCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
-    private ListRow row;
-    private ArrayList<ListRow> list = new ArrayList<>();
+    private ArrayList<ListRow> listRows = new ArrayList<>();
     private CustomArrayAdapter myAdapter;
 
     private Button bttSubmit;
@@ -26,17 +28,40 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
         bttSubmit.setText("Delete");
         bttSubmit.setOnClickListener(this);
 
-        // TODO load all cards
+        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
-        // display list of cards
+        //get Decks from current testing
+        ArrayList<Card> cardList = new ArrayList<>(TestingStubs.manyCards());
+
+        for (int i = 0; i < cardList.size(); ++i) {
+            ListRow listRow = new ListRow(cardList.get(i).getAnswer() , false);
+            listRows.add(listRow);
+        }
+
         listView = (ListView) findViewById(R.id.list_items);
-        myAdapter =  new CustomArrayAdapter(this, 0, list);
+        myAdapter =  new CustomArrayAdapter(this, 0, listRows);
         listView.setAdapter(myAdapter);
+
     }
 
 
     @Override
     public void onClick(View view) {
 
+        switch (view.getId()) {
+            case R.id.button_submit:
+                listRows = myAdapter.getItems();
+
+                for (ListRow row: listRows) {
+                    if (row.isChecked) {
+                        // TODO delete card, call back end api to delete
+                    }
+                }
+
+                break;
+
+            default:
+                break;
+        }
     }
 }

@@ -20,53 +20,57 @@ import java.util.ArrayList;
  * Public adapter for display selectable decks in listView layout.
  **/
 public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
-    private LayoutInflater layoutInflater;
+    private Context context;
     private CheckBox checkBox;
     private TextView textView;
     private ArrayList<ListRow> objects;
 
     public CustomArrayAdapter(Context context, int resource, ArrayList<ListRow> objects) {
         super(context, resource, objects);
-        this.layoutInflater = LayoutInflater.from(context);
+        this.context = context;
         this.objects = objects;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
+        RowViewHolder viewHolder;
 
-        // check null view and declare view holder
-        convertView = layoutInflater.inflate(R.layout.item, null);
-        checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
-        textView = (TextView) convertView.findViewById(R.id.list_row_textView);
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater)
+                    context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.item, null);
 
-        ListRow aRow = objects.get(position);
+            viewHolder = new RowViewHolder();
+            viewHolder.checkBox = (CheckBox)
+                    convertView.findViewById(R.id.list_row_checkBox);
+            viewHolder.textView = (TextView)
+                    convertView.findViewById(R.id.list_row_textView);
 
-        textView.setText(aRow.rowName);
-        if (aRow.isChecked) {
-            checkBox.setChecked(true);
-            View row = (View) checkBox.getParent();
-            row.setBackgroundResource(R.drawable.background1);
+            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    TextView label = (TextView) v.getTag(R.id.cardName);
+                    ListRow selectedDeck = objects.get(position);
+                    if(((CheckBox) v).isChecked())
+                        selectedDeck.isChecked = true;
+                    else
+                        selectedDeck.isChecked = false;
+
+                    objects.set(position, selectedDeck);
+                }
+            });
+
+            // store holder of view
+            convertView.setTag(viewHolder);
+            convertView.setTag(R.id.list_row_textView, viewHolder.textView);
+            convertView.setTag(R.id.list_row_checkBox, viewHolder.checkBox);
+
+        } else {
+            viewHolder = (RowViewHolder) convertView.getTag();
         }
 
-
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                View row = (View) buttonView.getParent();
-                ListRow object = objects.get(position);
-                if (isChecked) {
-                    row.setBackgroundResource(R.drawable.background1);
-                    object.isChecked = true;
-                    objects.set(position, object);
-                    Log.d("item", "Item Click at " + position + ": " + object.rowName + " is " + object.isChecked);
-                } else {
-                    row.setBackgroundResource(android.R.color.transparent);
-                    object.isChecked = false;
-                    objects.set(position, object);
-                    Log.d("item", "Item Click at " + position + ": " + object.rowName + " is " + object.isChecked);
-                }
-            }
-        });
+        viewHolder.checkBox.setTag(position);
+        viewHolder.textView.setText(objects.get(position).rowName);
+        viewHolder.checkBox.setChecked(objects.get(position).isChecked);
 
         return convertView;
     }

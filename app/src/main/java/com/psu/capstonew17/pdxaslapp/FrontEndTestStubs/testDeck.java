@@ -25,7 +25,7 @@ public class testDeck implements Deck {
     @Override
     public List<Card> getCards() {
         List<Card> ret = new ArrayList<>();
-        for (int i = 0; i < 26; ++i) {
+        for (int i = 0; i < 100; ++i) {
             testCard first = new testCard();
             first.setAnswer("Answer" + i);
             ret.add(first);

@@ -59,6 +59,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         listView = (ListView) findViewById(R.id.list_items);
         myAdapter =  new CustomArrayAdapter(this, 0, listRows);
         listView.setAdapter(myAdapter);
+
+
     }
 
     @Override
