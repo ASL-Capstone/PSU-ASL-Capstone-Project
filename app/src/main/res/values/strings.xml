@@ -19,6 +19,7 @@
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
     <string name="button_create">Create</string>
+    <string name="button_home">Home</string>
 
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>

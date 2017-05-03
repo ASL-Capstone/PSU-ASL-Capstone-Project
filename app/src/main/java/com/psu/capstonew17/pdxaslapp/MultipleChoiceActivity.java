@@ -98,6 +98,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             intent.putExtra("NumCorrect",totalCorect);
             intent.putExtra("totalNum",totalQuestions);
             startActivity(intent);
+            finish();
         }
     }
 

@@ -104,16 +104,19 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                         intent.putExtras(questionCount);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                     case FLASH_CARD:
                         intent = new Intent(this, FlashCardActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                     case WRITE_UP:
                         intent = new Intent(this, WriteUpActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                 }
             }

@@ -1,11 +1,15 @@
 //MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class CompleteQuizActivity extends AppCompatActivity {
+public class CompleteQuizActivity extends AppCompatActivity implements View.OnClickListener{
+    Button homeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,5 +25,14 @@ public class CompleteQuizActivity extends AppCompatActivity {
             TextView display = (TextView) findViewById(R.id.completeQuizCorrectText);
             display.setText("You got " + correct + " out of " + total + " questions!");
         }
+        homeButton = (Button) findViewById(R.id.button_home);
+        homeButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(this,HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
