@@ -4,54 +4,45 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        android:text="@string/add_video_text"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-        <TextView
-            android:id="@+id/creat_card_videoName"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginEnd="50dp"
-            android:background="@drawable/background1"
-            android:gravity="center"
-            android:text="@string/textView_no_video"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_get_video"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/background2"
-            android:text="@string/button_import_video"
-            android:textSize="30sp"
-            android:textStyle="bold"
-             />
-    </RelativeLayout>
+            android:id="@+id/buttonRecordVideo"
+            android:layout_width="195dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_record_video" />
 
-    <EditText
-        android:id="@+id/edit_text_video_description"
+        <Button
+            android:id="@+id/buttonFromGallery"
+            android:layout_width="191dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_select_video" />
+    </LinearLayout>
+
+    <VideoView
+        android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:labelFor="@+id/edit_text_video_description"
-        android:text="@string/edit_text_video_description"
-        android:gravity="center"
-        android:background="@drawable/background_dark_border"
-        android:layout_margin="3dp"
-        android:ems="10"
-        android:inputType="text" />
+        android:layout_height="328dp"
+        android:visibility="invisible" />
 
-    <include layout="@layout/submit_button"
+    <Button
+        android:id="@+id/buttonUseVIdeo"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        />
-
-
-    <include
-        layout="@layout/list_decks"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:text="@string/button_use_video"
+        android:visibility="invisible" />
 
 
 </LinearLayout>

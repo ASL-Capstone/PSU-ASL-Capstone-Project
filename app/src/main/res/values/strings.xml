@@ -16,9 +16,16 @@
     <string name="button_manage_cards">Manage Cards</string>
     <string name="button_submit">Submit</string>
     <string name="button_share">Share</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_create">Create</string>
+    <string name="button_home">Home</string>
+
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
     <string name="button_flash_card">Flash Card</string>
+    <string name="button_flash_card_next_question">Next</string>
+    <string name="button_flash_card_show_answer">Show Answer</string>
     <string name="button_write_up">Write Up</string>
     <string name="button_ten_questions">10</string>
     <string name="button_thirty_questions">30</string>
@@ -38,6 +45,12 @@
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
     <string name="textView_no_video">No Video Imported</string>
     <string name="button_import_video">+</string>
+    <string name="edit_text_card_answer">Enter Card Answer</string>
+    <string name="list_row_name">Row\'s Name</string>
     <string name="edit_text_video_description">Enter Video Description</string>
     <string name="list_row_deck_name">Deck\'s Name</string>
+    <string name="button_record_video">Record New Video</string>
+    <string name="button_select_video">Add From Gallery</string>
+    <string name="add_video_text">Create new video or add from gallery?</string>
+    <string name="button_use_video">Use This Video</string>
 </resources>
