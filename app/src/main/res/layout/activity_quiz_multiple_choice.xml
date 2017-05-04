@@ -30,14 +30,52 @@
             android:layout_marginRight="5dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_height="match_parent">
 
-            <RadioGroup
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="@string/placeholder_answer"                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView14"
+                />
+
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="@string/placeholder_answer"                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView13"
+                />
+
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15sp"
+                android:text="@string/placeholder_answer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/MultiChoiceAnswerRadioGroup">
-            </RadioGroup>
+                android:layout_height="wrap_content"
+                android:id="@+id/textView11"
+                />
+
+            <TextView
+                android:background="@drawable/background10_option_bg"
+                android:layout_margin="3dp"
+                android:padding="5dp"
+                android:maxLines="5"
+                android:textSize="15dp"
+                android:text="@string/placeholder_answer"                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView12"
+                />
         </LinearLayout>
     </ScrollView>
 
@@ -57,3 +95,5 @@
 
 
 </LinearLayout>
+
+

@@ -36,11 +36,11 @@
         android:orientation="horizontal">
 
         <Button
-            android:text="@string/button_submit"
+            android:text="Done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/bttn_create_done"
-            android:onClick="onCreateSubmitClicked"
+            android:onClick="onCreateDoneClicked"
             android:layout_weight="1" />
 
     </LinearLayout>

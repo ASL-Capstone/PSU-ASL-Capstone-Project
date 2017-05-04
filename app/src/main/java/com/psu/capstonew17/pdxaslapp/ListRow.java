@@ -2,11 +2,6 @@
 package com.psu.capstonew17.pdxaslapp;
 
 public class ListRow {
-    public String rowName;
+    public String name;
     public boolean isChecked;
-
-    public ListRow(String rowName, boolean isChecked) {
-        this.rowName = rowName;
-        this.isChecked = isChecked;
-    }
 }

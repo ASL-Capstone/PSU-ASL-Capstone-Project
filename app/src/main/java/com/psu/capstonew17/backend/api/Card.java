@@ -8,6 +8,7 @@ import java.util.List;
  * Public interface for card objects.
  */
 public interface Card {
+
     /**
      * Get the video associated with this card
      */

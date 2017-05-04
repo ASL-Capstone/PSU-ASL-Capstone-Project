@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_row"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,12 +16,9 @@
         android:id="@+id/list_row_textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/list_row_name"
+        android:text="@string/list_row_deck_name"
         android:layout_gravity="center"
         android:layout_marginLeft="10dp"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
-
-
-
 
 </LinearLayout>
