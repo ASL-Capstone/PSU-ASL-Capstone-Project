@@ -31,11 +31,42 @@
             />
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/edit_text_video_description"
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:labelFor="@+id/edit_text_video_description"
+        >
+
+        <Button
+            android:id="@+id/buttonRecordVideo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_record"
+            />
+
+        <Button
+            android:id="@+id/buttonFromGallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_get_from_gallery"
+            />
+
+        <Button
+            android:id="@+id/buttonUseVIdeo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_edit"
+            />
+
+    </TableRow>
+
+    <EditText
+        android:id="@+id/edit_text_video_answer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:labelFor="@+id/edit_text_video_answer"
         android:gravity="center"
         android:hint="@string/edit_text_card_answer"
         android:textColorHint="@color/lightGray"
@@ -53,21 +84,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
-    <!--<ScrollView-->
-        <!--android:id="@+id/deckListView_create_card"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_weight="0.24">-->
-
-        <!--<LinearLayout-->
-            <!--android:id="@+id/deckListLayout_create_card"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="vertical" >-->
-
-        <!--</LinearLayout>-->
-    <!--</ScrollView>-->
 
 
 </LinearLayout>

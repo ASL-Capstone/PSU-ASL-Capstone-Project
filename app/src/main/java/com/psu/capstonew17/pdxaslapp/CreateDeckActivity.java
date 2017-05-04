@@ -32,29 +32,29 @@ public class CreateDeckActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_deck);
-
-        deckManager = ExternalDeckManager.getInstance(this);
-        allCards    = deckManager.getDefaultDeck().getCards();
-        cardStructs = new ArrayList<ListRow>();
-        textBox     = (EditText) findViewById(R.id.createDeckNameField);
-
-
-        //create the card structs, sets all selected values to false
-        //as this is a new deck.
-        for (Card curr : allCards) {
-            ListRow cardStruct = new ListRow(curr.getAnswer(), false);
-            cardStructs.add(cardStruct);
-        }
-
-        //set ListView options, create an instance of the CardList
-        //adapter and set it as the adapter of the ListView
-        cardListView = (ListView)findViewById(R.id.createCardListView);
-        cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        CustomArrayListAdapter adapter =
-                new CustomArrayListAdapter(this, R.layout.item, cardStructs);
-        cardListView.setAdapter(adapter);
-        cardListView.setItemsCanFocus(false);
+//        setContentView(R.layout.activity_create_deck);
+//
+//        deckManager = ExternalDeckManager.getInstance(this);
+//        allCards    = deckManager.getDefaultDeck().getCards();
+//        cardStructs = new ArrayList<ListRow>();
+//        textBox     = (EditText) findViewById(R.id.createDeckNameField);
+//
+//
+//        //create the card structs, sets all selected values to false
+//        //as this is a new deck.
+//        for (Card curr : allCards) {
+//            ListRow cardStruct = new ListRow(curr.getAnswer(), false);
+//            cardStructs.add(cardStruct);
+//        }
+//
+//        //set ListView options, create an instance of the CardList
+//        //adapter and set it as the adapter of the ListView
+//        cardListView = (ListView)findViewById(R.id.createCardListView);
+//        cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//        CustomArrayListAdapter adapter =
+//                new CustomArrayListAdapter(this, R.layout.item, cardStructs);
+//        cardListView.setAdapter(adapter);
+//        cardListView.setItemsCanFocus(false);
     }
 
     //onClick for the submit/done button.

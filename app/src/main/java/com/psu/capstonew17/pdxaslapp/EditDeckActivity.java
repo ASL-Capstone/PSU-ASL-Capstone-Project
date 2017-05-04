@@ -66,7 +66,7 @@ public class EditDeckActivity extends BaseActivity {
         cardListView = (ListView)findViewById(R.id.editCardListView);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         CustomArrayListAdapter adapter =
-                new CustomArrayListAdapter(this, R.layout.card_list_item, cardStructs);
+                new CustomArrayListAdapter(this, R.layout.list_items, cardStructs);
         cardListView.setAdapter(adapter);
         cardListView.setItemsCanFocus(false);
     }

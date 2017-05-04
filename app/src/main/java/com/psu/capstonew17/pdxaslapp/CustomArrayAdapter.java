@@ -38,7 +38,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item, null);
+            convertView = inflater.inflate(R.layout.list_row, null);
 
             viewHolder = new RowViewHolder();
             viewHolder.checkBox = (CheckBox)
@@ -48,7 +48,9 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
 
             viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    TextView label = (TextView) v.getTag(R.id.cardName);
+//                    TextView label = (TextView) v.getTag(R.id.cardName);
+                    View row = (View) v.getParent();
+                    row.setBackgroundResource(R.drawable.background2);
                     ListRow selectedDeck = objects.get(position);
                     if(((CheckBox) v).isChecked())
                         selectedDeck.isChecked = true;
@@ -69,7 +71,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         }
 
         viewHolder.checkBox.setTag(position);
-        viewHolder.textView.setText(objects.get(position).rowName);
+        viewHolder.textView.setText(objects.get(position).name);
         viewHolder.checkBox.setChecked(objects.get(position).isChecked);
 
         return convertView;

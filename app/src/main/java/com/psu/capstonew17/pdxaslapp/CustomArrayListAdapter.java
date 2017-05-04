@@ -43,7 +43,7 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
             //inflate layout
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item, null);
+            convertView = inflater.inflate(R.layout.list_row, null);
 
             //create the view holder
             viewHolder          = new ViewHolder();
@@ -60,6 +60,8 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
                         selectedRow.isChecked = true;
                     else
                         selectedRow.isChecked = false;
+
+
                 }
             });
 
