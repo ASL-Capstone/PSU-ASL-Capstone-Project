@@ -34,9 +34,9 @@ public class testMultiChoiceQuestion implements Question {
     @Override
     public Pair<Boolean, String> answer(String answer) {
         if (answer.compareTo("True") == 0){
-            return new Pair<Boolean, String>(Boolean.TRUE,answer);
+            return new Pair<Boolean, String>(Boolean.TRUE,"True");
         }
-            return new Pair<Boolean, String>(Boolean.FALSE,answer);
+            return new Pair<Boolean, String>(Boolean.FALSE,"True");
     }
 
     @Override

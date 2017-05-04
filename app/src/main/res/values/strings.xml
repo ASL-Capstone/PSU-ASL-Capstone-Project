@@ -24,6 +24,8 @@
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
     <string name="button_flash_card">Flash Card</string>
+    <string name="button_flash_card_next_question">Next</string>
+    <string name="button_flash_card_show_answer">Show Answer</string>
     <string name="button_write_up">Write Up</string>
     <string name="button_ten_questions">10</string>
     <string name="button_thirty_questions">30</string>

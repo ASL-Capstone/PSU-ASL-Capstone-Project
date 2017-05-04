@@ -18,12 +18,15 @@ public class CompleteQuizActivity extends AppCompatActivity implements View.OnCl
 
         TextView textView = (TextView) findViewById(R.id.completeQuizSplashText);
         textView.setText(R.string.quiz_complete);
+        TextView display = (TextView) findViewById(R.id.completeQuizCorrectText);
         Bundle bundle = getIntent().getExtras();
         if(bundle != null) {
             int correct = bundle.getInt("NumCorrect");
             int total = bundle.getInt("totalNum");
-            TextView display = (TextView) findViewById(R.id.completeQuizCorrectText);
             display.setText("You got " + correct + " out of " + total + " questions!");
+        }
+        else{
+            display.setText(" ");
         }
         homeButton = (Button) findViewById(R.id.button_home);
         homeButton.setOnClickListener(this);
