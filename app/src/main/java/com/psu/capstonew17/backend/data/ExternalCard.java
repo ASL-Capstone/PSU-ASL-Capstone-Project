@@ -96,4 +96,10 @@ public class ExternalCard implements Card {
         }
         return decks;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ExternalCard)) return false;
+        return cardId == ((ExternalCard)obj).cardId;
+    }
 }

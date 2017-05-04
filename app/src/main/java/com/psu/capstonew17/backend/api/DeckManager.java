@@ -8,7 +8,9 @@ public interface DeckManager {
     List<Deck> getDecks(String name);
 
     /**
-     * Create a new deck with the specified name and contents
+     * Create a new deck with the specified name and contents.
+     *
+     * The deck name must be unique.
      */
     Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException;
 

@@ -16,6 +16,17 @@ public class SharingTransmitListenerStub implements SharingTransmitListener {
     }
 
     public void onClientError(String peerID, DisconnectReason why) {
-        System.out.println("Early connection termination with " + peerID + "due to" /*Reason why*/);
+        switch(why) {
+            case AUTH_FAILURE:
+                System.out.println("Early connection termination with " + peerID + " Authentication Failue");
+                break;
+            case CHECKSUM_ERROR:
+                System.out.println("Early connection termination with " + peerID + " Checksum Error ");
+                break;
+            case TIMEOUT:
+                System.out.println("Early connection termination with " + peerID + " Timeout");
+                break;
+        }
+
     }
 }
