@@ -24,7 +24,6 @@ import java.util.ArrayList;
 public class FlashCardActivity extends BaseActivity implements View.OnClickListener {
     private Button bttShow;
     private Button bttNext;
-    private final String answerCover = "The Answer is...";
     // Names Passed into the activity from quiz selection activity.
     ArrayList<String> deckNamesForQuiz;
     // Used for test generation when the back end is hooked in.
@@ -52,7 +51,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         bttNext.setOnClickListener(this);
         // Setup VideoView and Text Display
         answerDisplay = (TextView) findViewById(R.id.textView_FlashCardAnswer);
-        answerDisplay.setText(answerCover);
         vidDisplay = (VideoView) findViewById(R.id.videoView_flashCard);
         // Unpack the bundles list of Deck Names and the number of Questions for the Quiz
         Bundle extras = getIntent().getExtras();
@@ -82,6 +80,9 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         if(currTest.hasNext()) {
             // TODO hook video up
             curQuestion = currTest.next();
+            Pair<Boolean,String> answerReturn = curQuestion.answer(" ");
+            String correctAnswer = answerReturn.second;
+            answerDisplay.setText(correctAnswer);
         }
         //No more questions leave quiz activity
         else{
@@ -95,13 +96,10 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.button_nextFlashCard:
-                answerDisplay.setText(answerCover);
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                Pair<Boolean,String> answerReturn = curQuestion.answer(" ");
-                String correctAnswer = answerReturn.second;
-                answerDisplay.setText(correctAnswer);
+                //TODO start video display
                 break;
         }
 
