@@ -31,6 +31,8 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
         this.objects = objects;
     }
 
+    // Currently broken Commenting out to allow for testing
+    /*
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         RowViewHolder viewHolder;
@@ -74,7 +76,7 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
 
         return convertView;
     }
-
+*/
     @Nullable
     @Override
     public ListRow getItem(int position) {

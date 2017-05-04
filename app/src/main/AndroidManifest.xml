@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psu.capstonew17.pdxaslapp">
 
+    <uses-permission android:name="android.permission.RECORD_VIDEO" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -45,7 +48,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CreateCardActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".DeleteCardActivity"
             android:screenOrientation="portrait" />
@@ -65,6 +69,13 @@
                   android:parentActivityName=".HomeActivity"
                   android:screenOrientation="portrait">
         </activity>
+
+        <activity
+            android:name=".CreateDeckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EditDeckActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.psu.capstonew17.backend.sharing.SharingServer"
