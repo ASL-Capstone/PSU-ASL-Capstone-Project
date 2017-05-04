@@ -13,14 +13,15 @@ import java.util.List;
 public class ExternalDeck implements Deck {
     private int deckId;
     private String deckName;
-    private List<Card> cards;
+    private List<Card> mutableCards, dbCards;
 
     private AslDbHelper dbHelper;
 
     public ExternalDeck(int deckId, String deckName, List<Card> cards){
         this.deckId = deckId;
         this.deckName = deckName;
-        this.cards = new ArrayList<Card>(cards);
+        this.dbCards = cards;
+        this.mutableCards = new ArrayList<Card>(dbCards);
     }
 
 
@@ -48,20 +49,43 @@ public class ExternalDeck implements Deck {
 
     @Override
     public List<Card> getCards() {
-        return this.cards;
+        return this.mutableCards;
     }
 
     @Override
     public void commit() {
-        removeCardsFromDeck();
         dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        for(Card card: this.cards){
-            ContentValues values = new ContentValues();
-            values.put(RelationEntry.COLUMN_DECK, deckId);
-            values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
-            db.insert(RelationEntry.TABLE_NAME, null, values);
+
+        // remove deleted cards
+        String whereArgs[] = new String[2];
+        whereArgs[0] = String.valueOf(deckId);
+
+        for(Card card: this.dbCards) {
+            if(!mutableCards.contains(card)) {
+                whereArgs[1] = String.valueOf(((ExternalCard)card).getId());
+
+                db.delete(RelationEntry.TABLE_NAME,
+                        String.format("%s = ? AND %s = ?",
+                                RelationEntry.COLUMN_DECK,
+                                RelationEntry.COLUMN_CARD),
+                        whereArgs);
+            }
         }
+
+        // add inserted cards
+        for(Card card : mutableCards) {
+            if(!dbCards.contains(card)) {
+                ContentValues values = new ContentValues();
+                values.put(RelationEntry.COLUMN_DECK, deckId);
+                values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+                db.insert(RelationEntry.TABLE_NAME, null, values);
+            }
+        }
+
+        // update lists
+        dbCards.clear();
+        dbCards.addAll(mutableCards);
     }
 
     @Override
@@ -82,5 +106,11 @@ public class ExternalDeck implements Deck {
                 RelationEntry.TABLE_NAME,
                 RelationEntry.COLUMN_DECK + "=" + this.deckId, null
         );
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ExternalDeck)) return false;
+        return deckId == ((ExternalDeck)obj).deckId;
     }
 }
