@@ -3,7 +3,6 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import java.util.List;
-import java.util.ListIterator;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +16,8 @@ import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 public class CreateEditDeleteDeckActivity extends BaseActivity{
-    private RadioGroup deckRG;
-    private List<Deck> decks;
+    private RadioGroup  deckRG;
+    private List<Deck>  decks;
     private DeckManager deckManager;
 
     @Override
@@ -27,15 +26,14 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         setContentView(R.layout.activity_create_edit_delete_deck);
 
         deckManager = ExternalDeckManager.getInstance(this);
-        deckRG = (RadioGroup) findViewById(R.id.deckRButtons);
-        populateRadioGroup(deckRG);
+        deckRG      = (RadioGroup) findViewById(R.id.deckRButtons);
+        populateRadioGroup();
     }
 
-    public void populateRadioGroup(RadioGroup deckRG){
+    public void populateRadioGroup(){
         deckRG.clearCheck();
         deckRG.removeAllViews();
         decks = deckManager.getDecks(null);
-        ListIterator<Deck> deckIterator = decks.listIterator();
 
         for (int i = 0; i < decks.size(); i++) {
             RadioButton currRad = new RadioButton(this);
@@ -51,24 +49,22 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         startActivity(intent);
     }
 
-    //TODO: force the user to select a deck if they press this
     public void onDeleteClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
         if(index == -1) {
-            Toast.makeText(this, "ERROR Select a Deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
         } else {
             Deck selectedDeck = decks.get(index);
             selectedDeck.delete();
             selectedDeck.commit();
-            populateRadioGroup(deckRG);
+            populateRadioGroup();
         }
     }
 
-    //TODO: force the user to select a deck if they press this
     public void onEditClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
         if(index == -1) {
-            Toast.makeText(this, "ERROR Select a Deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent;
             intent = new Intent(this, EditDeckActivity.class);
@@ -80,6 +76,6 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     @Override
     protected void onResume(){
         super.onResume();
-        populateRadioGroup(deckRG);
+        populateRadioGroup();
     }
 }

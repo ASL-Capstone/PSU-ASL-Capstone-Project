@@ -23,11 +23,11 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 public class CreateDeckActivity extends BaseActivity {
 
-    private DeckManager deckManager;
-    private ListView cardListView;
-    private List<Card> allCards;
-    private List<CardListAdapter.CardStruct> cardStructs;
-    private EditText textBox;
+    private DeckManager     deckManager;
+    private ListView        cardListView;
+    private List<Card>      allCards;
+    private List<ListRow>   cardStructs;
+    private EditText        textBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,16 +35,15 @@ public class CreateDeckActivity extends BaseActivity {
         setContentView(R.layout.activity_create_deck);
 
         deckManager = ExternalDeckManager.getInstance(this);
-        //TODO: backend integration to get all cards
-        allCards = deckManager.getDefaultDeck().getCards();
-        cardStructs = new ArrayList<CardListAdapter.CardStruct>();
-        textBox = (EditText) findViewById(R.id.createDeckNameField);
+        allCards    = deckManager.getDefaultDeck().getCards();
+        cardStructs = new ArrayList<ListRow>();
+        textBox     = (EditText) findViewById(R.id.createDeckNameField);
 
 
         //create the card structs, sets all selected values to false
         //as this is a new deck.
         for (Card curr : allCards) {
-            CardListAdapter.CardStruct cardStruct = new CardListAdapter.CardStruct(curr, false);
+            ListRow cardStruct = new ListRow(curr.getAnswer(), false);
             cardStructs.add(cardStruct);
         }
 
@@ -52,31 +51,30 @@ public class CreateDeckActivity extends BaseActivity {
         //adapter and set it as the adapter of the ListView
         cardListView = (ListView)findViewById(R.id.createCardListView);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        CardListAdapter adapter =
-                new CardListAdapter(this, R.layout.card_list_item, cardStructs);
+        CustomArrayListAdapter adapter =
+                new CustomArrayListAdapter(this, R.layout.item, cardStructs);
         cardListView.setAdapter(adapter);
         cardListView.setItemsCanFocus(false);
     }
 
     //onClick for the submit/done button.
-    //needs to be integrated with backend
-    //TODO: integration with back end, constrict length of text entered in edit text
-    //TODO: force user to select at least one card
+    //TODO: constrict length of text entered in edit text
     public void onCreateSubmitClicked(View view) {
         List<Card> cardsInDeck = new ArrayList<Card>();
 
-        for (CardListAdapter.CardStruct curr : cardStructs) {
-            if(curr.selected)
-                cardsInDeck.add(curr.card);
+        for (int i = 0; i < cardStructs.size(); i++) {
+            ListRow curr = cardStructs.get(i);
+            if(curr.isChecked)
+                cardsInDeck.add(allCards.get(i));
         }
 
         if(cardsInDeck.isEmpty()) {
-            Toast.makeText(this, "ERROR Select at least one card", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select at least two cards", Toast.LENGTH_SHORT).show();
         } else {
             try {
                 deckManager.buildDeck(textBox.getText().toString(), cardsInDeck);
             } catch(ObjectAlreadyExistsException e) {
-
+                Toast.makeText(this, "Deck already exists", Toast.LENGTH_SHORT).show();
             }
             finish();
         }
