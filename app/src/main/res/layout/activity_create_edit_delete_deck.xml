@@ -11,47 +11,51 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.psu.capstonew17.pdxaslapp.CreateEditDeleteDeckActivity">
 
-    <!--TODO: need create layout for create/edit/delete deck activity-->
-    <RadioGroup
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/deckRButtons"
-        android:layout_weight="0"
-        android:textColor="@android:color/black">
-    </RadioGroup>
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:id="@+id/deckRButtons"
+            android:fillViewport="true"
+            android:textColor="@android:color/black">
+        </RadioGroup>
+    </ScrollView>
 
 
     <LinearLayout
-        android:layout_height="0dip"
         android:layout_width="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="bottom"
         android:orientation="horizontal">
 
        <Button
-           android:text="Edit"
+           android:text="@string/button_edit"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:id="@+id/bttnEdit"
            android:onClick="onEditClicked"
-           android:layout_weight="1" />
+           android:layout_weight="1"/>
 
         <Button
-            android:text="Delete"
+            android:text="@string/button_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/bttnDlt"
             android:onClick="onDeleteClicked"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
 
         <Button
-            android:text="Create"
+            android:text="@string/button_create"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/bttnCrt"
             android:onClick="onCreateClicked"
-            android:layout_weight="1" />
+            android:layout_weight="1"/>
     </LinearLayout>
 
 </LinearLayout>

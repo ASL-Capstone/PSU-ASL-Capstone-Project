@@ -1,48 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_create_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView5"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_video_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_height="50dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/creat_card_videoName"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/background1"
+            android:gravity="center"
+            android:text="@string/textView_no_video"/>
 
         <Button
-            android:id="@+id/buttonRecordVideo"
-            android:layout_width="195dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_record_video" />
+            android:id="@+id/button_get_video"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background2"
+            android:text="@string/button_import_video"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            />
+    </RelativeLayout>
 
-        <Button
-            android:id="@+id/buttonFromGallery"
-            android:layout_width="191dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_select_video" />
-    </LinearLayout>
-
-    <VideoView
-        android:id="@+id/videoView"
+    <EditText
+        android:id="@+id/edit_text_video_description"
         android:layout_width="match_parent"
-        android:layout_height="328dp"
-        android:visibility="invisible" />
+        android:layout_height="50dp"
+        android:labelFor="@+id/edit_text_video_description"
+        android:gravity="center"
+        android:hint="@string/edit_text_card_answer"
+        android:textColorHint="@color/lightGray"
+        android:background="@drawable/background_dark_border"
+        android:layout_margin="3dp"
+        android:ems="10"
+        android:inputType="text" />
 
-    <Button
-        android:id="@+id/buttonUseVIdeo"
+    <include layout="@layout/submit_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_use_video"
-        android:visibility="invisible" />
+        android:layout_height="50dp"
+        />
+
+    <include layout="@layout/list_items"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <!--<ScrollView-->
+        <!--android:id="@+id/deckListView_create_card"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="0.24">-->
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/deckListLayout_create_card"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical" >-->
+
+        <!--</LinearLayout>-->
+    <!--</ScrollView>-->
 
 
 </LinearLayout>

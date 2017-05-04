@@ -4,10 +4,11 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -52,10 +53,23 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
 
         int numDecks = deckList.size();
         for(int i = 0; i < numDecks; ++i){
-            String deckName = (deckList.get(i).getName());
+            final String deckName = (deckList.get(i).getName());
             CheckBox ch = new CheckBox(this);
             ch.setText(deckName);
             deckLayout.addView(ch);
+
+            ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    View row = (View) buttonView.getParent();
+                    if (isChecked) {
+                        Log.d("item", "Item " + deckName + " is " + isChecked);
+                    } else {
+                        Log.d("item", "Item " + deckName + " is " + isChecked);
+                    }
+                }
+            });
+
         }
     }
 
@@ -90,16 +104,19 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                         intent.putExtras(questionCount);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                     case FLASH_CARD:
                         intent = new Intent(this, FlashCardActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                     case WRITE_UP:
                         intent = new Intent(this, WriteUpActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
                         startActivity(intent);
+                        finish();
                         break;
                 }
             }

@@ -19,7 +19,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_card);
 
-        videoView = (VideoView) findViewById(R.id.videoView);
+        videoView = (VideoView) findViewById(R.id.videoView2);
 
         videoUri =  getIntent().getData();
         if(videoUri == null)
