@@ -76,7 +76,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
-        // TODO set up Handling for the case where there is no next Question
         if(currTest.hasNext()) {
             // TODO hook video up
             curQuestion = currTest.next();
