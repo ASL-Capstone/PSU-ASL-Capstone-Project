@@ -3,6 +3,7 @@ package com.psu.capstonew17.pdxaslapp;
 
 
 import android.content.Context;
+import android.inputmethodservice.Keyboard;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,11 +49,15 @@ public class CustomArrayAdapter extends ArrayAdapter<ListRow> {
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.list_row, null);
-        }
 
-        viewHolder = new RowViewHolder();
-        viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
-        viewHolder.textView = (TextView) convertView.findViewById(R.id.list_row_textView);
+            viewHolder = new RowViewHolder();
+            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
+            viewHolder.textView = (TextView) convertView.findViewById(R.id.list_row_textView);
+
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (RowViewHolder) convertView.getTag();
+        }
 
         viewHolder.textView.setText(getItem(position).name);
         viewHolder.checkBox.setTag(Integer.valueOf(position));

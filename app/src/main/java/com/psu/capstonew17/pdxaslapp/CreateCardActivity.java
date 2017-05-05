@@ -16,11 +16,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
+import com.psu.capstonew17.backend.api.Video;
+import com.psu.capstonew17.backend.data.ExternalCardManager;
+import com.psu.capstonew17.backend.data.ExternalVideo;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
@@ -30,6 +37,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     private CustomArrayAdapter myAdapter;
     private Uri videoUri;
+    private File videoFile;
 
     static final int REQUEST_VIDEO_CAPTURE = 1;
     static final int REQUEST_TAKE_GALLERY_VIDEO = 2;
@@ -86,8 +94,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
 
         // hide views
-//        bttSubmit.setVisibility(View.GONE);
-//        listView.setVisibility(View.GONE);
+        bttSubmit.setVisibility(View.GONE);
+        listView.setVisibility(View.GONE);
 
     }
 
@@ -127,20 +135,19 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
-//                if (videoLabelCheck() && videoFileCheck() && deckSelectedCheck()) {
-//                    // TODO create new card
-//                }
+                if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
+                    return;
 
-                String pos = "";
-                String check = "";
-                 for (int i = 0; i < list.size(); ++i) {
-                     if (list.get(i).isChecked) {
-                         pos += i + " ";
-                         check += true + " ";
-                     }
+                try {
+                    // not sure what videoId to assign, so make it random for testing
+                    Random random = new Random();
+                    int videoId = random.nextInt();
+                    Video video = new ExternalVideo(videoId, videoFile);
 
-                 }
-                Toast.makeText(this, pos + "\n" + check, Toast.LENGTH_SHORT).show();
+                    Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
+                } catch (ObjectAlreadyExistsException e) {
+                    Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
+                }
 
                 break;
 
@@ -161,9 +168,15 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     private boolean videoFileCheck() {
         if (videoUri == null) {
-            Toast.makeText(this, "Missing video!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error: Missing Uri!", Toast.LENGTH_SHORT).show();
             return false;
         }
+
+        videoFile = new File(videoUri.getPath());
+        if (videoFile == null || videoFile.exists()==false) {
+            Toast.makeText(this, "Error: File not exists", Toast.LENGTH_SHORT).show();
+        }
+
         return true;
     }
 
