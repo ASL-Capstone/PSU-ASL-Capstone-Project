@@ -5,32 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-
-        <TextView
-            android:id="@+id/creat_card_videoName"
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginEnd="50dp"
-            android:background="@drawable/background1"
-            android:gravity="center"
-            android:text="@string/textView_no_video"/>
-
-        <Button
-            android:id="@+id/button_get_video"
-            android:layout_width="60dp"
-            android:layout_height="50dp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/background2"
-            android:text="@string/button_import_video"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            />
-    </RelativeLayout>
-
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -74,6 +48,13 @@
         android:layout_margin="3dp"
         android:ems="10"
         android:inputType="text" />
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="328dp"
+        android:visibility="invisible" />
+
 
     <include layout="@layout/submit_button"
         android:layout_width="match_parent"

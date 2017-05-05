@@ -35,7 +35,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private List<ListRow> list = new ArrayList<>();
     private List<Integer> selectedIndex;
 
-    private CustomArrayAdapter myAdapter;
+    private CustomArrayListAdapter myAdapter;
     private Uri videoUri;
     private File videoFile;
 
@@ -89,13 +89,13 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         }
 
         listView = (ListView) findViewById(R.id.list_items);
-        myAdapter =  new CustomArrayAdapter(this, 0, list);
+        myAdapter =  new CustomArrayListAdapter(this, 0, list);
         listView.setAdapter(myAdapter);
 
 
         // hide views
         bttSubmit.setVisibility(View.GONE);
-        listView.setVisibility(View.GONE);
+//        listView.setVisibility(View.GONE);
 
     }
 
@@ -145,6 +145,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                     Video video = new ExternalVideo(videoId, videoFile);
 
                     Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
+
+                    for (int index: selectedIndex) {
+                        // TODO for each deck add aCard to that deck
+                    }
+
                 } catch (ObjectAlreadyExistsException e) {
                     Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
                 }
