@@ -49,15 +49,14 @@ public class DeleteCardActivity extends BaseActivity {
         if (index == -1) {
             Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
         } else {
-            Card card = cards.get(index);
-            List<Deck> decks = card.getUsers();
-            for (Deck curr : decks){
-                List<Card> cardsInDeck = curr.getCards();
-                cardsInDeck.remove(card);
-                curr.commit();
-            }
-
             try {
+                Card card = cards.get(index);
+                List<Deck> decks = card.getUsers();
+                for (Deck curr : decks){
+                    List<Card> cardsInDeck = curr.getCards();
+                    cardsInDeck.remove(card);
+                    curr.commit();
+                }
                 card.delete();
                 populateRadioGroup();
             } catch(ObjectInUseException e) {

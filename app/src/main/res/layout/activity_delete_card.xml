@@ -18,7 +18,7 @@
         android:layout_weight="1">
         <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/cardRButtons"
             android:fillViewport="true"
@@ -35,7 +35,7 @@
 
         <Button
             android:text="@string/button_delete"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/bttnCardDlt"
             android:onClick="onDeleteClicked"

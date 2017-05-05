@@ -20,7 +20,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private ListView listView;
     private ListRow row;
     private ArrayList<ListRow> list = new ArrayList<>();
-    private CustomArrayAdapter myAdapter;
+    private CustomArrayListAdapter myAdapter;
     private Uri videoUri;
 
     static final int REQUEST_VIDEO_CAPTURE = 1;
@@ -85,7 +85,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         }
     }
-
 
     private void dispatchTakeVideoIntent() {
         Intent takeVideoIntent = new Intent();

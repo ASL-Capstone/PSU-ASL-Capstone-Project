@@ -21,27 +21,25 @@
         android:layout_marginBottom="30dp"
         tools:ignore="HardcodedText,LabelFor,TextFields" />
 
-    <!--TODO: need create layout for create/edit/delete deck activity-->
     <ListView
         android:id="@+id/createCardListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </ListView>
 
     <LinearLayout
-        android:layout_height="0dip"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_weight="1"
         android:gravity="bottom"
         android:orientation="horizontal">
 
         <Button
             android:text="@string/button_submit"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/bttn_create_done"
-            android:onClick="onCreateSubmitClicked"
-            android:layout_weight="1" />
+            android:onClick="onCreateSubmitClicked"/>
 
     </LinearLayout>
 

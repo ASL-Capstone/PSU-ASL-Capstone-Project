@@ -18,10 +18,10 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 /**
  * Created by ichel on 4/28/2017.
+ * Allows user to edit existing decks
  */
 
 public class EditDeckActivity extends BaseActivity {
-    private ListView        cardListView;
     private Deck            deck;
     private List<Card>      allCards;
     private List<Card>      cardsInDeck;
@@ -36,7 +36,7 @@ public class EditDeckActivity extends BaseActivity {
         DeckManager deckManager = ExternalDeckManager.getInstance(this);
         List<Deck>  decks       = deckManager.getDecks(null);
         allCards                = deckManager.getDefaultDeck().getCards();
-        cardStructs             = new ArrayList<ListRow>();
+        cardStructs             = new ArrayList<>();
 
         //get the index of the selected deck to edit
         int checkedIndex = 0;
@@ -63,10 +63,10 @@ public class EditDeckActivity extends BaseActivity {
         }
 
         //set list view option, set adapter
-        cardListView = (ListView)findViewById(R.id.editCardListView);
+        ListView cardListView = (ListView)findViewById(R.id.editCardListView);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         CustomArrayListAdapter adapter =
-                new CustomArrayListAdapter(this, R.layout.card_list_item, cardStructs);
+                new CustomArrayListAdapter(this, R.layout.list_row, cardStructs);
         cardListView.setAdapter(adapter);
         cardListView.setItemsCanFocus(false);
     }
@@ -83,8 +83,6 @@ public class EditDeckActivity extends BaseActivity {
                 cardsInDeck.remove(curr);
             }
         }
-
-        Toast.makeText(this, "cardsInDeck size: " + cardsInDeck.size(), Toast.LENGTH_SHORT).show();
 
         if(cardsInDeck.size() < 2) {
             Toast.makeText(this, "Select at least two cards", Toast.LENGTH_SHORT).show();

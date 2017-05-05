@@ -2,6 +2,7 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +10,18 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import com.psu.capstonew17.backend.api.Card;
-
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ichel on 4/29/2017.
+ * Created by Chelsea on 4/29/2017.
+ * Use this as the listview adapter.
  */
 
-public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
-    Context         context;
-    List<ListRow>   rows;
+class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
+    private Context         context;
+    private List<ListRow>   rows;
 
-    public CustomArrayListAdapter(Context context, int tvResId, List<ListRow> rows){
+    CustomArrayListAdapter(Context context, int tvResId, List<ListRow> rows){
         super(context, tvResId, rows);
         this.context = context;
         this.rows    = rows;
@@ -36,32 +34,21 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
 
     //creates/gets the view for the List
     @Override
-    public View getView(final int index, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder = null;
+    public @NonNull View getView(final int index, View convertView, @NonNull ViewGroup parent) {
+        ViewHolder viewHolder;
 
         if (convertView == null) {
             //inflate layout
             LayoutInflater inflater = (LayoutInflater)
                     context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.item, null);
+            convertView = inflater.inflate(R.layout.list_row, null);
 
             //create the view holder
             viewHolder          = new ViewHolder();
             viewHolder.name     = (TextView) convertView.findViewById(R.id.list_row_textView);
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.list_row_checkBox);
-
-            //onClickListener for the checkboxes,
-            //sets toggles the selected field of the CardStruct
-            viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    TextView label = (TextView) v.getTag(R.id.list_row_textView);
-                    ListRow selectedRow = rows.get(index);
-                    if (((CheckBox) v).isChecked())
-                        selectedRow.isChecked = true;
-                    else
-                        selectedRow.isChecked = false;
-                }
-            });
+            viewHolder.name.setText(rows.get(index).name);
+            viewHolder.checkBox.setChecked(rows.get(index).isChecked);
 
             //view set tags
             convertView.setTag(viewHolder);
@@ -71,10 +58,18 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
         } else
             viewHolder = (ViewHolder) convertView.getTag();
 
-        //set viewholder tags
-        viewHolder.checkBox.setTag(index);
-        viewHolder.name.setText(rows.get(index).name);
+        //onClickListener for the checkboxes,
+        //sets toggles the selected field of the CardStruct
+        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ListRow selectedRow = rows.get(index);
+                selectedRow.isChecked = ((CheckBox) v).isChecked();
+            }
+        });
         viewHolder.checkBox.setChecked(rows.get(index).isChecked);
+        viewHolder.name.setText(rows.get(index).name);
+
+        //set viewholder tags
 
         return convertView;
     }
