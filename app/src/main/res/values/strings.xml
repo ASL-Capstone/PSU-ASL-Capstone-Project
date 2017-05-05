@@ -53,4 +53,8 @@
     <string name="button_select_video">Add From Gallery</string>
     <string name="add_video_text">Create new video or add from gallery?</string>
     <string name="button_use_video">Use This Video</string>
+
+    <string name="button_record">Record</string>
+    <string name="button_get_from_gallery">Gallery</string>
+    <string name="button_edit_video">Edit</string>
 </resources>
