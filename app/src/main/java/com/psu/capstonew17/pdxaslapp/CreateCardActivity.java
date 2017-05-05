@@ -20,12 +20,13 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
     private ListRow row;
-    private ArrayList<ListRow> list = new ArrayList<>();
-    private ArrayList<Integer> selectedIndex;
+    private List<ListRow> list = new ArrayList<>();
+    private List<Integer> selectedIndex;
 
     private CustomArrayAdapter myAdapter;
     private Uri videoUri;
@@ -85,8 +86,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
 
         // hide views
-        bttSubmit.setVisibility(View.GONE);
-        listView.setVisibility(View.GONE);
+//        bttSubmit.setVisibility(View.GONE);
+//        listView.setVisibility(View.GONE);
 
     }
 
@@ -126,9 +127,20 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
-                if (videoLabelCheck() && videoFileCheck() && deckSelectedCheck()) {
-                    // TODO create new card
-                }
+//                if (videoLabelCheck() && videoFileCheck() && deckSelectedCheck()) {
+//                    // TODO create new card
+//                }
+
+                String pos = "";
+                String check = "";
+                 for (int i = 0; i < list.size(); ++i) {
+                     if (list.get(i).isChecked) {
+                         pos += i + " ";
+                         check += true + " ";
+                     }
+
+                 }
+                Toast.makeText(this, pos + "\n" + check, Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -164,8 +176,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         }
 
         // update list
-        list = myAdapter.getItems();
-        selectedIndex = new ArrayList<Integer>();
+         selectedIndex = new ArrayList<Integer>();
         for (int i = 0; i < list.size(); ++i) {
             if (row.isChecked) {
                 selectedIndex.add(i);

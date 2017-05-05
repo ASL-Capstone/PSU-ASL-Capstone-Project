@@ -55,12 +55,15 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
             viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     TextView label = (TextView) v.getTag(R.id.list_row_textView);
+
                     ListRow selectedRow = rows.get(index);
-                    if (((CheckBox) v).isChecked())
+                    if (((CheckBox) v).isChecked()) {
                         selectedRow.isChecked = true;
+                    }
                     else
                         selectedRow.isChecked = false;
 
+//                    rows.set(index, selectedRow);
 
                 }
             });
@@ -81,5 +84,8 @@ public class CustomArrayListAdapter extends ArrayAdapter<ListRow> {
         return convertView;
     }
 
+    public List<ListRow> getRows() {
+        return rows;
+    }
 
 }
