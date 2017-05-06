@@ -10,7 +10,7 @@ jdk: oraclejdk8
 #        - extra-google-m2repository
 
 env:
-	- ANDROID_HOME=$HOME/android-sdk
+    - ANDROID_HOME=$HOME/android-sdk
 
 script:
     - ./gradlew build
@@ -24,16 +24,16 @@ before_install:
     - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
 install:
-	# Download android SDK tools if not present
-	- if test ! -e $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; then curl https://dl.google.com/android/repository/tools_r25.2.5-linux.zip > $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; fi
-	- unzip -n $HOME/android-sdk-dl/tools_r25.2.5-linux.zip -d $HOME/android-sdk
-	
-	# Install/update SDK components
-	echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
-	echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
-	echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-24'
-	echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
-	echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
+    # Download android SDK tools if not present
+    - if test ! -e $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; then curl https://dl.google.com/android/repository/tools_r25.2.5-linux.zip > $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; fi
+    - unzip -n $HOME/android-sdk-dl/tools_r25.2.5-linux.zip -d $HOME/android-sdk
+    
+    # Install/update SDK components
+    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
+    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
+    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-24'
+    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
+    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
 
 before_cache:
     - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -44,8 +44,8 @@ cache:
         - $HOME/.gradle/caches
         - $HOME/.gradle/wrapper
         - $HOME/.android/build-cache
-		- $HOME/android-sdk
-		- $HOME/android-sdk-dl
+        - $HOME/android-sdk
+        - $HOME/android-sdk-dl
 
 licenses:
     - 'android-sdk-preview-license-.+'
