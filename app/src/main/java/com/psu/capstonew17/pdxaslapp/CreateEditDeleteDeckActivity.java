@@ -16,6 +16,9 @@ import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 public class CreateEditDeleteDeckActivity extends BaseActivity{
+    static final int    MIN_CARDS       = 2;
+    static final int    MAX_STRG_LNGTH  = 50;
+
     private RadioGroup  deckRG;
     private List<Deck>  decks;
     private DeckManager deckManager;
@@ -52,7 +55,8 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     public void onDeleteClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
         if(index == -1) {
-            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
+
         } else {
             Deck selectedDeck = decks.get(index);
             selectedDeck.delete();
@@ -64,7 +68,8 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     public void onEditClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
         if(index == -1) {
-            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
+
         } else {
             Intent intent;
             intent = new Intent(this, EditDeckActivity.class);

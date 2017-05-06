@@ -54,6 +54,13 @@
     <string name="add_video_text">Create new video or add from gallery?</string>
     <string name="button_use_video">Use This Video</string>
 
+    <!-- Deck creation/editing strings -->
+    <string name="deck_name_length_error">"Deck name must be at least 1 character and less than "</string>
+    <string name="deck_size_error">Select at least two cards</string>
+    <string name="deck_already_exists_error">Deck already exists</string>
+    <string name="deck_not_selected">Select a deck</string>
+
+
     <string name="button_record">Record</string>
     <string name="button_get_from_gallery">Gallery</string>
     <string name="button_edit_video">Edit</string>

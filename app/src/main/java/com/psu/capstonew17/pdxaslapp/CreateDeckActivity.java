@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.zxing.common.StringUtils;
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
@@ -61,6 +63,7 @@ public class CreateDeckActivity extends BaseActivity {
     //TODO: constrict length of text entered in edit text
     public void onCreateSubmitClicked(View view) {
         List<Card> cardsInDeck = new ArrayList<>();
+        String deckName = textBox.getText().toString().trim();
 
         for (int i = 0; i < cardStructs.size(); i++) {
             ListRow curr = cardStructs.get(i);
@@ -68,15 +71,23 @@ public class CreateDeckActivity extends BaseActivity {
                 cardsInDeck.add(allCards.get(i));
         }
 
-        if(cardsInDeck.isEmpty()) {
-            Toast.makeText(this, "Select at least two cards", Toast.LENGTH_SHORT).show();
+        if (TextUtils.isEmpty(deckName)
+                || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
+            String nameLenErr = getResources().getString(R.string.deck_name_length_error)
+                    + Integer.toString(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
+            Toast.makeText(this, nameLenErr, Toast.LENGTH_SHORT).show();
+
+        } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
+            Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
+
         } else {
             try {
                 deckManager.buildDeck(textBox.getText().toString(), cardsInDeck);
+                finish();
+
             } catch(ObjectAlreadyExistsException e) {
-                Toast.makeText(this, "Deck already exists", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
             }
-            finish();
         }
     }
 }
