@@ -2,6 +2,7 @@ package com.psu.capstonew17.pdxaslapp.FrontEndTestStubs;
 
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class testDeck implements Deck {
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name) throws ObjectAlreadyExistsException{
         this.name = name;
     }
 
