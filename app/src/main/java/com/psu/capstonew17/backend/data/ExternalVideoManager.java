@@ -45,7 +45,7 @@ public class ExternalVideoManager implements VideoManager {
 
 
     @Override
-    public void importVideo(final File videoFile, ImportOptions options, VideoImportListener handler) {
+    public void importVideo(final File videoFile, final ImportOptions options, VideoImportListener handler) {
         final VideoImportListener handle = handler;
 
         // generate an output file location
@@ -54,7 +54,7 @@ public class ExternalVideoManager implements VideoManager {
 
         PreprocessingPipeline  pipeline;
         try {
-            pipeline = new PreprocessingPipeline(outFile, videoFile);
+            pipeline = new PreprocessingPipeline(outFile, videoFile, options);
         } catch(IOException e) {
             handler.onFailed(e);
             return;
@@ -114,6 +114,8 @@ public class ExternalVideoManager implements VideoManager {
                 }
                 cursor.close();
                 handle.onComplete(video);
+
+                if(options.deleteAfter) videoFile.delete();
             }
 
             @Override
