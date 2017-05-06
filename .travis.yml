@@ -38,6 +38,8 @@ install:
 before_cache:
     - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
     - rm -rf $HOME/.gradle/caches/*/plugin-resolution
+    - rm -f $HOME/.gradle/caches/*/classAnalysis
+    - rm -f $HOME/.gradle/caches/*/jarSnapshots
 
 cache:
     directories:
