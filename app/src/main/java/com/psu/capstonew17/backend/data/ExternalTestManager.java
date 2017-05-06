@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ExternalTestManager implements TestManager{
-    public static ExternalTestManager INSTANCE = new ExternalTestManager();
+    static ExternalTestManager INSTANCE = new ExternalTestManager();
 
     private AslDbHelper dbHelper;
 
@@ -23,7 +23,7 @@ public class ExternalTestManager implements TestManager{
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return dbHelper;
     }
 
