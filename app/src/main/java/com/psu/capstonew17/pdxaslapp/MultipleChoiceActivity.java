@@ -2,12 +2,12 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
-import android.graphics.Region;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -35,7 +35,6 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     Test currTest;
     // Submit button used by this activity
     Button submit;
-
     VideoView questionVideo;
     // Tracks number of questions the user has answered
     int totalQuestions;
@@ -45,6 +44,10 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     RadioGroup answers;
     // The Question that is being currently presented to the User.
     Question curQuestion;
+    // Media Controller
+    MediaController mediaController;
+    // Media Player
+    MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,15 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 answers.addView(add);
             }
             //TODO hook up video
+            curQuestion.getVideo().configurePlayer(mPlayer);
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                    questionVideo.setMediaController(mediaController);
+                    mp.start();
+                }
+            });
         }
         //No more questions leave quiz activity
         else{

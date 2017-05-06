@@ -2,6 +2,8 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.session.MediaController;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.util.Pair;
@@ -41,6 +43,8 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     Question curQuestion;
     private VideoView vidDisplay;
     private TextView answerDisplay;
+    private MediaPlayer mPlayer;
+    private android.widget.MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,15 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 break;
             case R.id.button_showAnswer:
                 //TODO start video display
+                curQuestion.getVideo().configurePlayer(mPlayer);
+                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setLooping(true);
+                        vidDisplay.setMediaController(mediaController);
+                        mp.start();
+                    }
+                });
                 break;
         }
 

@@ -2,11 +2,13 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +41,8 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     Question curQuestion;
     private VideoView vidDisplay;
     private EditText answerInput;
+    private MediaController mediaController;
+    private MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +92,17 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     protected void loadQuestion() {
         // Check to See if there is another Question in the Test
         if (currTest.hasNext()) {
-            // TODO hook video up
             curQuestion = currTest.next();
             answerInput.getText().clear();
+            curQuestion.getVideo().configurePlayer(mPlayer);
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                    vidDisplay.setMediaController(mediaController);
+                    mp.start();
+                }
+            });
         }
         //No more questions leave quiz activity
         else {
