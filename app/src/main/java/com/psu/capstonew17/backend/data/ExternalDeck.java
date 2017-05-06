@@ -31,7 +31,10 @@ public class ExternalDeck implements Deck {
     }
 
     @Override
-    public void setName(String name) {
+    public void setName(String name) throws ObjectAlreadyExistsException {
+        if(ExternalDeckManager.INSTANCE.deckExists(name)){
+            throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
+        }
         this.deckName = name;
         dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();

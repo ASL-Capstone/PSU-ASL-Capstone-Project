@@ -12,9 +12,10 @@ public interface Deck {
     String getName();
 
     /**
-     * Modify the deck's title
+     * Modify the deck's title. If the new title is already being used
+     * by another deck, an exception will be thrown.
      */
-    void setName(String name);
+    void setName(String name) throws ObjectAlreadyExistsException;
 
     /**
      * Get all cards in the deck as an list. The returned list is an isolated copy, which is unique
