@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ExternalCard implements Card {
+class ExternalCard implements Card {
     private int cardId;
     private Video video;
     private String answer;
