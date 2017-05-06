@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ExternalStatisticsManager implements StatisticsManager {
 
-    public static ExternalStatisticsManager INSTANCE = new ExternalStatisticsManager();
+    static ExternalStatisticsManager INSTANCE = new ExternalStatisticsManager();
 
     private AslDbHelper dbHelper;
 
@@ -27,7 +27,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return this.dbHelper;
     }
 

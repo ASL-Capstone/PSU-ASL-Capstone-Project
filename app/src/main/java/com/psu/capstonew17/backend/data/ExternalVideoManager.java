@@ -18,7 +18,7 @@ import com.psu.capstonew17.backend.video.PreprocessingPipeline;
 
 
 public class ExternalVideoManager implements VideoManager {
-    public static ExternalVideoManager INSTANCE = new ExternalVideoManager();
+    static ExternalVideoManager INSTANCE = new ExternalVideoManager();
 
     private AslDbHelper dbHelper;
 
@@ -27,11 +27,11 @@ public class ExternalVideoManager implements VideoManager {
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return dbHelper;
     }
 
-    public Video getVideo(int id){
+    Video getVideo(int id){
         return null;
     }
 

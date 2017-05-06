@@ -14,7 +14,7 @@ import java.util.Arrays;
 
 
 public class ExternalCardManager implements CardManager{
-    public static ExternalCardManager INSTANCE = new ExternalCardManager();
+    static ExternalCardManager INSTANCE = new ExternalCardManager();
 
     private AslDbHelper dbHelper;
 
@@ -23,7 +23,7 @@ public class ExternalCardManager implements CardManager{
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return dbHelper;
     }
 
