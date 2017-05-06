@@ -4,12 +4,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.util.Log;
 
 import com.psu.capstonew17.backend.api.*;
 
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import com.psu.capstonew17.backend.db.AslDbContract.*;
@@ -55,6 +61,32 @@ public class ExternalVideoManager implements VideoManager {
         pipeline.setListener(new PreprocessingPipeline.PreprocessingListener() {
             @Override
             public void onCompleted() {
+                MessageDigest digest;
+                try {
+                    digest = MessageDigest.getInstance("SHA256");
+                } catch(NoSuchAlgorithmException e) {
+                    Log.d("VideoManager", "System does not support SHA256 hash", e);
+                    outFile.delete();
+                    handle.onFailed(e);
+                    return;
+                }
+
+                byte[] sha = null;
+                try {
+                    InputStream istrm = new FileInputStream(outFile);
+                    byte[] arr = new byte[8192];
+                    int len;
+                    while((len = istrm.read(arr)) > 0) {
+                        digest.update(arr, 0, len);
+                    }
+                    sha = digest.digest();
+                } catch(IOException e) {
+                    Log.d("VideoManager", "Unexpected IO error", e);
+                    outFile.delete();
+                    handle.onFailed(e);
+                    return;
+                }
+
                 // create the new video
                 dbHelper = ExternalVideoManager.INSTANCE.getDbHelper();
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
