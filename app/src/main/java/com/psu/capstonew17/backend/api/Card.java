@@ -23,7 +23,7 @@ public interface Card {
     String getAnswer();
 
     /**
-     * Change the answer associated with a card
+     * Change the answer associated with a card. Answers are not uniquely enforced.
      */
     void setAnswer(String a);
 
