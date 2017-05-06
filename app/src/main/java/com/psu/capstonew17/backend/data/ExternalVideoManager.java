@@ -43,7 +43,7 @@ public class ExternalVideoManager implements VideoManager {
 
 
     @Override
-    public void importVideo(final File videoFile, ImportOptions options, VideoImportListener handler) {
+    public void importVideo(final File videoFile, final ImportOptions options, VideoImportListener handler) {
         final VideoImportListener handle = handler;
 
         // generate an output file location
@@ -95,6 +95,8 @@ public class ExternalVideoManager implements VideoManager {
                 int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
                 Video video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
                 handle.onComplete(video);
+
+                if(options.deleteAfter) videoFile.delete();
             }
 
             @Override

@@ -85,6 +85,7 @@ public class PreprocessingPipeline {
             //int tgtWidth = srcWidth/2, tgtHeight = srcHeight/2;
             int tgtWidth = srcWidth, tgtHeight = srcHeight; // TODO: Resizing
             MediaFormat outFormat = MediaFormat.createVideoFormat("video/h264", tgtWidth, tgtHeight);
+            outFormat.setInteger(MediaFormat.KEY_BIT_RATE, 20*1024*1024); // 20 Mbps
 
             // set up a muxer
             MediaMuxer muxer;
