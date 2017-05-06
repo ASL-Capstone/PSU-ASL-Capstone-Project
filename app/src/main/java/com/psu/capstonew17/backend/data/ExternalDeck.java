@@ -10,7 +10,7 @@ import com.psu.capstonew17.backend.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExternalDeck implements Deck {
+class ExternalDeck implements Deck {
     private int deckId;
     private String deckName;
     private List<Card> mutableCards, dbCards;

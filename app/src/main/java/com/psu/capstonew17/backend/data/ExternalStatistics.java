@@ -6,7 +6,7 @@ import com.psu.capstonew17.backend.api.Statistics;
 import java.util.List;
 
 
-public class ExternalStatistics implements Statistics{
+class ExternalStatistics implements Statistics{
     private List<Card> correctCards;
     private List<Card> incorrectCards;
     private Long avgTime;

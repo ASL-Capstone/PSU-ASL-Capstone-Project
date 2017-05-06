@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Date;
 
-public class ExternalQuestion implements Question {
+class ExternalQuestion implements Question {
     private Card card;
     private int deckId;
     private Type type;
