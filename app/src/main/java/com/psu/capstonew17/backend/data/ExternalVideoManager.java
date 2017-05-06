@@ -100,9 +100,9 @@ public class ExternalVideoManager implements VideoManager {
                 if(cursor.moveToFirst()){
                     int videoId = cursor.getInt(cursor.getColumnIndex(VideoEntry.COLUMN_ID));
                     String videoPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
-                    File videoFile = new File(videoPath);
+                    File existingVideo = new File(videoPath);
                     outFile.delete();
-                    video = new ExternalVideo(videoId, videoFile.getAbsoluteFile());
+                    video = new ExternalVideo(videoId, existingVideo.getAbsoluteFile());
                 }
                 else{
                     // create the new video
