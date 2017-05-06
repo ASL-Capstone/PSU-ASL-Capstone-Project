@@ -30,3 +30,4 @@ branches:
     only:
         - master
         - Develop
+        - travis-ci
