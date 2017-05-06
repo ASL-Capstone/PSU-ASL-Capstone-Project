@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ExternalTest implements Test {
+class ExternalTest implements Test {
     private List<Question> questions;
     private int current;
     private Statistics statistics;

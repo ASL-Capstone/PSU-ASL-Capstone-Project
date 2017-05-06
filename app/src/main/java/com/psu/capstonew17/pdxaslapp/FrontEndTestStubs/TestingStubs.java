@@ -2,6 +2,7 @@ package com.psu.capstonew17.pdxaslapp.FrontEndTestStubs;
 
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +45,9 @@ public class TestingStubs {
     public static List<Deck> oneDeck(){
        List<Deck> ret = new ArrayList<>();
        Deck d = new testDeck();
-        d.setName("Deck One");
+        try {
+            d.setName("Deck One");
+        } catch (ObjectAlreadyExistsException e){}
         ret.add(d);
         return ret;
     }
@@ -52,14 +55,16 @@ public class TestingStubs {
     public static List<Deck> manyDecks(){
         Deck d = new testDeck();
         List<Deck> ret = new ArrayList<>();
-        d.setName("Deck One");
-        ret.add(d);
-        d = new testDeck();
-        d.setName("Deck Two");
-        ret.add(d);
-        d = new testDeck();
-        d.setName("Deck Three");
-        ret.add(d);
+        try {
+            d.setName("Deck One");
+            ret.add(d);
+            d = new testDeck();
+            d.setName("Deck Two");
+            ret.add(d);
+            d = new testDeck();
+            d.setName("Deck Three");
+            ret.add(d);
+        } catch (ObjectAlreadyExistsException e){}
         return ret;
     }
 }
