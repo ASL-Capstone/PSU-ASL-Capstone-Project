@@ -26,6 +26,7 @@ public class PreprocessingPipeline {
 
     public interface PreprocessingListener {
         void onCompleted();
+        void onFailed();
     }
 
     public PreprocessingPipeline(File outFile, File inFile) throws IOException {
@@ -193,6 +194,14 @@ public class PreprocessingPipeline {
         protected void onPostExecute(Void aVoid) {
             if(listener != null) {
                 listener.onCompleted();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            if(listener != null) {
+                listener.onFailed();
             }
         }
     }
