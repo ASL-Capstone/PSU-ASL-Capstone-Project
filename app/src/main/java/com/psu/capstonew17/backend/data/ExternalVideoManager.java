@@ -1,6 +1,8 @@
 package com.psu.capstonew17.backend.data;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
 import com.psu.capstonew17.backend.api.*;
@@ -10,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.video.PreprocessingPipeline;
 
@@ -34,11 +37,11 @@ public class ExternalVideoManager implements VideoManager {
 
 
     @Override
-    public void importVideo(File videoFile, ImportOptions options, VideoImportListener handler) {
+    public void importVideo(final File videoFile, ImportOptions options, VideoImportListener handler) {
         final VideoImportListener handle = handler;
 
         // generate an output file location
-        File outFile = new File(Environment.getDataDirectory().getAbsoluteFile(),
+        final File outFile = new File(Environment.getDataDirectory().getAbsoluteFile(),
                 UUID.randomUUID().toString());
 
         PreprocessingPipeline  pipeline;
@@ -53,9 +56,13 @@ public class ExternalVideoManager implements VideoManager {
             @Override
             public void onCompleted() {
                 // create the new video
-                // TODO: Actually create the video
-
-                handle.onComplete(null);
+                dbHelper = ExternalVideoManager.INSTANCE.getDbHelper();
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                ContentValues values = new ContentValues();
+                values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
+                int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
+                Video video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
+                handle.onComplete(video);
             }
 
             @Override
