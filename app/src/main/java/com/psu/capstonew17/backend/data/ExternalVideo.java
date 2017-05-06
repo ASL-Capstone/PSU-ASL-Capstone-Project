@@ -5,7 +5,7 @@ import com.psu.capstonew17.backend.api.*;
 
 import java.io.File;
 
-public class ExternalVideo implements Video {
+class ExternalVideo implements Video {
     private File videoFile;
     private int videoId;
 
