@@ -8,8 +8,8 @@ import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+
+import com.psu.capstonew17.backend.api.VideoManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 public class PreprocessingPipeline {
     private File output;
     private File input;
+    private VideoManager.ImportOptions options;
 
     private PreprocessingListener listener = null;
 
@@ -29,9 +30,10 @@ public class PreprocessingPipeline {
         void onFailed();
     }
 
-    public PreprocessingPipeline(File outFile, File inFile) throws IOException {
+    public PreprocessingPipeline(File outFile, File inFile, VideoManager.ImportOptions opts) throws IOException {
         output = outFile;
         input = inFile;
+        options = opts;
     }
 
     public void setListener(PreprocessingListener l) {
@@ -129,7 +131,9 @@ public class PreprocessingPipeline {
 
                 // read a chunk out of the decoder if available
                 int outIdx = decoder.dequeueOutputBuffer(bufInfo, 10);
-                if(outIdx >= 0) {
+                if((outIdx >= 0) &&
+                        (bufInfo.presentationTimeUs > (options.startTime*1000)) &&
+                        (bufInfo.presentationTimeUs < (options.endTime*1000))) {
                     Image img = decoder.getOutputImage(outIdx);
 
                     // process the image

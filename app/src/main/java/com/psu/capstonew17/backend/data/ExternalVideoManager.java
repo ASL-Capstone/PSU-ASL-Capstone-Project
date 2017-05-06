@@ -52,7 +52,7 @@ public class ExternalVideoManager implements VideoManager {
 
         PreprocessingPipeline  pipeline;
         try {
-            pipeline = new PreprocessingPipeline(outFile, videoFile);
+            pipeline = new PreprocessingPipeline(outFile, videoFile, options);
         } catch(IOException e) {
             handler.onFailed(e);
             return;
