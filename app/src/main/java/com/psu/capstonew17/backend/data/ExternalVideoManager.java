@@ -2,6 +2,7 @@ package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.UUID;
 
 import com.psu.capstonew17.backend.db.AslDbContract.*;
@@ -86,14 +88,31 @@ public class ExternalVideoManager implements VideoManager {
                     handle.onFailed(e);
                     return;
                 }
-
-                // create the new video
+                // check if video already exists, if so delete the video file we just created
                 dbHelper = ExternalVideoManager.INSTANCE.getDbHelper();
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
-                ContentValues values = new ContentValues();
-                values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
-                int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
-                Video video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
+                String query = dbHelper.buildSelectQuery(
+                        VideoEntry.TABLE_NAME,
+                        Arrays.asList(VideoEntry.COLUMN_SHA + "='" + sha.toString() + "'")
+                );
+                Video video;
+                Cursor cursor = db.rawQuery(query, null);
+                if(cursor.moveToFirst()){
+                    int videoId = cursor.getInt(cursor.getColumnIndex(VideoEntry.COLUMN_ID));
+                    String videoPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
+                    File videoFile = new File(videoPath);
+                    outFile.delete();
+                    video = new ExternalVideo(videoId, videoFile.getAbsoluteFile());
+                }
+                else{
+                    // create the new video
+                    ContentValues values = new ContentValues();
+                    values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
+                    values.put(VideoEntry.COLUMN_SHA, sha.toString());
+                    int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
+                    video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
+                }
+                cursor.close();
                 handle.onComplete(video);
             }
 
