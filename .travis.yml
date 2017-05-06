@@ -29,11 +29,11 @@ install:
     - unzip -n $HOME/android-sdk-dl/tools_r25.2.5-linux.zip -d $HOME/android-sdk
     
     # Install/update SDK components
-    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
-    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
-    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-24'
-    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
-    echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
+    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
+    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
+    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-24'
+    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
+    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
 
 before_cache:
     - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
