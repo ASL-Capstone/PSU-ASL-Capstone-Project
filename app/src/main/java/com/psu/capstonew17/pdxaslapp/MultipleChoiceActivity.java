@@ -2,6 +2,8 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.graphics.Region;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -9,14 +11,18 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalTestManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleChoiceActivity extends BaseActivity implements View.OnClickListener {
     // Names Passed into the activity from quiz selection activity.
@@ -29,13 +35,12 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     Test currTest;
     // Submit button used by this activity
     Button submit;
+
+    VideoView questionVideo;
     // Tracks number of questions the user has answered
     int totalQuestions;
     // Tracks number of correct responses the user gave
-    int totalCorect;
-
-    // TODO Hook up actual Test Manager
-    TestManager testManager;
+    int totalCorrect;
     // The Radio Group that is dynamically filled with the potential answers for the question.
     RadioGroup answers;
     // The Question that is being currently presented to the User.
@@ -65,19 +70,38 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
         }
         // Get the generic Test
-        // TODO Update to using the actual backend quiz generation
-        currTest = new testMultiChoiceTest();
+        // TODO Test the actual backend quiz generation
+        decksForQuiz = new ArrayList<>();
+        for (String name : deckNamesForQuiz){
+            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+            if (toAdd != null)
+                decksForQuiz.add(toAdd);
+        }
+        TestManager.Options opts = new TestManager.Options();
+        opts.recordStats = false;
+        opts.count = numQuestions;
+        opts.mode = TestManager.OrderingMode.RANDOM;
+        opts.questionTypes = TestManager.Options.QUESTION_MULTIPLE_CHOICE;
+        currTest = ExternalTestManager.getInstance(this).buildTest((List<Deck>)decksForQuiz,opts);
+        // Testing stub call
+        // currTest = new testMultiChoiceTest();
         // Hook up the Radio Container and the Submit Button
         answers = (RadioGroup)findViewById(R.id.MultiChoiceAnswerRadioGroup);
         submit = (Button)findViewById(R.id.button_submit);
         submit.setOnClickListener(this);
+        questionVideo = (VideoView) findViewById(R.id.videoViewMultiChoice);
+        questionVideo.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
         // Load the First Question
         loadQuestion();
     }
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
-        // TODO set up Handling for the case where there is no next Question
         if(currTest.hasNext()) {
             // Clear the current set of answers from the Radio Group
             answers.removeAllViews();
@@ -90,12 +114,12 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 add.setText(answer);
                 answers.addView(add);
             }
-            // TODO hook video up
+            //TODO hook up video
         }
         //No more questions leave quiz activity
         else{
             Intent intent = new Intent(this,CompleteQuizActivity.class);
-            intent.putExtra("NumCorrect",totalCorect);
+            intent.putExtra("NumCorrect",totalCorrect);
             intent.putExtra("totalNum",totalQuestions);
             startActivity(intent);
             finish();
@@ -142,7 +166,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 switch (processAnswer()) {
                     // Case: User entered correct answer
                     case 1:
-                        totalCorect += 1;
+                        totalCorrect += 1;
                         totalQuestions += 1;
                         Toast.makeText(this, "Correct!", Toast.LENGTH_SHORT).show();
                         break;

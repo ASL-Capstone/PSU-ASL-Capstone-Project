@@ -17,9 +17,12 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalTestManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FlashCardActivity extends BaseActivity implements View.OnClickListener {
     private Button bttShow;
@@ -69,8 +72,20 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
             Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
         }
         // Get the generic Test
-        // TODO Update to using the actual backend quiz generation
-        currTest = new testMultiChoiceTest();
+        // TODO Test the actual backend quiz generation
+        decksForQuiz = new ArrayList<>();
+        for (String name : deckNamesForQuiz){
+            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+            if (toAdd != null)
+                decksForQuiz.add(toAdd);
+        }
+        TestManager.Options opts = new TestManager.Options();
+        opts.recordStats = false;
+        opts.count = 999;
+        opts.mode = TestManager.OrderingMode.RANDOM;
+        opts.questionTypes = TestManager.Options.QUESTION_TEXT_ENTRY;
+        currTest = ExternalTestManager.getInstance(this).buildTest((List<Deck>)decksForQuiz,opts);
+        // currTest = new testMultiChoiceTest();
         loadQuestion();
     }
 
