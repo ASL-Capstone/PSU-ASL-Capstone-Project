@@ -5,11 +5,11 @@
     android:orientation="vertical">
 
     <VideoView
-        android:layout_margin="10dp"
-        android:padding="8dp"
+        android:id="@+id/videoView2"
         android:layout_width="wrap_content"
         android:layout_height="241dp"
-        android:id="@+id/videoView2" />
+        android:layout_margin="10dp"
+        android:padding="8dp" />
 
     <ScrollView
         android:layout_width="match_parent"
