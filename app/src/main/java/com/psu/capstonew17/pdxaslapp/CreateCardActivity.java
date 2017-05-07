@@ -21,7 +21,6 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.api.Video;
 import com.psu.capstonew17.backend.data.ExternalCardManager;
-import com.psu.capstonew17.backend.data.ExternalVideo;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 import java.io.File;
@@ -132,7 +131,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
 
-            case R.id.button_submit:
+            /*case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
@@ -155,6 +154,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 }
 
                 break;
+                */
 
 
         }
