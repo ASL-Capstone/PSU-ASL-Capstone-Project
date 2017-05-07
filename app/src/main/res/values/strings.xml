@@ -60,6 +60,15 @@
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
 
+    <!-- Card creation/deletion strings -->
+    <string name="card_select_deck_error">Please select at least one deck</string>
+    <string name="card_video_file_error">Error: File not exists</string>
+    <string name="card_record_video_error">Record Video Failed</string>
+    <string name="card_camera_perm_error">Camera Not Available</string>
+    <string name="card_uri_error">Error: Missing Uri!</string>
+    <string name="card_name_lngth_error1">"Label length should be greater than "</string>
+    <string name="card_name_lngth_error2">" characters and less than "</string>
+    <string name="select_video">Select video</string>
 
     <string name="button_record">Record</string>
     <string name="button_get_from_gallery">Gallery</string>

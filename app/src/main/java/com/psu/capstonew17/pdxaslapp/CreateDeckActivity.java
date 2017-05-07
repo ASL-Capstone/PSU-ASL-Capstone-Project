@@ -73,9 +73,10 @@ public class CreateDeckActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(deckName)
                 || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
-            String nameLenErr = getResources().getString(R.string.deck_name_length_error)
-                    + Integer.toString(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
-            Toast.makeText(this, nameLenErr, Toast.LENGTH_SHORT).show();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
+            stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
+            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
         } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
             Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();

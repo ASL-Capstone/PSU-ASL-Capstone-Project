@@ -21,7 +21,6 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.api.Video;
 import com.psu.capstonew17.backend.data.ExternalCardManager;
-import com.psu.capstonew17.backend.data.ExternalVideo;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 import java.io.File;
@@ -40,11 +39,13 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private File videoFile;
 
     static final int REQUEST_VIDEO_CAPTURE = 1;
-    static final int REQUEST_TAKE_GALLERY_VIDEO = 2;
+    static final int REQUEST_TAKE_GALLERY_VIDEO = 1;
     static final int REQUEST_EDIT_VIDEO = 3;
 
     static final int MIN_LABEL_LENGTH = 3;
     static final int MAX_LABEL_LENGTH = 250;
+
+    private final String SELECT_VIDEO = "Select Video";
 
     private Button bttSubmit;
     private Button bttGetVideo;
@@ -110,14 +111,16 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                     dispatchTakeVideoIntent();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "Camera Not Available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.buttonFromGallery:
                 intent = new Intent();
                 intent.setType("video/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+                startActivityForResult(Intent.createChooser(intent,SELECT_VIDEO),
+                        REQUEST_TAKE_GALLERY_VIDEO);
 
                 break;
             case R.id.buttonUseVIdeo:
@@ -132,19 +135,19 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
 
-            case R.id.button_submit:
+            /*case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
                     return;
-
+/*
                 try {
                     // not sure what videoId to assign, so make it random for testing
                     Random random = new Random();
                     int videoId = random.nextInt();
-                    Video video = new ExternalVideo(videoId, videoFile);
+                    //Video video = new ExternalVideo(videoId, videoFile);
 
-                    Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
+                    //Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
 
                     for (int index: selectedIndex) {
                         // TODO for each deck add aCard to that deck
@@ -153,8 +156,9 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 } catch (ObjectAlreadyExistsException e) {
                     Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
                 }
-
+*/
                 break;
+                */
 
 
         }
@@ -164,8 +168,13 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         videoLabel = editText.getText().toString();
         if (videoLabel.length() < MIN_LABEL_LENGTH || videoLabel.length() > MAX_LABEL_LENGTH) {
-            Toast.makeText(this, "Label length should be in range ["
-                    + MIN_LABEL_LENGTH + ", " + MAX_LABEL_LENGTH + "]", Toast.LENGTH_SHORT).show();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.card_name_lngth_error1));
+            stringBuilder.append(MIN_LABEL_LENGTH);
+            stringBuilder.append(getResources().getString(R.string.card_name_lngth_error2));
+            stringBuilder.append(MAX_LABEL_LENGTH);
+
+            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -173,13 +182,13 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     private boolean videoFileCheck() {
         if (videoUri == null) {
-            Toast.makeText(this, "Error: Missing Uri!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.card_uri_error, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         videoFile = new File(videoUri.getPath());
         if (videoFile == null || videoFile.exists()==false) {
-            Toast.makeText(this, "Error: File not exists", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.card_video_file_error, Toast.LENGTH_SHORT).show();
         }
 
         return true;
@@ -189,7 +198,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         if (listView.getVisibility() == View.GONE) {
             listView.setVisibility(View.VISIBLE);
-            Toast.makeText(this, "Please select at least one deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.card_select_deck_error, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -202,7 +211,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         }
 
         if (selectedIndex == null || selectedIndex.size() < 1) {
-            Toast.makeText(this, "Please select at least one deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.card_select_deck_error, Toast.LENGTH_SHORT).show();
             return false;
         }
 
@@ -217,7 +226,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
         else{
-            Toast.makeText(getApplicationContext(), "Record Video Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    R.string.card_record_video_error, Toast.LENGTH_SHORT).show();
         }
 
     }
