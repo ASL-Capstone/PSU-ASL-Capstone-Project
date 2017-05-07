@@ -2,6 +2,8 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.session.MediaController;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.util.Pair;
@@ -17,9 +19,12 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalTestManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FlashCardActivity extends BaseActivity implements View.OnClickListener {
     private Button bttShow;
@@ -38,6 +43,8 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     Question curQuestion;
     private VideoView vidDisplay;
     private TextView answerDisplay;
+    private MediaPlayer mPlayer;
+    private android.widget.MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +76,20 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
             Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
         }
         // Get the generic Test
-        // TODO Update to using the actual backend quiz generation
-        currTest = new testMultiChoiceTest();
+        // TODO Test the actual backend quiz generation
+        decksForQuiz = new ArrayList<>();
+        for (String name : deckNamesForQuiz){
+            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+            if (toAdd != null)
+                decksForQuiz.add(toAdd);
+        }
+        TestManager.Options opts = new TestManager.Options();
+        opts.recordStats = false;
+        opts.count = 999;
+        opts.mode = TestManager.OrderingMode.RANDOM;
+        opts.questionTypes = TestManager.Options.QUESTION_TEXT_ENTRY;
+        currTest = ExternalTestManager.getInstance(this).buildTest((List<Deck>)decksForQuiz,opts);
+        // currTest = new testMultiChoiceTest();
         loadQuestion();
     }
 
@@ -98,7 +117,23 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                //TODO start video display
+                //TODO test video display
+                curQuestion.getVideo().configurePlayer(mPlayer);
+                mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
+                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                    @Override
+                    public void onPrepared(MediaPlayer mp) {
+                        mp.setLooping(true);
+                        vidDisplay.setMediaController(mediaController);
+                        mp.start();
+                    }
+                });
                 break;
         }
 

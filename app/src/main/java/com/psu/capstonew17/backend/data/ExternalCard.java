@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ExternalCard implements Card {
+class ExternalCard implements Card {
     private int cardId;
     private Video video;
     private String answer;
@@ -97,5 +97,11 @@ public class ExternalCard implements Card {
             decks.add(ExternalDeckManager.INSTANCE.getDeck(deckId));
         }
         return decks;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof ExternalCard)) return false;
+        return cardId == ((ExternalCard)obj).cardId;
     }
 }

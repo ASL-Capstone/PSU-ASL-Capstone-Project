@@ -2,7 +2,7 @@ package com.psu.capstonew17.backend.api;
 /**
  * Listener interface for sharing events.
  */
-public class ExternalSharingTransmitListener implements SharingTransmitListener{
+public class ExternalSharingTransmitListener implements SharingTransmitListener {
     enum DisconnectReason {
         AUTH_FAILURE,
         CHECKSUM_ERROR,

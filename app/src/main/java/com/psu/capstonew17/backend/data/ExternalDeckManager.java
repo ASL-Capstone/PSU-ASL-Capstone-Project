@@ -59,38 +59,66 @@ public class ExternalDeckManager implements DeckManager{
         return null;
     }
 
-
-    @Override
-    public List<Deck> getDecks(String name) {
+    public Deck getDeck(String name)
+    {
+        Deck deck = null;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        List<Deck> decks = new ArrayList<Deck>();
-        if(name == null){
-            // get all decks
-            String query = dbHelper.buildSelectQuery(DeckEntry.TABLE_NAME, null);
-            Cursor cursor = db.rawQuery(query, null);
-            while(cursor.moveToNext()){
-                int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
-                decks.add(getDeck(deckId));
-            }
-        }
-        //TODO: get list by name
-        return decks;
-    }
-
-    @Override
-    public Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         String query = dbHelper.buildSelectQuery(
                 DeckEntry.TABLE_NAME,
                 Arrays.asList(DeckEntry.COLUMN_NAME + "='" + name + "'")
         );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
-            cursor.close();
-            throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
+            int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
+            deck = new ExternalDeck(deckId, name, getCardsForDeck(deckId));
         }
         cursor.close();
+        return deck;
+    }
 
+    public boolean deckExists(String name){
+        boolean exists = false;
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        String query = dbHelper.buildSelectQuery(
+                DeckEntry.TABLE_NAME,
+                Arrays.asList(DeckEntry.COLUMN_NAME + "='" + name + "'")
+        );
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()){
+            exists = true;
+        }
+        cursor.close();
+        return exists;
+    }
+
+    @Override
+    public List<Deck> getDecks(String name) {
+        List<Deck> decks = new ArrayList<Deck>();
+        if(name == null){
+            // get all decks
+            SQLiteDatabase db = dbHelper.getReadableDatabase();
+            String query = dbHelper.buildSelectQuery(DeckEntry.TABLE_NAME, null);
+            Cursor cursor = db.rawQuery(query, null);
+            while(cursor.moveToNext()){
+                int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
+                decks.add(getDeck(deckId));
+            }
+            cursor.close();
+        }
+        Deck namedDeck = getDeck(name);
+        if(namedDeck != null){
+            decks.add(namedDeck);
+        }
+        return decks;
+    }
+
+
+    @Override
+    public Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException {
+        if(deckExists(name)){
+            throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DeckEntry.COLUMN_NAME, name);
         int deckId = (int) db.insert(DeckEntry.TABLE_NAME, null, values);

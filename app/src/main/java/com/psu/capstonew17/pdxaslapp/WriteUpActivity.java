@@ -2,11 +2,13 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.MediaController;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,9 +18,12 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalTestManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class WriteUpActivity extends BaseActivity implements View.OnClickListener {
     // Accuracy Vars
@@ -32,12 +37,12 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     private ArrayList<Deck> decksForQuiz;
     // The Test that is being used for this quiz
     private Test currTest;
-    // TODO Hook up actual Test Manager
-    private TestManager testManager;
     // The Question that is being currently presented to the User.
     Question curQuestion;
     private VideoView vidDisplay;
     private EditText answerInput;
+    private MediaController mediaController;
+    private MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +71,20 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
             Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
         }
         // Get the generic Test
-        // TODO Update to using the actual backend quiz generation
-        currTest = new testMultiChoiceTest();
+        // TODO Test the actual backend quiz generation
+        decksForQuiz = new ArrayList<>();
+        for (String name : deckNamesForQuiz){
+            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+            if (toAdd != null)
+                decksForQuiz.add(toAdd);
+        }
+        TestManager.Options opts = new TestManager.Options();
+        opts.recordStats = false;
+        opts.count = 999;
+        opts.mode = TestManager.OrderingMode.RANDOM;
+        opts.questionTypes = TestManager.Options.QUESTION_MULTIPLE_CHOICE;
+        currTest = ExternalTestManager.getInstance(this).buildTest((List<Deck>)decksForQuiz,opts);
+        //currTest = new testMultiChoiceTest();
         loadQuestion();
 
     }
@@ -75,9 +92,25 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     protected void loadQuestion() {
         // Check to See if there is another Question in the Test
         if (currTest.hasNext()) {
-            // TODO hook video up
             curQuestion = currTest.next();
             answerInput.getText().clear();
+            // TODO test Video Playing
+            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+            curQuestion.getVideo().configurePlayer(mPlayer);
+            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                    vidDisplay.setMediaController(mediaController);
+                    mp.start();
+                }
+            });
         }
         //No more questions leave quiz activity
         else {
