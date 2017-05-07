@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_delete_card"
+    android:id="@+id/activity_create_deck"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,36 +9,38 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.psu.capstonew17.pdxaslapp.CreateEditDeleteDeckActivity">
+    tools:context="com.psu.capstonew17.pdxaslapp.CreateDeckActivity">
 
-    <ScrollView
+    <EditText
+        android:id="@+id/createDeckNameField"
         android:layout_width="match_parent"
-        android:orientation="vertical"
+        android:layout_height="110dp"
+        android:background="@drawable/background4"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        tools:ignore="HardcodedText,LabelFor,TextFields" />
+
+    <ListView
+        android:id="@+id/createCardListView"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/cardRButtons"
-            android:fillViewport="true"
-            android:textColor="@android:color/black">
-        </RadioGroup>
-    </ScrollView>
-
+    </ListView>
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="match_parent"
         android:gravity="bottom"
         android:orientation="horizontal">
 
         <Button
-            android:text="@string/button_delete"
-            android:layout_width="0dp"
+            android:text="@string/button_submit"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/bttnCardDlt"
-            android:onClick="onDeleteClicked"
-            android:layout_weight="1"/>
+            android:id="@+id/bttn_create_done"
+            android:onClick="onCreateSubmitClicked"/>
+
     </LinearLayout>
+
 </LinearLayout>

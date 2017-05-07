@@ -15,7 +15,7 @@ public class testDeck implements Deck {
     protected String name;
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
@@ -26,12 +26,11 @@ public class testDeck implements Deck {
     @Override
     public List<Card> getCards() {
         List<Card> ret = new ArrayList<>();
-        testCard first = new testCard();
-        first.setAnswer("One Answer");
-        ret.add(first);
-        first = new testCard();
-        first.setAnswer("Two Answer");
-        ret.add(first);
+        for (int i = 0; i < 100; ++i) {
+            testCard first = new testCard();
+            first.setAnswer("Answer" + i);
+            ret.add(first);
+        }
         return ret;
     }
 
