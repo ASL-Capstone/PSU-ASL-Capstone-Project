@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 /**
@@ -28,6 +29,7 @@ public class EditDeckActivity extends BaseActivity {
     private List<Card>      cardsInDeck;
     private List<ListRow>   cardStructs;
     private EditText        textBox;
+    private final String    CHECKED_INDEX   = "checkedIndex";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,10 @@ public class EditDeckActivity extends BaseActivity {
 
         //get the index of the selected deck to edit
         int checkedIndex = 0;
-        if(getIntent().hasExtra("checkedIndex")) {
+        if(getIntent().hasExtra(CHECKED_INDEX)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                checkedIndex = bundle.getInt("checkedIndex");
+                checkedIndex = bundle.getInt(CHECKED_INDEX);
             }
         }
 
@@ -88,18 +90,28 @@ public class EditDeckActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(deckName)
                 || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
-            String nameLenErr = getResources().getString(R.string.deck_name_length_error)
-                    + Integer.toString(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
-            Toast.makeText(this, nameLenErr, Toast.LENGTH_SHORT).show();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
+            stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
+            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
 
         } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
             Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
 
         } else {
-            deck.setName(textBox.getText().toString());
-            deck.commit();
-            finish();
+            if (!TextUtils.equals(deckName, deck.getName())) {
+                try {
+                    deck.setName(textBox.getText().toString());
+                    deck.commit();
+                    finish();
+                } catch (ObjectAlreadyExistsException e) {
+                    Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                deck.commit();
+                finish();
+            }
         }
     }
 }
