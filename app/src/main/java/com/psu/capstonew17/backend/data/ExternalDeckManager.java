@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
@@ -131,14 +133,6 @@ public class ExternalDeckManager implements DeckManager{
 
     @Override
     public Deck getDefaultDeck() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        String query = dbHelper.buildSelectQuery(CardEntry.TABLE_NAME, null);
-        Cursor cursor = db.rawQuery(query, null);
-        List<Card> cards = new ArrayList<Card>();
-        while(cursor.moveToNext()){
-            int cardId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_ID));
-            cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
-        }
-        return new ExternalDeck(-1, "[[DEFAULT]]", cards);
+        return new ExternalDefaultDeck();
     }
 }

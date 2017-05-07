@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 import android.content.Context;
@@ -14,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ExternalTestManager implements TestManager{
-    public static ExternalTestManager INSTANCE = new ExternalTestManager();
+    static ExternalTestManager INSTANCE = new ExternalTestManager();
 
     private AslDbHelper dbHelper;
 
@@ -23,7 +25,7 @@ public class ExternalTestManager implements TestManager{
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return dbHelper;
     }
 

@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 
@@ -18,7 +20,7 @@ import java.util.List;
 
 public class ExternalStatisticsManager implements StatisticsManager {
 
-    public static ExternalStatisticsManager INSTANCE = new ExternalStatisticsManager();
+    static ExternalStatisticsManager INSTANCE = new ExternalStatisticsManager();
 
     private AslDbHelper dbHelper;
 
@@ -27,7 +29,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
         return INSTANCE;
     }
 
-    public AslDbHelper getDbHelper(){
+    AslDbHelper getDbHelper(){
         return this.dbHelper;
     }
 
@@ -42,7 +44,9 @@ public class ExternalStatisticsManager implements StatisticsManager {
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();
-        List<Long> times = new ArrayList<Long>();
+
+        long totalTime = 0;
+        long numAnswered = 0;
         while(cursor.moveToNext()){
             int cardId = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_CARD));
             Boolean correct = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_CORRECT)) == 1;
@@ -54,13 +58,11 @@ public class ExternalStatisticsManager implements StatisticsManager {
             }
             int startTime = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ASKED_AT));
             int endTime = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ANSWERED_AT));
-            times.add(Long.valueOf(endTime - startTime));
+
+            totalTime += endTime - startTime;
+            numAnswered++;
         }
-        long sum = 0;
-        for(Long l : times){
-            sum += l;
-        }
-        Long avgTime = Long.valueOf(sum / times.size());
+        long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
 
@@ -74,7 +76,9 @@ public class ExternalStatisticsManager implements StatisticsManager {
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();
-        List<Long> times = new ArrayList<Long>();
+
+        long totalTime = 0;
+        long numAnswered = 0;
         while(cursor.moveToNext()){
             Boolean correct = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_CORRECT)) == 1;
             if(correct){
@@ -85,13 +89,11 @@ public class ExternalStatisticsManager implements StatisticsManager {
             }
             int startTime = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ASKED_AT));
             int endTime = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ANSWERED_AT));
-            times.add(Long.valueOf(endTime - startTime));
+
+            totalTime += endTime - startTime;
+            numAnswered++;
         }
-        long sum = 0;
-        for(Long l : times){
-            sum += l;
-        }
-        Long avgTime = Long.valueOf(sum / times.size());
+        long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
 
@@ -105,7 +107,9 @@ public class ExternalStatisticsManager implements StatisticsManager {
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
         List<Card> incorrectCards = new ArrayList<Card>();
-        List<Long> times = new ArrayList<Long>();
+
+        long totalTime = 0;
+        long numAnswered = 0;
         while(cursor.moveToNext()){
             int cardId = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_CARD));
             Boolean correct = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_CORRECT)) == 1;
@@ -117,13 +121,11 @@ public class ExternalStatisticsManager implements StatisticsManager {
             }
             int start = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ASKED_AT));
             int end = cursor.getInt(cursor.getColumnIndex(AnswerEntry.COLUMN_ANSWERED_AT));
-            times.add(Long.valueOf(end - start));
+
+            totalTime += end - start;
+            numAnswered++;
         }
-        long sum = 0;
-        for(Long l : times){
-            sum += l;
-        }
-        Long avgTime = Long.valueOf(sum / times.size());
+        long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
 }

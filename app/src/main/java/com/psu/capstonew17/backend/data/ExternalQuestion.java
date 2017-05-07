@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Date;
 
-public class ExternalQuestion implements Question {
+class ExternalQuestion implements Question {
     private Card card;
     private int deckId;
     private Type type;

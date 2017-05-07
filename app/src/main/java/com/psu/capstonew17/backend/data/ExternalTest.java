@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
@@ -11,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ExternalTest implements Test {
+class ExternalTest implements Test {
     private List<Question> questions;
     private int current;
     private Statistics statistics;

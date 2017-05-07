@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
@@ -13,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class ExternalCard implements Card {
+class ExternalCard implements Card {
     private int cardId;
     private Video video;
     private String answer;

@@ -1,3 +1,5 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
+
 package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
@@ -10,7 +12,7 @@ import com.psu.capstonew17.backend.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExternalDeck implements Deck {
+class ExternalDeck implements Deck {
     private int deckId;
     private String deckName;
     private List<Card> mutableCards, dbCards;
