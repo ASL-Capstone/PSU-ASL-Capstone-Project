@@ -117,7 +117,14 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 add.setText(answer);
                 answers.addView(add);
             }
-            //TODO hook up video
+            //TODO Test video
+            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
             curQuestion.getVideo().configurePlayer(mPlayer);
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override

@@ -117,8 +117,15 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                //TODO start video display
+                //TODO test video display
                 curQuestion.getVideo().configurePlayer(mPlayer);
+                mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                });
                 mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
