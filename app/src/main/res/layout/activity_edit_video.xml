@@ -11,16 +11,18 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:layout_gravity="center"
+        android:padding="3dp"
         android:layout_weight="5">
 
         <VideoView
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:id="@+id/videoView_edit_video" />
 
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
 
     <TableRow
         android:layout_width="match_parent"
