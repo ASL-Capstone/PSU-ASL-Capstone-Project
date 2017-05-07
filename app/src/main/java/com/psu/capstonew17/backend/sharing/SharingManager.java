@@ -2,8 +2,13 @@ package com.psu.capstonew17.backend.sharing;
 
 import android.graphics.Bitmap;
 
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.encoder.Encoder;
 import com.google.zxing.qrcode.encoder.QRCode;
+import com.google.zxing.BarcodeFormat;
+
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.SharingReceiveListener;
@@ -62,11 +67,31 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
 
         // generate QR code
         // TODO: figure out ZXing
+        String ParamTotal = param.ssid + param.keySource + param.netPassword;   //concat param strings
+        QRCodeWriter writer = new QRCodeWriter();
+        BitMatrix bmat = null;
+        try{
+            bmat = writer.encode(ParamTotal,BarcodeFormat.QR_CODE,100,100);    //create QR code, store in BitMatrx
 
-        // start server
+        }catch (WriterException exception){exception.printStackTrace();}
 
-        return null;
+        int height = bmat.getHeight();    //convert BitMatrix to bitmap
+        int width = bmat.getWidth();
+        int [] pix = new int[width * height];
+        int offst =0;
+        for(int Yaxis =0;Yaxis< height; ++Yaxis){
+            offst = Yaxis * width;
+            for(int Xaxis =0;Xaxis < width; ++ Xaxis){
+                if(bmat.get(Xaxis,Yaxis)){pix[Xaxis + offst] = 0xFF000000;}     //if true, set to Black
+                else{pix[Xaxis + offst] = 0xFFFFFFFF;}                          //else set to white
+            }
+        }
+
+        Bitmap bmap = Bitmap.createBitmap(width,height,Bitmap.Config.RGB_565);
+        bmap.setPixels(pix, 0, width, 0,0,width, height);
+        return bmap;
     }
+
 
     @Override
     public void receive(RxOptions opts, SharingReceiveListener listener) {
