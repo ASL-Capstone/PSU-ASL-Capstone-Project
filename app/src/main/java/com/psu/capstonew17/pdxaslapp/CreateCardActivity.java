@@ -156,7 +156,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 } catch (ObjectAlreadyExistsException e) {
                     Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
                 }
-*/
+
                 break;
                 */
 
