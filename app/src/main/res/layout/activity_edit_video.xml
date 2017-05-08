@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_edit_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,25 +18,48 @@
         <VideoView
             android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="280dp"
             android:layout_marginBottom="5dp"
             android:id="@+id/videoView_edit_video" />
 
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
 
+    <SeekBar
+        android:id="@+id/seekBarEditVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/textViewDelFromGal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/textview"
+        android:textAlignment="center"
+        tools:text="@string/delete_from_gallery" />
+
+    <ToggleButton
+        android:id="@+id/toggleButtonDelFromGal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="false"
+        android:text="@string/togglebutton"
+        android:textOff="@string/NO"
+        android:textOn="@string/YES" />
+
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="bottom">
+
         <include
+            android:id="@+id/submitButtonEditCard"
             layout="@layout/submit_button"
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
 
-            >
-        </include>
+            android:layout_height="wrap_content"
+            android:visibility="visible"></include>
+
     </TableRow>
 
 

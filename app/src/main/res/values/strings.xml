@@ -74,4 +74,10 @@
     <string name="button_get_from_gallery">Gallery</string>
     <string name="button_edit_video">Edit</string>
     <string name="button_scan_qr_code">Scan QR Code</string>
+    <string name="delete_from_gallery">Delete From Gallery?</string>
+    <string name="NO">No</string>
+    <string name="YES">Yes</string>
+    <string name="Dont_delete_from_gal">Save to Gallery</string>
+    <string name="textview">TextView</string>
+    <string name="togglebutton">ToggleButton</string>
 </resources>
