@@ -1,68 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_gravity="bottom"
-        android:layout_width="fill_parent"
-        android:layout_height="60sp"
-        android:layout_alignParentBottom="true"
+    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+        android:id="@+id/layout"
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5">
+
+        <VideoView
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/videoView_flashCard" />
+
+    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:gravity="bottom">
 
-        <include android:layout_height="wrap_content"
+        <Button
+            android:id="@+id/button_showAnswer"
             android:layout_width="match_parent"
-            layout="@layout/submit_button">
-        </include>
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_flash_card_show_answer" />
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp">
-
-        <TextView
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:padding="8dp"
-            android:textSize="20sp"
-            android:background="@drawable/background6"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:text="@string/placeholder_answer"
+        <Button
+            android:id="@+id/button_nextFlashCard"
             android:layout_width="match_parent"
-            android:layout_height="65dp"
-            android:id="@+id/textView5"
-            tools:ignore="HardcodedText" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_flash_card_next_question" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center">
+    </TableRow>
 
-                <VideoView
-
-                    android:layout_marginTop="10dp"
-                    android:layout_gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="264dp"
-                    android:layout_marginBottom="5dp"
-                    android:id="@+id/videoView" />
-
-
-            </LinearLayout>
+    <TextView
+        android:id="@+id/textView_FlashCardAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:background="@drawable/background6"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text=""
+        android:textSize="18sp" />
 
 
-    </LinearLayout>
+</LinearLayout>
 
 
 
-
-
-</RelativeLayout>

@@ -1,3 +1,4 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
@@ -15,31 +16,35 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen);
 
-        // declare button and enable clickable on buttons
+        // declare layout components
         bttTakeQuiz = (Button) this.findViewById(R.id.button_take_quiz);
-        bttTakeQuiz.setOnClickListener(this);
-
         bttManageCards = (Button) this.findViewById(R.id.button_manage_cards);
-        bttManageCards.setOnClickListener(this);
-
         bttManageDecks = (Button) this.findViewById(R.id.button_manage_decks);
+
+        // enable clickable on buttons
+        bttTakeQuiz.setOnClickListener(this);
+        bttManageCards.setOnClickListener(this);
         bttManageDecks.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.button_take_quiz:
-                Intent intent = new Intent(getApplicationContext(), TakeQuizSubMenuActivity.class);
+                intent = new Intent(getApplicationContext(), TakeQuizSubMenuActivity.class);
                 startActivity(intent);
                 break;
 
             case R.id.button_manage_decks:
-                // TODO: add intent and start new activity after created activity for manage decks sub menu
+                intent = new Intent(getApplicationContext(), ManageDecksSubMenuActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_manage_cards:
-                // TODO: add intent and state new activity for manage cards sub menu
+                intent = new Intent(getApplicationContext(), ManageCardsSubMenuActivity.class);
+                startActivity(intent);
                 break;
         }
     }

@@ -2,33 +2,124 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <TextView
         android:gravity="center"
         android:layout_gravity="center"
         android:layout_margin="10dp"
         android:textSize="30sp"
-        android:text="@string/header_take_quiz_submenu"
+        android:text="@string/label_choose_quiz_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:ignore="HardcodedText" />
 
-    <Button
-        android:text="@string/button_multiple_choice"
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:id="@+id/radioGroupQuizChoice"
+        android:layout_height="43dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonMultipleChoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_multiple_choice"
+            android:onClick="onQuizTypeClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonFlashCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_flash_card"
+            android:onClick="onQuizTypeClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonWriteUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_write_up"
+            android:onClick="onQuizTypeClicked"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewChooseNumberOfQuestions"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:textSize="30sp"
+        android:text="@string/label_choose_number_of_questions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_multiple_choice" />
+        tools:ignore="HardcodedText" />
+
+    <RadioGroup
+        android:id = "@+id/radioGroupQuestionCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonTenQuestions"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_ten_questions"
+            android:onClick="onNumQuestionsClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonThirtyQuestions"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_thirty_questions"
+            android:onClick="onNumQuestionsClicked"/>
+
+        <RadioButton
+            android:id="@+id/radioButtonFiftyQuestions"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_fifty_questions"
+            android:onClick="onNumQuestionsClicked"/>
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/promptChooseDecks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:text="@string/label_choose_decks"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <ScrollView
+        android:id="@+id/deckListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.24">
+
+        <LinearLayout
+            android:id="@+id/deckListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+        </LinearLayout>
+    </ScrollView>
 
     <Button
-        android:text="@string/button_flash_card"
+        android:id="@+id/buttonTakeQuiz"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_flash_card" />
-
-    <Button
-        android:text="@string/button_write_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_write_up" />
+        android:text="@string/button_take_quiz"
+        android:onClick="takeQuizButtonClicked"/>
 </LinearLayout>

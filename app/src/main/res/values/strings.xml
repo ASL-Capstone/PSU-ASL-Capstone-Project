@@ -1,4 +1,9 @@
 <resources>
+    <string-array name="quizTypesArray">
+        <item>Multiple Choice</item>
+        <item>Flash Card</item>
+        <item>Write Up</item>
+    </string-array>
     <string name="app_name">PDXASLApp</string>
 
     <!-- Activities Headers -->
@@ -10,14 +15,62 @@
     <string name="button_manage_decks">Manage Decks</string>
     <string name="button_manage_cards">Manage Cards</string>
     <string name="button_submit">Submit</string>
+    <string name="button_share">Share</string>
+    <string name="button_edit">Edit</string>
+    <string name="button_delete">Delete</string>
+    <string name="button_create">Create</string>
+    <string name="button_home">Home</string>
+
+    <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
     <string name="button_flash_card">Flash Card</string>
+    <string name="button_flash_card_next_question">Next</string>
+    <string name="button_flash_card_show_answer">Show Answer</string>
     <string name="button_write_up">Write Up</string>
-    <string name="button_share">Share</string>
+    <string name="button_ten_questions">10</string>
+    <string name="button_thirty_questions">30</string>
+    <string name="button_fifty_questions">50</string>
+
+    <!-- Labels -->
+    <string name="label_choose_quiz_type">Choose Quiz Type</string>
+    <string name="label_choose_number_of_questions">Choose Number of Questions</string>
+    <string name="label_choose_decks">Choose Decks</string>
+    <string name="quiz_complete">Quiz Complete!</string>
 
     <!-- User Help Prompts -->
     <string name="prompt_text_field">Type Here</string>
+    <string name="prompt_card_name">Card Name</string>
 
     <!-- Place Holders -->
     <string name="placeholder_answer">this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video. this is an answer for this video.  this is an answer for this video.</string>
+    <string name="textView_no_video">No Video Imported</string>
+    <string name="button_import_video">+</string>
+    <string name="edit_text_card_answer">Enter Card Answer</string>
+    <string name="list_row_name">Row\'s Name</string>
+    <string name="edit_text_video_description">Enter Video Description</string>
+    <string name="list_row_deck_name">Deck\'s Name</string>
+    <string name="button_record_video">Record New Video</string>
+    <string name="button_select_video">Add From Gallery</string>
+    <string name="add_video_text">Create new video or add from gallery?</string>
+    <string name="button_use_video">Use This Video</string>
+
+    <!-- Deck creation/editing strings -->
+    <string name="deck_name_length_error">"Deck name must be at least 1 character and less than "</string>
+    <string name="deck_size_error">Select at least two cards</string>
+    <string name="deck_already_exists_error">Deck already exists</string>
+    <string name="deck_not_selected">Select a deck</string>
+
+    <!-- Card creation/deletion strings -->
+    <string name="card_select_deck_error">Please select at least one deck</string>
+    <string name="card_video_file_error">Error: File not exists</string>
+    <string name="card_record_video_error">Record Video Failed</string>
+    <string name="card_camera_perm_error">Camera Not Available</string>
+    <string name="card_uri_error">Error: Missing Uri!</string>
+    <string name="card_name_lngth_error1">"Label length should be greater than "</string>
+    <string name="card_name_lngth_error2">" characters and less than "</string>
+    <string name="select_video">Select video</string>
+
+    <string name="button_record">Record</string>
+    <string name="button_get_from_gallery">Gallery</string>
+    <string name="button_edit_video">Edit</string>
 </resources>

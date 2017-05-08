@@ -8,7 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="actionOverflowMenuStyle">@style/AppTheme</item>
+        <item name="android:itemBackground">#CDD6FC</item>
     </style>
 
 </resources>
+
+
+
 
