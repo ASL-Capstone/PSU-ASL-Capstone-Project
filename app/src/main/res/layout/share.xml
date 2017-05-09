@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,8 +10,9 @@
     <!-- TODO  add scroll view for large sets of decks-->
 
     <ScrollView
+        android:id="@+id/decksView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="470dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,6 +23,7 @@
                 android:id="@+id/deckList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
         </LinearLayout>
     </ScrollView>
 
@@ -28,6 +31,7 @@
         android:id="@+id/button3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.94"
         android:text="@string/button_share"
         tools:ignore="HardcodedText" />
 
