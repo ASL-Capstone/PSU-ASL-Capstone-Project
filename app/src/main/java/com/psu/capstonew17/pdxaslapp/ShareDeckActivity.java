@@ -73,19 +73,11 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
                 int id = this.rg.getCheckedRadioButtonId();
                 if(id != -1){
                     Deck toShare = decks.get(id);
-                    //TODO create popup window for displaying the QR code recieved from backend
                     Intent intent = new Intent(this, DispQRCodeActivity.class);
-                    //toShare.getName();
                     intent.putExtra("DECKNAME", toShare.getName());
                     startActivity(intent);
                     finish();
                     return;
-                    /*
-                    toShare.getName();
-                    List<Deck> sharing = new ArrayList<>();
-                    sharing.add(toShare);
-                    setUpPopupWindow(sharing);
-                    */
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "No Deck Selected", Toast.LENGTH_SHORT).show();
@@ -95,27 +87,4 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
 
     }
 
-
-    public void setUpPopupWindow(List<Deck> sharing){
-
-
-        //sv.setVisibility(View.INVISIBLE);
-        //submit.setVisibility(View.INVISIBLE);
-/*        popupWindow = new PopupWindow(this);
-        popupWindow.showAtLocation(ll, Gravity.BOTTOM, 10, 10);
-        popupWindow.update(50,50,320,90);
-        popupWindow.showAtLocation(ll, Gravity.BOTTOM, 10, 10);*/
-        /*
-        popupLL = new LinearLayout(this);
-        popupLL.setOrientation(LinearLayout.VERTICAL);
-        imageView = new ImageView(this);
-        imageView.setImageBitmap(qrCode);
-        popupLL.addView(imageView);
-        popupWindow.setContentView(popupLL);
-        */
-
-
-
-
-    }
 }
