@@ -1,6 +1,7 @@
 package com.psu.capstonew17.pdxaslapp;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,14 +19,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     //newly added to 'EditVideoActivity'
     private static SeekBar seekBar; //tracks current video's progress
 
-    //Vars to pass to backend
+    //Vars to pass to backend //may replace with local vars at some point
     private boolean deleteAfter;
     private int startTime;
     private int endTime;
     private int quality;
     //private Rect cropRegion; //STRETCH GOAL!!!
-
-
 
     //Private inner-class used to update the seekBar
     private final Runnable onEverySecond = new Runnable() {
@@ -59,6 +58,26 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             seekBar = (SeekBar) findViewById(R.id.seekBarEditVideo);
             //seekBar.setMax(videoView.getDuration()); //set 'seekBar's max limit to videos's length
 
+            //connect seekBar functionality to video --> video should respond to seekBar movement with these
+            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if(fromUser) { //if seekBar movement is user-initiated, adjust video accordingly
+                        videoView.seekTo(progress);
+                    }
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    //TO DO
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    //TO DO
+                }
+            });
+
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -71,10 +90,22 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
             //calls setOnPreparedListener??
             //videoView.start(); //start AFTER setting up the seek bar
-
-
-
         } //end of 'else'
+
+
+        //FOR NOW, just return the un-edited video back to 'CreateCard'
+        //Will change once connected to backend, and time-cropping is functional
+        Intent returnIntent = new Intent();
+        if(videoUri != null) {
+            returnIntent.setData(videoUri);
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+        }
+        else {
+            setResult(Activity.RESULT_CANCELED, returnIntent);
+            finish();
+        }
+
 
 
     }
