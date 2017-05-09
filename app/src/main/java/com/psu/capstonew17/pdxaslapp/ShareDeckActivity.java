@@ -2,9 +2,7 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,11 +15,8 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Deck;
-import com.psu.capstonew17.backend.api.SharingManager;
-import com.psu.capstonew17.backend.api.SharingTransmitListener;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ShareDeckActivity extends BaseActivity implements View.OnClickListener{
@@ -63,7 +58,7 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
         this.submit = (Button) findViewById(R.id.button3);
         this.submit.setOnClickListener(this);
 
-        this.sv = (ScrollView) findViewById(R.id.decksView);
+        //this.sv = (ScrollView) findViewById(R.id.decksView);
     }
 
     @Override
