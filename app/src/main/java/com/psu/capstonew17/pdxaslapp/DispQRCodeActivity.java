@@ -8,15 +8,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.vision.text.Text;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
-import com.psu.capstonew17.backend.api.ExternalSharingTransmitListener;
-import com.psu.capstonew17.backend.api.SharingTransmitListener;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
-import com.psu.capstonew17.backend.sharing.SharingManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,7 +42,8 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         //Get the bitmap of the QR Code
         //TODO Override method for what happens on a successful share
         //Should update download counter and the downloads textview
-        
+
+        /*
         SharingTransmitListener listener = new ExternalSharingTransmitListener();
         com.psu.capstonew17.backend.api.SharingManager sharer = SharingManager.getInstance();
         SharingManager.TxOptions ops = new SharingManager.TxOptions();
@@ -56,6 +52,7 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         ops.timeout = 360;
         ops.maxTargets = 30;
         qrCode = sharer.transmit(null, decks,ops, listener);
+        */
 
         if(qrCode != null) {
             imageView.setImageBitmap(qrCode);
