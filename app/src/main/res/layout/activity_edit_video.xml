@@ -55,10 +55,10 @@
         android:showText="true"
         android:splitTrack="false"
         android:text="@string/start_stop_edit"
-        android:textAlignment="textEnd"
-        android:textOff="@string/stop"
-        android:textOn="@string/start"
-        tools:checked="true" />
+        android:textAlignment="textStart"
+        android:textOff="@string/start"
+        android:textOn="@string/stop"
+        tools:checked="false" />
 
     <TextView
         android:id="@+id/textViewStartTimeLabel"
