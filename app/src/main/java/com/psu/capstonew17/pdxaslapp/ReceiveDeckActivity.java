@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.psu.capstonew17.backend.api.SharingReceiveListener;
+import com.psu.capstonew17.backend.sharing.SharingManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,7 +51,27 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_SHORT).show();
             } else {
                 textView.setText("Scan Successful");
-                // TODO hook up with backend, pass scanResu
+
+                SharingManager sharingManager = (SharingManager) SharingManager.getInstance();
+
+                com.psu.capstonew17.backend.api.SharingManager.RxOptions rx
+                        = new com.psu.capstonew17.backend.api.SharingManager.RxOptions();
+                rx.retries = 3;
+
+                sharingManager.receive(rx, new SharingReceiveListener() {
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(ReceiveDeckActivity.this, "Successful Receive New Decks",
+                                Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(ErrorType type) {
+                        Toast.makeText(ReceiveDeckActivity.this, "Error: Failing to receive deck",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
 
