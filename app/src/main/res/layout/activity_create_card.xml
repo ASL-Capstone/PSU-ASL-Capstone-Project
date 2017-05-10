@@ -48,24 +48,11 @@
         android:ems="10"
         android:inputType="text" />
 
-    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-        android:id="@+id/layout_videoView_create_card"
+    <VideoView
+        android:id="@+id/videoView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="3dp"
-        android:layout_weight="5">
-
-        <VideoView
-            android:background="@drawable/background1"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoView_create_card" />
-
-    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+        android:layout_height="328dp"
+        android:visibility="invisible" />
 
 
     <include layout="@layout/submit_button"
