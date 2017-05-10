@@ -34,6 +34,9 @@ class ExternalDeck implements Deck {
 
     @Override
     public void setName(String name) throws ObjectAlreadyExistsException {
+        if(this.deckName.equals(name)){
+            return;
+        }
         if(ExternalDeckManager.INSTANCE.deckExists(name)){
             throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
         }
