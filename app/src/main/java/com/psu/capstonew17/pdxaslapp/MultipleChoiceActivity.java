@@ -3,10 +3,12 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -101,8 +103,9 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 answers.addView(add);
             }
             //curQuestion.getVideo()
-            MediaPlayer m = MediaPlayer.create(this,R.raw.BrookTestVideo1);
-            //questionVideo.setMediaController(m);
+            Uri video = Uri.parse("android.resource://com.psu.capstonew17/raw/brook_vid1");
+            questionVideo.setVideoURI(video);
+            questionVideo.start();;
         }
         //No more questions leave quiz activity
         else{
