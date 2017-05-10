@@ -77,7 +77,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         editText = (EditText) findViewById(R.id.edit_text_video_answer);
         editText.setOnClickListener(this);
 
-        videoView = (VideoView) findViewById (R.id.videoView);
+        videoView = (VideoView) findViewById (R.id.videoView_create_card);
 
         //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
