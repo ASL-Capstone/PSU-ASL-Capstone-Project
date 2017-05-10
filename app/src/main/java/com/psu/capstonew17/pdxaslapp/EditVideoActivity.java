@@ -90,7 +90,39 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
             //calls setOnPreparedListener??
             //videoView.start(); //start AFTER setting up the seek bar
-        } //end of 'else'
+
+
+            //OUTLINE TO CONNECT TO BACKEND
+            /*
+            VideoManager videoManager = ExternalVideoManager.getInstance(this);
+            VideoManager.ImportOptions importOptions = new VideoManager.ImportOptions();
+
+            //These members will eventually be set by EditVideo layout
+            importOptions.cropRegion = null;
+            importOptions.deleteAfter = false;
+            importOptions.endTime = videoView.getDuration();
+            importOptions.startTime = 0;
+            importOptions.quality = 10; //default degredation
+
+            videoManager.importVideo(new File(videoUri.getPath()), importOptions, new VideoManager.VideoImportListener() {
+                @Override
+                public void onProgressUpdate(int current, int max) {
+                    //TO DO: indicate video loading progress bar
+                }
+
+                @Override
+                public void onComplete(Video vid) {
+                    //TO DO: once edited, send this video back to 'CreateCardActivity'
+                }
+
+                @Override
+                public void onFailed(Throwable err) {
+                    //TO DO: indicate "Failure" to calling routine
+                }
+            });
+            */
+
+        } //end of 'else' //videoUri != null case
 
 
         //FOR NOW, just return the un-edited video back to 'CreateCard'
