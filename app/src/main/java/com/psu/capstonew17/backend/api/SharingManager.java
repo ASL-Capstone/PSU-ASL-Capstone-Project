@@ -38,8 +38,10 @@ public interface SharingManager {
 
     /**
      * Start a receive session with the supplied options
-     * TODO: Interface for this
+     *
+     * @param code The text content of the detected QR code
+     * @param opts Receive options
+     * @param listener Handler object to get notifications about the receive process
      */
-    void receive(RxOptions opts, SharingReceiveListener listener);
-    //void receive(QRCode code, RxOptions opts, SharingReceiveListener listener);
+    void receive(String code, RxOptions opts, SharingReceiveListener listener);
 }
