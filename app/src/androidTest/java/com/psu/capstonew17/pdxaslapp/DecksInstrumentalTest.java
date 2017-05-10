@@ -6,7 +6,6 @@ import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.api.stubs.CardStub;
 import com.psu.capstonew17.backend.api.stubs.DeckStub;
-import com.psu.capstonew17.backend.data.ExternalDeck;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 import android.content.Context;
