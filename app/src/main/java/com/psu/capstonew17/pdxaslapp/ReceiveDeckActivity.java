@@ -58,7 +58,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
                         = new com.psu.capstonew17.backend.api.SharingManager.RxOptions();
                 rx.retries = 3;
 
-                sharingManager.receive(rx, new SharingReceiveListener() {
+                sharingManager.receive(scanResult.getContents(), rx, new SharingReceiveListener() {
                     @Override
                     public void onSuccess() {
                         Toast.makeText(ReceiveDeckActivity.this, "Successful Receive New Decks",
