@@ -10,8 +10,8 @@ import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaRecorder;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.support.annotation.NonNull;
+
+import com.psu.capstonew17.backend.api.VideoManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,16 +23,19 @@ import java.nio.ByteBuffer;
 public class PreprocessingPipeline {
     private File output;
     private File input;
+    private VideoManager.ImportOptions options;
 
     private PreprocessingListener listener = null;
 
     public interface PreprocessingListener {
         void onCompleted();
+        void onFailed();
     }
 
-    public PreprocessingPipeline(File outFile, File inFile) throws IOException {
+    public PreprocessingPipeline(File outFile, File inFile, VideoManager.ImportOptions opts) throws IOException {
         output = outFile;
         input = inFile;
+        options = opts;
     }
 
     public void setListener(PreprocessingListener l) {
@@ -84,6 +87,7 @@ public class PreprocessingPipeline {
             //int tgtWidth = srcWidth/2, tgtHeight = srcHeight/2;
             int tgtWidth = srcWidth, tgtHeight = srcHeight; // TODO: Resizing
             MediaFormat outFormat = MediaFormat.createVideoFormat("video/h264", tgtWidth, tgtHeight);
+            outFormat.setInteger(MediaFormat.KEY_BIT_RATE, 20*1024*1024); // 20 Mbps
 
             // set up a muxer
             MediaMuxer muxer;
@@ -130,7 +134,9 @@ public class PreprocessingPipeline {
 
                 // read a chunk out of the decoder if available
                 int outIdx = decoder.dequeueOutputBuffer(bufInfo, 10);
-                if(outIdx >= 0) {
+                if((outIdx >= 0) &&
+                        (bufInfo.presentationTimeUs > (options.startTime*1000)) &&
+                        (bufInfo.presentationTimeUs < (options.endTime*1000))) {
                     Image img = decoder.getOutputImage(outIdx);
 
                     // process the image
@@ -195,6 +201,14 @@ public class PreprocessingPipeline {
         protected void onPostExecute(Void aVoid) {
             if(listener != null) {
                 listener.onCompleted();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            if(listener != null) {
+                listener.onFailed();
             }
         }
     }

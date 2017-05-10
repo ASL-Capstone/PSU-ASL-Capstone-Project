@@ -16,17 +16,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
-import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
-import com.psu.capstonew17.backend.api.Video;
-import com.psu.capstonew17.backend.data.ExternalCardManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
@@ -135,12 +130,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
 
-            /*case R.id.button_submit:
+            /*
+                case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
                     return;
-/*
                 try {
                     // not sure what videoId to assign, so make it random for testing
                     Random random = new Random();
