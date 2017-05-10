@@ -103,9 +103,9 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 answers.addView(add);
             }
             //curQuestion.getVideo()
-            Uri video = Uri.parse("android.resource://com.psu.capstonew17/raw/brook_vid1");
+            Uri video = Uri.parse("android.resource://com.psu.capstonew17.pdxaslapp/raw/brook_vid1");
             questionVideo.setVideoURI(video);
-            questionVideo.start();;
+            questionVideo.start();
         }
         //No more questions leave quiz activity
         else{

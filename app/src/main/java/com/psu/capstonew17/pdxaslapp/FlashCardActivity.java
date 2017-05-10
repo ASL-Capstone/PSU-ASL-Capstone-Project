@@ -2,6 +2,7 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.print.PrintAttributes;
 import android.util.Pair;
@@ -82,6 +83,9 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
             Pair<Boolean,String> answerReturn = curQuestion.answer(" ");
             String correctAnswer = answerReturn.second;
             answerDisplay.setText(correctAnswer);
+            Uri video = Uri.parse("android.resource://com.psu.capstonew17.pdxaslapp/raw/brook_vid1");
+            vidDisplay.setVideoURI(video);
+            vidDisplay.start();
         }
         //No more questions leave quiz activity
         else{

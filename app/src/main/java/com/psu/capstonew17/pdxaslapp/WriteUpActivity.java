@@ -2,6 +2,7 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.View;
@@ -76,6 +77,9 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         // Check to See if there is another Question in the Test
         if (currTest.hasNext()) {
             // TODO hook video up
+            Uri video = Uri.parse("android.resource://com.psu.capstonew17.pdxaslapp/raw/brook_vid1");
+            vidDisplay.setVideoURI(video);
+            vidDisplay.start();
             curQuestion = currTest.next();
             answerInput.getText().clear();
         }
