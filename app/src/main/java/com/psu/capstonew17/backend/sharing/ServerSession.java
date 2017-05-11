@@ -21,10 +21,12 @@ class ServerSession {
     private static final String TAG = "ServerSession";
     private Socket sck;
     private byte[] key;
+    private SharePackage pack;
 
-    public ServerSession(Socket sock, byte[] key) {
+    public ServerSession(Socket sock, byte[] key, SharePackage pack) {
         sck = sock;
         this.key = key;
+        this.pack = pack;
     }
 
     /**
@@ -55,7 +57,6 @@ class ServerSession {
         }
 
         // send challenge and get response
-        out.write(Protocol.MT_CHALLENGE);
         out.write(challenge_salt);
 
         byte[] client_response = new byte[32];
@@ -63,29 +64,32 @@ class ServerSession {
         while((nread = in.read(client_response, read, 32-read)) >= 0);
         if(nread == -1 || !Arrays.equals(client_response, response)) {
             // protocol error
-            out.write(Protocol.MT_ERROR);
             sck.close();
             return;
         }
 
         // okay, handshake is good - send the data
-        // TODO: Serialization
-        // deckInfo.serializeTo(out); // note that serialization format must be self-terminating
-
-        // read the checksum back and verify it
-        byte[] computed_checksum = new byte[32];
-        // TODO: checksum computation
+        try {
+            hash = MessageDigest.getInstance("SHA2");
+        } catch(NoSuchAlgorithmException e) {
+            Log.wtf(TAG, "Cannot construct SHA2 hash", e);
+            sck.close();
+            return;
+        }
+        pack.serializeTo(out, hash);
+        byte[] computed_checksum = hash.digest();
 
         read = 0;
         while((nread = in.read(client_response, read, 32-read)) >= 0);
         if(nread == -1) {
             // protocol error
-            out.write(Protocol.MT_ERROR);
             sck.close();
             return;
         } else if(!Arrays.equals(client_response, computed_checksum)) {
             out.write(Protocol.MT_CKSUM_ERROR);
             // TODO: Retry on failure?
         }
+        out.write(Protocol.MT_CKSUM_VALID);
+        sck.close();
     }
 }
