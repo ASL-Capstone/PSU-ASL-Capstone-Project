@@ -1,6 +1,5 @@
 package com.psu.capstonew17.pdxaslapp;
 
-
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -11,6 +10,12 @@ import android.widget.SeekBar;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.psu.capstonew17.backend.api.Video;
+import com.psu.capstonew17.backend.api.VideoManager;
+import com.psu.capstonew17.backend.data.ExternalVideoManager;
+
+import java.io.File;
+
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
     private Uri videoUri;
@@ -20,10 +25,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private static SeekBar seekBar; //tracks current video's progress
 
     //Vars to pass to backend //may replace with local vars at some point
-    private boolean deleteAfter;
-    private int startTime;
-    private int endTime;
-    private int quality;
+    VideoManager.ImportOptions importOptions;
+    //private boolean deleteAfter;
+    //private int startTime;
+    //private int endTime;
+    //private int quality;
     //private Rect cropRegion; //STRETCH GOAL!!!
 
     //Private inner-class used to update the seekBar
@@ -54,6 +60,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             Toast.makeText(this, "From EditCard: No URI Passed", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
         }
         else {
+
+            //MOVE SEEK BAR SET-UP TO SEPARATE METHOD
             //connect seekBar to xml
             seekBar = (SeekBar) findViewById(R.id.seekBarEditVideo);
             //seekBar.setMax(videoView.getDuration()); //set 'seekBar's max limit to videos's length
@@ -91,36 +99,15 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             //calls setOnPreparedListener??
             //videoView.start(); //start AFTER setting up the seek bar
 
-
-            //OUTLINE TO CONNECT TO BACKEND
-            /*
-            VideoManager videoManager = ExternalVideoManager.getInstance(this);
-            VideoManager.ImportOptions importOptions = new VideoManager.ImportOptions();
-
+            //initialize import-options structure
+            importOptions = new VideoManager.ImportOptions();
             //These members will eventually be set by EditVideo layout
             importOptions.cropRegion = null;
             importOptions.deleteAfter = false;
             importOptions.endTime = videoView.getDuration();
             importOptions.startTime = 0;
-            importOptions.quality = 10; //default degredation
+            importOptions.quality = 10; //default quality
 
-            videoManager.importVideo(new File(videoUri.getPath()), importOptions, new VideoManager.VideoImportListener() {
-                @Override
-                public void onProgressUpdate(int current, int max) {
-                    //TO DO: indicate video loading progress bar
-                }
-
-                @Override
-                public void onComplete(Video vid) {
-                    //TO DO: once edited, send this video back to 'CreateCardActivity'
-                }
-
-                @Override
-                public void onFailed(Throwable err) {
-                    //TO DO: indicate "Failure" to calling routine
-                }
-            });
-            */
 
         } //end of 'else' //videoUri != null case
 
@@ -143,8 +130,52 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
 
+    /**
+     * Check is user hits the 'Submit' Button
+     * @param view
+     */
     @Override
     public void onClick(View view) {
+        if(R.id.submitButtonEditCard == view.getId()){
+            submitEdits(view);
+        }
+    }
+
+
+    /**
+     * Called when user hits the submit button
+     * @param view
+     */
+    public void submitEdits(View view) {
+
+        //OUTLINE TO CONNECT TO BACKEND
+        VideoManager videoEditor = ExternalVideoManager.getInstance(this);
+
+        videoEditor.importVideo(new File(videoUri.getPath()), importOptions, new VideoManager.VideoImportListener() {
+            @Override
+            public void onProgressUpdate(int current, int max) {
+                //TO DO: indicate video loading progress bar
+                finish();
+            }
+
+            @Override
+            public void onComplete(Video vid) {
+                //TO DO: once edited, send this video back to 'CreateCardActivity'
+                finish();
+            }
+
+            @Override
+            public void onFailed(Throwable err) {
+                //TO DO: indicate "Failure" to calling routine
+                finish();
+            }
+        });
 
     }
+
+
+
+
+
+
 }
