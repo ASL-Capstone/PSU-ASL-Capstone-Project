@@ -42,8 +42,8 @@
         android:id="@+id/toggleButtonDelFromGal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="@string/togglebutton"
+        android:checked="true"
+        android:text="@string/delete_from_gallery"
         android:textOff="@string/NO"
         android:textOn="@string/YES" />
 
@@ -64,13 +64,13 @@
         android:id="@+id/textViewStartTimeLabel"
         android:layout_width="112dp"
         android:layout_height="wrap_content"
-        android:text="@string/start_time_label" />
+        android:text="@string/start_time_default" />
 
     <TextView
         android:id="@+id/textViewStopTimeLabel"
         android:layout_width="112dp"
         android:layout_height="wrap_content"
-        android:text="@string/stop_time_label" />
+        android:text="@string/stop_time_default" />
 
     <TableRow
         android:layout_width="match_parent"
