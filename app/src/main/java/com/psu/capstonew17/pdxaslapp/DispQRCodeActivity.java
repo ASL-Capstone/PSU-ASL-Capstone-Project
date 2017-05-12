@@ -50,9 +50,12 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         List<Deck> decks = deckManager.getDecks(deckName);
         //Get the bitmap of the QR Code
         //TODO Override method for what happens on a successful share
-        //Should update download counter and the downloads textview
-
-
+        //Code below for that function
+        /*
+        downloadCount += 1;
+        String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
+        downloads.setText(downloadDisplay);
+        */
         SharingTransmitListener listener = new SharingTransmitListenerStub();
         com.psu.capstonew17.backend.api.SharingManager sharer = SharingManager.getInstance();
         SharingManager.TxOptions ops = new SharingManager.TxOptions();
