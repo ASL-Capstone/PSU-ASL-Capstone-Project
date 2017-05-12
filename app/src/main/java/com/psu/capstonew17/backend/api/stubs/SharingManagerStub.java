@@ -20,7 +20,7 @@ public class SharingManagerStub implements SharingManager {
         return null;
     }
 
-    public void receive(RxOptions opts, SharingReceiveListener listener) {
+    public void receive(String code, RxOptions opts, SharingReceiveListener listener) {
         return;
     }
 }

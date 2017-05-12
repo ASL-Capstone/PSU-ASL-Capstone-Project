@@ -36,6 +36,7 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
     }
 
     private SharingManager() {
+
     }
 
     /**
@@ -94,6 +95,6 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
 
 
     @Override
-    public void receive(RxOptions opts, SharingReceiveListener listener) {
+    public void receive(String code, RxOptions opts, SharingReceiveListener listener) {
     }
 }
