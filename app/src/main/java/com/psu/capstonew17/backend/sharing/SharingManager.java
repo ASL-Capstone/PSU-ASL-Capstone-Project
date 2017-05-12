@@ -36,6 +36,7 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
     }
 
     private SharingManager() {
+
     }
 
     /**
