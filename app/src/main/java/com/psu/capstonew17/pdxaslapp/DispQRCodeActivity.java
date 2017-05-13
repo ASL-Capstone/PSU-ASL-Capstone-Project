@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
@@ -48,15 +49,38 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
 
 
         List<Deck> decks = deckManager.getDecks(deckName);
-        //Get the bitmap of the QR Code
-        //TODO Override method for what happens on a successful share
-        //Code below for that function
-        /*
-        downloadCount += 1;
-        String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
-        downloads.setText(downloadDisplay);
-        */
-        SharingTransmitListener listener = new SharingTransmitListenerStub();
+ 
+        SharingTransmitListener listener = new SharingTransmitListener(){
+            @Override
+            public void onClientConnect(String peerID) {
+
+            }
+
+            @Override
+            public void onTransmittedSuccessfully(String peerID) {
+                downloadCount += 1;
+                String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
+                downloads.setText(downloadDisplay);
+            }
+
+            @Override
+            public void onClientError(String peerID, DisconnectReason why) {
+                switch(why){
+                    case AUTH_FAILURE:
+                        Toast.makeText(getApplicationContext(), "Authorization Failed for Sharing", Toast.LENGTH_SHORT);
+                        break;
+                    case CHECKSUM_ERROR: //TODO Find a correct output for this error
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT);
+                        break;
+                    case TIMEOUT:
+                        Toast.makeText(getApplicationContext(), "Sharing Timed Out", Toast.LENGTH_SHORT);
+                        break;
+                    default:
+                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT);
+                }
+            }
+        };
+
         com.psu.capstonew17.backend.api.SharingManager sharer = SharingManager.getInstance();
         SharingManager.TxOptions ops = new SharingManager.TxOptions();
         ops.timeout = 360;
