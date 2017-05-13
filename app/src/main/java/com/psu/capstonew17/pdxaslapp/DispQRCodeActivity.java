@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Deck;
@@ -87,11 +88,9 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         ops.maxTargets = 30;
         qrCode = sharer.transmit(null, decks,ops, listener);
 
-
         if(qrCode != null) {
             imageView.setImageBitmap(qrCode);
         }
-
 
 
     }

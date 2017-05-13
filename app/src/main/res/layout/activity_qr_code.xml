@@ -48,6 +48,8 @@
         android:phoneNumber="false"
         android:saveEnabled="false"
         android:scrollHorizontally="false"
+
+        android:text="@string/shared_counter"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textIsSelectable="false" />

@@ -14,6 +14,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.psu.capstonew17.backend.api.SharingReceiveListener;
 import com.psu.capstonew17.backend.sharing.SharingManager;
 
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -72,6 +73,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
+
 
             }
 
