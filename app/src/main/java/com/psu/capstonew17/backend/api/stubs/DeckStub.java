@@ -1,5 +1,8 @@
 package com.psu.capstonew17.backend.api.stubs;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 
@@ -31,5 +34,26 @@ public class DeckStub implements Deck {
 
     public void delete() {
         //Delete deck
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new DeckStub();
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new DeckStub[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 }
