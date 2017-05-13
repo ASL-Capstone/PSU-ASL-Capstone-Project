@@ -2,7 +2,9 @@
 
 package com.psu.capstonew17.backend.api;
 
+import android.content.Context;
 import android.graphics.Rect;
+import android.net.Uri;
 
 import java.io.File;
 import java.lang.Throwable;
@@ -10,11 +12,6 @@ import java.lang.Throwable;
 public interface VideoManager {
 
     public class ImportOptions {
-        /**
-         * Whether the video file should be deleted after import.
-         */
-        public boolean deleteAfter;
-
         /**
          * The crop region for this video, or null to disable cropping.
          */
@@ -68,9 +65,9 @@ public interface VideoManager {
      * When complete, call appropriate methods in the passed video import
      * listener.
      *
-     * @param videoFile The file to import. Must be readable.
+     * @param video file to import. Must be readable.
      * @param options The options to use when importing the video
      * @param handler The listener which will be notified of completion
      */
-    void importVideo(File videoFile, ImportOptions options, VideoImportListener handler);
+    void importVideo(Context ctx, Uri video, ImportOptions options, VideoImportListener handler);
 }
