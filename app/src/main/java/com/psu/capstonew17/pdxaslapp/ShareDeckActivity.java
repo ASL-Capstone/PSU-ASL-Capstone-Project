@@ -75,7 +75,7 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
                     return;
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "No Deck Selected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.deck_error, Toast.LENGTH_SHORT).show();
                 }
                 break;
         }

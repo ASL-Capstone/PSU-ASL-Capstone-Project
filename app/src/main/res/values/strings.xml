@@ -74,6 +74,7 @@
     <string name="button_get_from_gallery">Gallery</string>
     <string name="button_edit_video">Edit</string>
     <string name="share_label">Scan QR Code To Share</string>
+    <string name="deck_error">No Deck Selected</string>
     <string name="shared_counter">Successful Downloads</string>
     <string name="button_scan_qr_code">Scan QR Code</string>
     <string name="delete_from_gallery">Delete From Gallery?</string>
