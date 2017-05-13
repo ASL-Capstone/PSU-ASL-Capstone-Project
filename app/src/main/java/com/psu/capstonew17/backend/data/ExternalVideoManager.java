@@ -42,7 +42,20 @@ public class ExternalVideoManager implements VideoManager {
     }
 
     Video getVideo(int id){
-        return null;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String query = dbHelper.buildSelectQuery(
+                VideoEntry.TABLE_NAME,
+                Arrays.asList(VideoEntry.COLUMN_ID + "=" + Integer.toString(id))
+        );
+        Video video = null;
+        Cursor cursor = db.rawQuery(query, null);
+        if(cursor.moveToFirst()) {
+            String videoPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
+            File videoFile = new File(videoPath);
+            video = new ExternalVideo(id, videoFile.getAbsoluteFile());
+        }
+        cursor.close();
+        return video;
     }
 
 
@@ -91,7 +104,6 @@ public class ExternalVideoManager implements VideoManager {
                     return;
                 }
                 // check if video already exists, if so delete the video file we just created
-                dbHelper = ExternalVideoManager.INSTANCE.getDbHelper();
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 String query = dbHelper.buildSelectQuery(
                         VideoEntry.TABLE_NAME,
