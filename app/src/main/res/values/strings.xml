@@ -88,4 +88,5 @@
     <string name="stop">stop</string>
     <string name="start_time_label">Start time:</string>
     <string name="stop_time_label">Stop time:</string>
+    <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
 </resources>
