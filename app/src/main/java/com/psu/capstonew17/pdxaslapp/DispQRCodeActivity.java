@@ -32,7 +32,7 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qr_code);
 
-        //Initialize Members and Atatch to Layout
+        //Initialize Members and Attach to Layout
         downloadCount = 0;
         exit = (Button) findViewById(R.id.button_QR_code_finish);
         exit.setOnClickListener(this);
@@ -49,7 +49,7 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
 
 
         List<Deck> decks = deckManager.getDecks(deckName);
- 
+
         SharingTransmitListener listener = new SharingTransmitListener(){
             @Override
             public void onClientConnect(String peerID) {
