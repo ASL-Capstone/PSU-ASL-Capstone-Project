@@ -46,13 +46,12 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="bottom">
-        <include
-            layout="@layout/submit_button"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
 
-            >
-        </include>
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_submit" />
     </TableRow>
 
 
