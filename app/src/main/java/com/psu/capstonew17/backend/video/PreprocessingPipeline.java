@@ -2,6 +2,7 @@
 
 package com.psu.capstonew17.backend.video;
 
+import android.content.Context;
 import android.media.Image;
 import android.media.MediaCodec;
 import android.media.MediaCodecList;
@@ -9,7 +10,9 @@ import android.media.MediaExtractor;
 import android.media.MediaFormat;
 import android.media.MediaMuxer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Pair;
 
 import com.psu.capstonew17.backend.api.VideoManager;
 
@@ -22,8 +25,9 @@ import java.nio.ByteBuffer;
  */
 public class PreprocessingPipeline {
     private File output;
-    private File input;
+    private Uri input;
     private VideoManager.ImportOptions options;
+    private Context ctx;
 
     private PreprocessingListener listener = null;
 
@@ -32,9 +36,10 @@ public class PreprocessingPipeline {
         void onFailed();
     }
 
-    public PreprocessingPipeline(File outFile, File inFile, VideoManager.ImportOptions opts) throws IOException {
+    public PreprocessingPipeline(Context ctx, File outFile, Uri in, VideoManager.ImportOptions opts) throws IOException {
+        this.ctx = ctx;
         output = outFile;
-        input = inFile;
+        input = in;
         options = opts;
     }
 
@@ -44,14 +49,14 @@ public class PreprocessingPipeline {
 
     public void start() throws IOException {
         PreprocessingOperation op = new PreprocessingOperation();
-        op.execute(input, output);
+        op.execute(Pair.create(input, output));
     }
 
-    private class PreprocessingOperation extends AsyncTask<File, Void, Void> {
+    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Void, Void> {
         @Override
-        protected Void doInBackground(File... files) {
-            File in = files[0];
-            File out = files[1];
+        protected Void doInBackground(Pair<Uri, File>... inputs) {
+            Uri in = inputs[0].first;
+            File out = inputs[0].second;
 
             final MediaRecorder record;
             final MediaExtractor extractor;
@@ -63,7 +68,7 @@ public class PreprocessingPipeline {
             int videoTrack = -1;
             extractor = new MediaExtractor();
             try {
-                extractor.setDataSource(in.getPath());
+                extractor.setDataSource(ctx, in, null);
                 MediaFormat trackFmt = null;
                 for (int i = 0; i < extractor.getTrackCount(); i++) {
                     trackFmt = extractor.getTrackFormat(i);
