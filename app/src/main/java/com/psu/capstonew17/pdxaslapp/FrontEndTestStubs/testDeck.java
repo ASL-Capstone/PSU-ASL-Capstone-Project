@@ -1,5 +1,8 @@
 package com.psu.capstonew17.pdxaslapp.FrontEndTestStubs;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
@@ -44,4 +47,24 @@ public class testDeck implements Deck {
 
     }
 
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new testDeck();
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new testDeck[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+    }
 }
