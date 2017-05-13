@@ -5,6 +5,8 @@ package com.psu.capstonew17.backend.data;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.psu.capstonew17.backend.api.*;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
@@ -103,5 +105,32 @@ class ExternalCard implements Card {
     public boolean equals(Object obj) {
         if(!(obj instanceof ExternalCard)) return false;
         return cardId == ((ExternalCard)obj).cardId;
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            int id = parcel.readInt();
+            Video vid = (Video)parcel.readTypedObject(ExternalVideo.CREATOR);
+            String answer = parcel.readString();
+            return new ExternalCard(id, vid, answer);
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new ExternalCard[0];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(cardId);
+        parcel.writeTypedObject(video, 0);
+        parcel.writeString(answer);
     }
 }
