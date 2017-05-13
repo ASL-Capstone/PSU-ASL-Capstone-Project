@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
     private RadioGroup numGroup;
     private TextView numPrompt;
     private LinearLayout deckLayout;
+    private Space space;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
         numPrompt = (TextView) findViewById(R.id.textViewChooseNumberOfQuestions);
         numPrompt.setVisibility(View.GONE);
 
+
+
         int numDecks = deckList.size();
         for(int i = 0; i < numDecks; ++i){
             final String deckName = (deckList.get(i).getName());
@@ -69,7 +73,6 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                     }
                 }
             });
-
         }
     }
 
