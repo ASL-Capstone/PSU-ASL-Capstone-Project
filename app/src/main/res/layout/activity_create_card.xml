@@ -3,61 +3,67 @@
     android:id="@+id/activity_create_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="1"
     android:orientation="vertical">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        >
 
-        <Button
-            android:id="@+id/buttonRecordVideo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/button_record" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            >
 
-        <Button
-            android:id="@+id/buttonFromGallery"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/button_get_from_gallery"
-            />
+            <Button
+                android:id="@+id/buttonRecordVideo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/button_record" />
 
-        <Button
-            android:id="@+id/buttonUseVIdeo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/button_edit"
-            />
+            <Button
+                android:id="@+id/buttonFromGallery"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/button_get_from_gallery"
+                />
 
-    </TableRow>
+            <Button
+                android:id="@+id/buttonUseVIdeo"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/button_edit"
+                />
 
-    <EditText
-        android:id="@+id/edit_text_video_answer"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:labelFor="@+id/edit_text_video_answer"
-        android:gravity="center"
-        android:hint="@string/edit_text_card_answer"
-        android:textColorHint="@color/lightGray"
-        android:background="@drawable/background_dark_border"
-        android:layout_margin="3dp"
-        android:ems="10"
-        android:inputType="text" />
-
-    <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="328dp"
-        android:visibility="invisible" />
-
+        </TableRow>
 
     <include layout="@layout/submit_button"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        />
+
+        <EditText
+            android:id="@+id/edit_text_video_answer"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:labelFor="@+id/edit_text_video_answer"
+            android:gravity="center"
+            android:hint="@string/edit_text_card_answer"
+            android:textColorHint="@color/lightGray"
+            android:background="@drawable/background_dark_border"
+            android:layout_margin="3dp"
+            android:ems="10"
+            android:inputType="text" />
+
+
+
+    <com.psu.capstonew17.pdxaslapp.CustomVideoView
+        android:id="@+id/videoView_create_card"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:visibility="visible"
+        android:layout_margin="5dp"
         />
 
     <include layout="@layout/list_items"
