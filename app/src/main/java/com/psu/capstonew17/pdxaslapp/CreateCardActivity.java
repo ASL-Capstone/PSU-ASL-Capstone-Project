@@ -168,6 +168,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         public void onComplete(Video vid) {
                             try {
                                 cardManager.buildCard(vid, videoLabel);
+                                Log.d("stacktrc", Log.getStackTraceString(new Exception()));
                                 finish();
                             } catch (ObjectAlreadyExistsException e){
 

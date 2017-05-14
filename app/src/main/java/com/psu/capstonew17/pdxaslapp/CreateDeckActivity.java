@@ -62,33 +62,36 @@ public class CreateDeckActivity extends BaseActivity {
     //onClick for the submit/done button.
     //TODO: constrict length of text entered in edit text
     public void onCreateSubmitClicked(View view) {
-        List<Card> cardsInDeck = new ArrayList<>();
-        String deckName = textBox.getText().toString().trim();
+        for (int k = 0; k < 200; k++) {
+            List<Card> cardsInDeck = new ArrayList<>();
+            String deckName = textBox.getText().toString().trim() + k;
+            deckManager = ExternalDeckManager.getInstance(this);
 
-        for (int i = 0; i < cardStructs.size(); i++) {
-            ListRow curr = cardStructs.get(i);
-            if(curr.isChecked)
-                cardsInDeck.add(allCards.get(i));
-        }
+            for (int i = 0; i < cardStructs.size(); i++) {
+                ListRow curr = cardStructs.get(i);
+                if (curr.isChecked)
+                    cardsInDeck.add(allCards.get(i));
+            }
 
-        if (TextUtils.isEmpty(deckName)
-                || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
-            stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
-            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(deckName)
+                    || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
+                stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
+                Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
-        } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
-            Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
+            } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
+                Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
 
-        } else {
-            try {
-                deckManager.buildDeck(textBox.getText().toString(), cardsInDeck);
-                finish();
+            } else {
+                try {
+                    deckManager.buildDeck(deckName, cardsInDeck);
 
-            } catch(ObjectAlreadyExistsException e) {
-                Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
+                } catch (ObjectAlreadyExistsException e) {
+                    Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
+                }
             }
         }
+        finish();
     }
 }
