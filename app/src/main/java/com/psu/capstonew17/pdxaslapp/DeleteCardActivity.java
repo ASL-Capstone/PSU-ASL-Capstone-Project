@@ -78,8 +78,7 @@ public class DeleteCardActivity extends BaseActivity {
         StringBuilder sb = new StringBuilder();
         sb.append(R.string.deleted_decks);
         for (int i = 0; i < deletedDecks.size(); i++){
-            String curr = deletedDecks.get(i);
-            sb.append(i);
+            sb.append(deletedDecks.get(i));
             if (i < deletedDecks.size() - 1)
                 sb.append(", ");
         }
