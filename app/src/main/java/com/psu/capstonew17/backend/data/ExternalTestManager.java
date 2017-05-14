@@ -53,6 +53,7 @@ public class ExternalTestManager implements TestManager{
                 Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
                 questions.add(q);
             }
+            cursor.close();
         }
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
