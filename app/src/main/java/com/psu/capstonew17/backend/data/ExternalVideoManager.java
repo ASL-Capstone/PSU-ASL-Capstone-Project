@@ -34,7 +34,7 @@ public class ExternalVideoManager implements VideoManager {
     private AslDbHelper dbHelper;
 
     public static VideoManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
         return INSTANCE;
     }
 

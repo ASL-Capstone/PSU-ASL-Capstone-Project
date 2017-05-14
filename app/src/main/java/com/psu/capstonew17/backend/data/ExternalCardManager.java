@@ -21,7 +21,7 @@ public class ExternalCardManager implements CardManager{
     private AslDbHelper dbHelper;
 
     public static CardManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
         ExternalVideoManager.getInstance(context);
         return INSTANCE;
     }
