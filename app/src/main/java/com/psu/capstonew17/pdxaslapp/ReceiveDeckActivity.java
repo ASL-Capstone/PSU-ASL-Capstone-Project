@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,10 +13,8 @@ import com.google.zxing.integration.android.IntentResult;
 import com.psu.capstonew17.backend.api.SharingReceiveListener;
 import com.psu.capstonew17.backend.sharing.SharingManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class ReceiveDeckActivity extends BaseActivity implements View.OnClickListener {
+    // layout views
     private Button bttScanQR;
     private TextView textView;
 
@@ -86,6 +83,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
         Intent intent;
 
         switch (view.getId()) {
+            //
             case R.id.buttonScanQR:
                 qrScan.initiateScan();
                 break;

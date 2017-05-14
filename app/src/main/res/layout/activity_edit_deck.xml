@@ -10,6 +10,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.psu.capstonew17.pdxaslapp.EditDeckActivity">
 
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="@string/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/bttn_create_done"
+            android:onClick="onEditSubmitClicked"/>
+
+    </LinearLayout>
+
+
     <EditText
         android:id="@+id/editDeckNameField"
         android:layout_width="match_parent"
@@ -27,19 +43,5 @@
         android:layout_weight="1">
     </ListView>
 
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:gravity="bottom"
-        android:orientation="horizontal">
-
-        <Button
-            android:text="@string/button_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/bttn_create_done"
-            android:onClick="onEditSubmitClicked"/>
-
-    </LinearLayout>
 
 </LinearLayout>
