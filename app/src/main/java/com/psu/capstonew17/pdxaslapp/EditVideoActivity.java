@@ -108,8 +108,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser) { //if seekBar movement is user-initiated, adjust video accordingly
-                    videoView.seekTo(progress);
-                    currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds
+                    videoView.seekTo(progress*1000);
+                    currentProgress = progress*1000; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
             }
 
@@ -166,11 +166,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             });
 
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
-            //calls setOnPreparedListener??
-            videoView.start(); //start AFTER setting up the seek bar
 
             //set DEFAULT max video length to original video length
             importOptions.endTime = videoView.getDuration();
+
+            //calls setOnPreparedListener??
+            videoView.start(); //start AFTER setting up the seek bar
         } //end of 'else' //videoUri != null case
 
 
@@ -250,18 +251,34 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onProgressUpdate(int current, int max) {
                 //TO DO: indicate video loading progress bar
-                finish();
+                //finish();
             }
 
             @Override
             public void onComplete(Video vid) {
                 //TO DO: once edited, send this video back to 'CreateCardActivity'
+
+                Intent returnIntent = new Intent();
+                returnIntent.setData(videoUri);
+
+                if(videoUri != null) {
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    //finish();
+                }
+                else {
+                    setResult(Activity.RESULT_CANCELED, returnIntent);
+                    //finish();
+                }
                 finish();
             }
 
             @Override
             public void onFailed(Throwable err) {
                 //TO DO: indicate "Failure" to calling routine
+                Intent returnIntent = new Intent();
+                returnIntent.setData(videoUri);
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                Toast.makeText(getApplicationContext(), "From EditCard: Failed to Edit Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
                 finish();
             }
         });
