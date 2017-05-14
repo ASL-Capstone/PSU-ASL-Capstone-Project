@@ -166,7 +166,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
                         @Override
                         public void onComplete(Video vid) {
-             
+                            try {
+                                cardManager.buildCard(vid, videoLabel);
+                                finish();
+                            } catch (ObjectAlreadyExistsException e){
+
+                            }
                         }
 
                         @Override
