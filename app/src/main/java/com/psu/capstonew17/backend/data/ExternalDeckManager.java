@@ -43,6 +43,7 @@ public class ExternalDeckManager implements DeckManager{
             int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
             cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
         }
+        cursor.close();
         return cards;
     }
 
@@ -57,6 +58,7 @@ public class ExternalDeckManager implements DeckManager{
             String deckName = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
             return new ExternalDeck(id, deckName, getCardsForDeck(id));
         }
+        cursor.close();
         return null;
     }
 
