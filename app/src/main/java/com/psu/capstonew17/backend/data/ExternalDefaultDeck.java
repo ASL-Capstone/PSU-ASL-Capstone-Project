@@ -2,6 +2,8 @@ package com.psu.capstonew17.backend.data;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
@@ -55,5 +57,26 @@ public class ExternalDefaultDeck implements Deck {
     public boolean equals(Object obj) {
         if(!(obj instanceof ExternalDefaultDeck)) return false;
         return true;
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new ExternalDefaultDeck();
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new ExternalDefaultDeck[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 }

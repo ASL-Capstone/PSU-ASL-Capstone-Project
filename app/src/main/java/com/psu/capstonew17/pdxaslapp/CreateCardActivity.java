@@ -90,7 +90,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
 
         // hide views
-        bttSubmit.setVisibility(View.GONE);
+//        bttSubmit.setVisibility(View.GONE);
 //        listView.setVisibility(View.GONE);
 
     }
