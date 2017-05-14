@@ -18,8 +18,6 @@ import com.psu.capstonew17.backend.api.Video;
 import com.psu.capstonew17.backend.api.VideoManager;
 import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
-import java.io.File;
-
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
     private Uri videoUri;
@@ -32,7 +30,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private Button submitButton; //attached to submit button (sends modifications to backend)
     private TextView startTimeText; //displays current starting point of video
     private TextView endTimeText; //displays current ending point of video
-    private int currentProgress; //current progress of user-initiated seekBar movement 
+    private int currentProgress; //current progress of user-initiated seekBar movement
 
     //Vars to pass to backend //may replace with local vars at some point
     VideoManager.ImportOptions importOptions;
@@ -56,9 +54,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
         }
     };
-
-
-
 
 
 
@@ -142,11 +137,21 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         });
 
 
+        //initialize import-options structure
+        importOptions = new VideoManager.ImportOptions();
+        //These members will eventually be set by EditVideo layout
+        importOptions.cropRegion = null;
+        //importOptions.deleteAfter = false;
+        importOptions.startTime = 0;
+        importOptions.quality = 10; //default quality
 
+
+        //GET Intent passed from CreateACard Activity
         Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
         videoUri = intent.getData(); //get video URI data passed via an Intent from 'CreateCardActivity'
 
         if(videoUri == null) {
+            importOptions.endTime = 0;
             Toast.makeText(this, "From EditCard: No URI Passed", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
         }
         else {
@@ -162,16 +167,10 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
             //calls setOnPreparedListener??
-            //videoView.start(); //start AFTER setting up the seek bar
+            videoView.start(); //start AFTER setting up the seek bar
 
-            //initialize import-options structure
-            importOptions = new VideoManager.ImportOptions();
-            //These members will eventually be set by EditVideo layout
-            importOptions.cropRegion = null;
-            importOptions.deleteAfter = false;
+            //set DEFAULT max video length to original video length
             importOptions.endTime = videoView.getDuration();
-            importOptions.startTime = 0;
-            importOptions.quality = 10; //default quality
         } //end of 'else' //videoUri != null case
 
 
@@ -185,9 +184,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         endTimeText = (TextView) findViewById(R.id.textViewStopTimeLabel);
         endTimeText.setText(R.string.stop_time_default + videoView.getDuration());
 
-
-
-
+        /*
         //FOR NOW, just return the un-edited video back to 'CreateCard'
         //Will change once connected to backend, and time-cropping is functional
         Intent returnIntent = new Intent();
@@ -200,8 +197,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             setResult(Activity.RESULT_CANCELED, returnIntent);
             finish();
         }
-
-
+        */
 
     }
 
@@ -213,7 +209,24 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(R.id.submitButtonEditCard == view.getId()){
-            submitEdits(view);
+
+            //UNcomment once backend is working + connected
+            //submitEdits(view);
+
+            //FOR NOW, just return the un-edited video back to 'CreateCard'
+            //Will change once connected to backend, and time-cropping is functional
+            Intent returnIntent = new Intent();
+            if(videoUri != null) {
+                returnIntent.setData(videoUri);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
+            else {
+                setResult(Activity.RESULT_CANCELED, returnIntent);
+                finish();
+            }
+
+
         }
     }
 
@@ -233,7 +246,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         VideoManager videoEditor = ExternalVideoManager.getInstance(this);
 
         //NEED TO: determine how to get video file path to pass to backend
-        videoEditor.importVideo(new File(videoUri.getPath()), importOptions, new VideoManager.VideoImportListener() {
+        videoEditor.importVideo(getApplicationContext(), videoUri, importOptions, new VideoManager.VideoImportListener() {
             @Override
             public void onProgressUpdate(int current, int max) {
                 //TO DO: indicate video loading progress bar
