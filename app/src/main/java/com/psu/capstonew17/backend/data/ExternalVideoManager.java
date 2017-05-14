@@ -65,8 +65,7 @@ public class ExternalVideoManager implements VideoManager {
         final VideoImportListener handle = handler;
 
         // generate an output file location
-        final File outFile = new File(Environment.getDataDirectory().getAbsoluteFile(),
-                UUID.randomUUID().toString());
+        final File outFile = new File(ctx.getFilesDir(), UUID.randomUUID().toString());
 
         PreprocessingPipeline  pipeline;
         try {
