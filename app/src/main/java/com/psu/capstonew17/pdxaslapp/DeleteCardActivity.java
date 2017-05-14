@@ -13,6 +13,7 @@ import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.ObjectInUseException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DeleteCardActivity extends BaseActivity {
@@ -47,21 +48,40 @@ public class DeleteCardActivity extends BaseActivity {
     public void onDeleteClicked(View view) {
         int index = cardRG.getCheckedRadioButtonId();
         if (index == -1) {
-            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.select_card, Toast.LENGTH_SHORT).show();
         } else {
             try {
                 Card card = cards.get(index);
                 List<Deck> decks = card.getUsers();
+                List<String> deletedDecks = new ArrayList<>();
                 for (Deck curr : decks){
                     List<Card> cardsInDeck = curr.getCards();
-                    cardsInDeck.remove(card);
+                    if(cardsInDeck.size() < 3)
+                        cardsInDeck.remove(card);
+                    else {
+                        deletedDecks.add(curr.getName());
+                        curr.delete();
+                    }
                     curr.commit();
                 }
                 card.delete();
+                if(!deletedDecks.isEmpty())
+                    decksDeletedMsg(deletedDecks);
                 populateRadioGroup();
             } catch(ObjectInUseException e) {
-                Toast.makeText(this, "Error: card still exists in deck", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.card_in_use_error, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void decksDeletedMsg(List<String> deletedDecks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(R.string.deleted_decks);
+        for (int i = 0; i < deletedDecks.size(); i++){
+            sb.append(deletedDecks.get(i));
+            if (i < deletedDecks.size() - 1)
+                sb.append(", ");
+        }
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
     }
 }
