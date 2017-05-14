@@ -3,12 +3,14 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +18,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.CardManager;
 import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
+import com.psu.capstonew17.backend.api.Video;
+import com.psu.capstonew17.backend.api.VideoManager;
+import com.psu.capstonew17.backend.data.ExternalCardManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalVideoManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 import java.io.File;
@@ -25,9 +35,9 @@ import java.util.List;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
     private ListView listView;
-    private ListRow row;
     private List<ListRow> list = new ArrayList<>();
     private List<Integer> selectedIndex;
+    private CardManager cardManager;
 
     private CustomArrayListAdapter myAdapter;
     private Uri videoUri;
@@ -48,8 +58,10 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private Button bttUseVideo;
     private EditText editText;
     private VideoView videoView;
+    private Card card;
 
     private String videoLabel;
+    private Video video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +86,15 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         videoView = (VideoView) findViewById (R.id.videoView_create_card);
 
-        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
+        ArrayList<Deck> deckList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
-        //get Decks from current testing
-        ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
-
-        for (int i = 0; i < deckList.size(); ++i) {
+        for (int i = 0; i < deckList.size(); i++) {
             ListRow listRow = new ListRow(deckList.get(i).getName() , false);
             list.add(listRow);
         }
 
         listView = (ListView) findViewById(R.id.list_items);
-        myAdapter =  new CustomArrayListAdapter(this, 0, list);
+        myAdapter =  new CustomArrayListAdapter(this, R.layout.list_row, list);
         listView.setAdapter(myAdapter);
 
 
@@ -122,6 +131,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 //TODO Package video URI and call edit video intent
 
                 if(videoUri != null){
+                    Log.d("videoinfo", videoUri.toString());
+                    Log.d("videoinfo", videoUri.getPath());
                     intent = new Intent(this, EditVideoActivity.class);
                     intent.setData( videoUri);
 //                    startActivity(intent);
@@ -130,30 +141,42 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 }
                 break;
 
-            /*
+
                 case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
                     return;
-                try {
                     // not sure what videoId to assign, so make it random for testing
-                    Random random = new Random();
-                    int videoId = random.nextInt();
                     //Video video = new ExternalVideo(videoId, videoFile);
 
-                    //Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
+                    cardManager = ExternalCardManager.getInstance(this);
+                    VideoManager vm = ExternalVideoManager.getInstance(this);
+                    VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
+                    imo.quality = 20;
+                    imo.endTime = 20;
+                    imo.startTime = 0;
+                    imo.cropRegion = null;
 
-                    for (int index: selectedIndex) {
-                        // TODO for each deck add aCard to that deck
-                    }
+                    vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
+                        @Override
+                        public void onProgressUpdate(int current, int max) {
 
-                } catch (ObjectAlreadyExistsException e) {
-                    Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
-                }
+                        }
+
+                        @Override
+                        public void onComplete(Video vid) {
+             
+                        }
+
+                        @Override
+                        public void onFailed(Throwable err) {
+
+                        }
+                    });
 
                 break;
-                */
+
 
 
         }
@@ -180,12 +203,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             Toast.makeText(this, R.string.card_uri_error, Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        videoFile = new File(videoUri.getPath());
-        if (videoFile == null || videoFile.exists()==false) {
-            Toast.makeText(this, R.string.card_video_file_error, Toast.LENGTH_SHORT).show();
-        }
-
         return true;
     }
 
@@ -199,15 +216,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         // update list
          selectedIndex = new ArrayList<Integer>();
-        for (int i = 0; i < list.size(); ++i) {
-            if (row.isChecked) {
+        for (int i = 0; i < list.size(); i++) {
+            ListRow curr = list.get(i);
+            if (curr.isChecked) {
                 selectedIndex.add(i);
             }
-        }
-
-        if (selectedIndex == null || selectedIndex.size() < 1) {
-            Toast.makeText(this, R.string.card_select_deck_error, Toast.LENGTH_SHORT).show();
-            return false;
         }
 
         return true;
