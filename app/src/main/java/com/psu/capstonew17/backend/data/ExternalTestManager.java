@@ -21,7 +21,7 @@ public class ExternalTestManager implements TestManager{
     private AslDbHelper dbHelper;
 
     public static TestManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
         return INSTANCE;
     }
 
