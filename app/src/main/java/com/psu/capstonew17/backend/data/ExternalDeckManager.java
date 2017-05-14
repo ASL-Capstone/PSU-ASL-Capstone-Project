@@ -23,6 +23,7 @@ public class ExternalDeckManager implements DeckManager{
 
     public static DeckManager getInstance(Context context){
         INSTANCE.dbHelper = new AslDbHelper(context);
+        ExternalCardManager.getInstance(context);
         return INSTANCE;
     }
 
