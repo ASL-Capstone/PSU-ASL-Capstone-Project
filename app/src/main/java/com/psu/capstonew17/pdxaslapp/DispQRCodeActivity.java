@@ -42,7 +42,7 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         imageView = (ImageView) findViewById(R.id.qrCodeView);
         downloads = (TextView) findViewById(R.id.textSharedCount);
         //Set the Downloads Display to show number of downloads
-        String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
+        String downloadDisplay = String.valueOf(downloadCount) + " " + getString(R.string.shared_counter);
         downloads.setText(downloadDisplay);
 
         DeckManager deckManager = ExternalDeckManager.getInstance(this);
