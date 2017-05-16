@@ -1,5 +1,8 @@
 package com.psu.capstonew17.pdxaslapp.FrontEndTestStubs;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.ObjectInUseException;
@@ -43,5 +46,26 @@ public class testCard implements Card {
     @Override
     public List<Deck> getUsers() {
         return null;
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new testCard();
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new testCard[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 }
