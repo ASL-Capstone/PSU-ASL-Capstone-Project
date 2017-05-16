@@ -11,6 +11,7 @@ import javax.xml.datatype.Duration;
 public class StatisticsStub implements Statistics {
     private List<Card> correct;
     private List<Card> incorrect;
+    private int averageAnswerTime;
 
     public List<Card> getCorrectCards() {
         return correct;
