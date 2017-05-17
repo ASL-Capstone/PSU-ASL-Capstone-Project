@@ -17,11 +17,20 @@ public class DeckManagerStub implements DeckManager {
     private String name;
     private DeckStub defaultDeck;
 
+    private class node {
+        String name;
+        List<Deck> deck;
+        node next;
+    }
+
     public List<Deck> getDecks(String name) {
+
         return decks;
     }
 
     public Deck buildDeck(String name, List<Card> cards) throws ObjectAlreadyExistsException {
+
+
         Deck temp = new DeckStub();
 
         temp.setName(name);
