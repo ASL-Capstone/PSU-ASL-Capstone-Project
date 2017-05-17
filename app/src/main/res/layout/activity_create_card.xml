@@ -3,73 +3,82 @@
     android:id="@+id/activity_create_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
     android:orientation="vertical">
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            >
+        <Button
+            android:id="@+id/buttonRecordVideo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_record" />
 
-            <Button
-                android:id="@+id/buttonRecordVideo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/button_record" />
+        <Button
+            android:id="@+id/buttonFromGallery"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_get_from_gallery"
+            />
 
-            <Button
-                android:id="@+id/buttonFromGallery"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/button_get_from_gallery"
-                />
+        <Button
+            android:id="@+id/buttonUseVIdeo"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_edit"
+            />
 
-            <Button
-                android:id="@+id/buttonUseVIdeo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/button_edit"
-                />
+    </TableRow>
 
-        </TableRow>
-
-    <include layout="@layout/submit_button"
+    <Button
+        android:id="@+id/button_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:text="@string/button_submit"
+        android:visibility="visible" />
 
-        <EditText
-            android:id="@+id/edit_text_video_answer"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:labelFor="@+id/edit_text_video_answer"
-            android:gravity="center"
-            android:hint="@string/edit_text_card_answer"
-            android:textColorHint="@color/lightGray"
-            android:background="@drawable/background_dark_border"
-            android:layout_margin="3dp"
-            android:ems="10"
-            android:inputType="text" />
+    <EditText
+        android:id="@+id/edit_text_video_answer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:labelFor="@+id/edit_text_video_answer"
+        android:gravity="center"
+        android:hint="@string/edit_text_card_answer"
+        android:textColorHint="@color/lightGray"
+        android:background="@drawable/background_dark_border"
+        android:layout_margin="3dp"
+        android:ems="10"
+        android:inputType="text" />
 
-
-
-    <com.psu.capstonew17.pdxaslapp.CustomVideoView
-        android:id="@+id/videoView_create_card"
+    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+        android:id="@+id/layout_videoView_create_card"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="center"
         android:layout_gravity="center"
-        android:visibility="visible"
-        android:layout_margin="5dp"
-        />
+        android:padding="3dp"
+        android:layout_weight="5">
 
-    <include layout="@layout/list_items"
+        <VideoView
+            android:background="@drawable/background1"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/videoView_create_card" />
+
+    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+
+    <include
+        layout="@layout/list_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 
 
 </LinearLayout>
