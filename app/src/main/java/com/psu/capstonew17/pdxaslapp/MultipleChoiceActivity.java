@@ -181,7 +181,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // Currently only one needed button but added switch in case of future need
         switch (view.getId()) {
             // Case: User hit the submit button
-            case R.id.button_submit:
+            case R.id.button_mult_submit:
                 switch (processAnswer()) {
                     // Case: User entered correct answer
                     case 1:

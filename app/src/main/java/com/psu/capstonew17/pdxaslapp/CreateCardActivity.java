@@ -157,7 +157,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                     imo.endTime = 20;
                     imo.startTime = 0;
                     imo.cropRegion = null;
-
                     vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
                         @Override
                         public void onProgressUpdate(int current, int max) {
