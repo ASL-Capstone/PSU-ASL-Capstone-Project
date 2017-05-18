@@ -171,6 +171,9 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                 if(checked)
                     numQuestions = 10;
                 break;
+            case R.id.radioButtonAllQuestions:
+                if (checked)
+                    numQuestions = 99999;
         }
 
     }
