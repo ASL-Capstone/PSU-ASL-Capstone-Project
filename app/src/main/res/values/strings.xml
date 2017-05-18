@@ -30,6 +30,7 @@
     <string name="button_ten_questions">10</string>
     <string name="button_thirty_questions">30</string>
     <string name="button_fifty_questions">50</string>
+    <string name="button_all_questions">All</string>
 
     <!-- Labels -->
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
