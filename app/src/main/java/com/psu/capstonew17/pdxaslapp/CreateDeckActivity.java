@@ -62,7 +62,7 @@ public class CreateDeckActivity extends BaseActivity {
     //onClick for the submit/done button.
     //TODO: constrict length of text entered in edit text
     public void onCreateSubmitClicked(View view) {
-        for (int k = 0; k < 200; k++) {
+        for (int k = 0; k < 25; k++) {
             List<Card> cardsInDeck = new ArrayList<>();
             String deckName = textBox.getText().toString().trim() + k;
             deckManager = ExternalDeckManager.getInstance(this);
