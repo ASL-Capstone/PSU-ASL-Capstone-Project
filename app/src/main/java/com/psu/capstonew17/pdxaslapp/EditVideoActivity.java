@@ -90,7 +90,18 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                submitEdits(view);
+                //UNCOMMENT once backend connected - submitEdits(view);
+
+                Intent returnIntent = new Intent();
+                if(videoUri != null) {
+                    returnIntent.setData(videoUri);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }
+                else {
+                    setResult(Activity.RESULT_CANCELED, returnIntent);
+                    finish();
+                }
             }
         });
 
@@ -145,7 +156,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         importOptions.startTime = 0;
         importOptions.quality = 10; //default quality
 
-
         //GET Intent passed from CreateACard Activity
         Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
         videoUri = intent.getData(); //get video URI data passed via an Intent from 'CreateCardActivity'
@@ -164,6 +174,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     seekBar.postDelayed(onEverySecond, 1000); //1000 milli-second delay
                 }
             });
+
 
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
 
@@ -239,6 +250,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     /**
      * Called when user hits the submit button
+     *
+     * *NOTE* currently not called, will un-comment in other methods, once back_end connectivity is verified
+     *
      * @param view
      */
     public void submitEdits(View view) {
