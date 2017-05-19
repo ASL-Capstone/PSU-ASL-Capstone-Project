@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_create_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -55,24 +56,33 @@
         android:ems="10"
         android:inputType="text" />
 
-    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-        android:id="@+id/layout_videoView_create_card"
+    <fragment
+        android:name="com.psu.capstonew17.pdxaslapp.VideoFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="3dp"
-        android:layout_weight="5">
+        android:layout_height="wrap_content"
+        android:id="@+id/fragment_video"
+        tools:layout="@layout/fragment_video_view" />
 
-        <VideoView
-            android:background="@drawable/background1"
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoView_create_card" />
 
-    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+    <!--<com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout-->
+        <!--android:id="@+id/layout_videoView_create_card"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:padding="3dp"-->
+        <!--android:layout_weight="5">-->
+
+        <!--<VideoView-->
+            <!--android:background="@drawable/background1"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_marginBottom="5dp"-->
+            <!--android:id="@+id/videoView_create_card" />-->
+
+    <!--</com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>-->
 
 
     <include
