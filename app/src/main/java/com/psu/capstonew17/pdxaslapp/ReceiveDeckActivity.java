@@ -65,7 +65,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
 
                     @Override
                     public void onError(ErrorType type) {
-                        Toast.makeText(ReceiveDeckActivity.this, "Error: Failing to receive deck",
+                        Toast.makeText(ReceiveDeckActivity.this, "Error: Failed to receive deck",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
