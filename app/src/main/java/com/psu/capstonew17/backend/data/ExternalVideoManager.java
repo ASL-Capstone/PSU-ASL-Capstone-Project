@@ -56,6 +56,7 @@ public class ExternalVideoManager implements VideoManager {
             video = new ExternalVideo(id, videoFile.getAbsoluteFile());
         }
         cursor.close();
+        db.close();
         return video;
     }
 
@@ -127,6 +128,7 @@ public class ExternalVideoManager implements VideoManager {
                     video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
                 }
                 cursor.close();
+                db.close();
                 handle.onComplete(video);
             }
 

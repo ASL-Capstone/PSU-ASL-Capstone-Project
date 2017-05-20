@@ -44,6 +44,7 @@ public class ExternalDeckManager implements DeckManager{
             cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
         }
         cursor.close();
+        db.close();
         return cards;
     }
 
@@ -59,6 +60,7 @@ public class ExternalDeckManager implements DeckManager{
             return new ExternalDeck(id, deckName, getCardsForDeck(id));
         }
         cursor.close();
+        db.close();
         return null;
     }
 
@@ -76,6 +78,7 @@ public class ExternalDeckManager implements DeckManager{
             deck = new ExternalDeck(deckId, name, getCardsForDeck(deckId));
         }
         cursor.close();
+        db.close();
         return deck;
     }
 
@@ -91,6 +94,7 @@ public class ExternalDeckManager implements DeckManager{
             exists = true;
         }
         cursor.close();
+        db.close();
         return exists;
     }
 
@@ -107,6 +111,7 @@ public class ExternalDeckManager implements DeckManager{
                 decks.add(getDeck(deckId));
             }
             cursor.close();
+            db.close();
         }
         Deck namedDeck = getDeck(name);
         if(namedDeck != null){
@@ -131,6 +136,7 @@ public class ExternalDeckManager implements DeckManager{
             values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
             db.insert(RelationEntry.TABLE_NAME, null, values);
         }
+        db.close();
         return new ExternalDeck(deckId, name, cards);
     }
 

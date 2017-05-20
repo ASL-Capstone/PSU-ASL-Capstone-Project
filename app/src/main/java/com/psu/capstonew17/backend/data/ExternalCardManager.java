@@ -43,6 +43,7 @@ public class ExternalCardManager implements CardManager{
             return new ExternalCard(id, ExternalVideoManager.INSTANCE.getVideo(videoId), answer);
         }
         cursor.close();
+        db.close();
         return null;
     }
 
@@ -63,6 +64,7 @@ public class ExternalCardManager implements CardManager{
         values.put(CardEntry.COLUMN_VIDEO, ((ExternalVideo) video).getVideoId());
         values.put(CardEntry.COLUMN_ANSWER, answer);
         int id = (int) db.insert(CardEntry.TABLE_NAME, null, values);
+        db.close();
         return new ExternalCard(id, video, answer);
     }
 

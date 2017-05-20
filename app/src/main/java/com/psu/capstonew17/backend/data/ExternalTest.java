@@ -48,6 +48,7 @@ class ExternalTest implements Test {
         values.put(AnswerEntry.COLUMN_TYPE, question.getType().ordinal());
         int questionId = (int) db.insert(AnswerEntry.TABLE_NAME, null, values);
         ((ExternalQuestion) question).setQuestionId(questionId);
+        db.close();
         current += 1;
         return question;
     }
