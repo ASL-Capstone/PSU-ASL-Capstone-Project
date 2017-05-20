@@ -73,6 +73,7 @@
     <string name="select_card">Please select a card</string>
     <string name="deleted_decks">"The following decks were deleted: "</string>
     <string name="card_in_use_error">Card is still in use</string>
+    <string name="import_video_error">Problem importing video</string>
 
     <string name="button_record">Record</string>
     <string name="button_get_from_gallery">Gallery</string>
