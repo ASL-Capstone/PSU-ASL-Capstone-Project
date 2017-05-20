@@ -98,6 +98,7 @@ class ExternalCard implements Card {
             int deckId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_DECK));
             decks.add(ExternalDeckManager.INSTANCE.getDeck(deckId));
         }
+        cursor.close();
         return decks;
     }
 

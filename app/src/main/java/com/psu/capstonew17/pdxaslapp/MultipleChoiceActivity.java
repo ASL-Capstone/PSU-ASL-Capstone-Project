@@ -75,10 +75,16 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // TODO Test the actual backend quiz generation
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
-            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
-            if (toAdd != null)
-                decksForQuiz.add(toAdd);
-
+            try {
+                Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+                if (toAdd != null)
+                    decksForQuiz.add(toAdd);
+            }
+            catch (IndexOutOfBoundsException e){
+                Toast.makeText(getBaseContext(), "Error Invalid Decks", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
         }
         TestManager.Options opts = new TestManager.Options();
         opts.recordStats = false;

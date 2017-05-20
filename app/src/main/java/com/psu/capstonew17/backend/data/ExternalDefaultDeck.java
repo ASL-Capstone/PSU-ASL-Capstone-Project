@@ -40,6 +40,7 @@ public class ExternalDefaultDeck implements Deck {
             int cardId = cursor.getInt(cursor.getColumnIndex(AslDbContract.CardEntry.COLUMN_ID));
             cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
         }
+        cursor.close();
         return cards;
     }
 
