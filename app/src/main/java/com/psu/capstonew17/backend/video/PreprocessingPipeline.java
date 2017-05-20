@@ -169,6 +169,7 @@ public class PreprocessingPipeline {
                         int length = extractor.readSampleData(ibuf, 0);
                         if (length == -1) {
                             extractorDone = true;
+                            extractor.release();
                             Log.d("VPreproc", "Extractor done");
                             decoder.queueInputBuffer(inIdx, 0, 0, -1,
                                     MediaCodec.BUFFER_FLAG_END_OF_STREAM);
@@ -211,7 +212,7 @@ public class PreprocessingPipeline {
                     encImg.getPlanes()[2].getBuffer().put(img.getPlanes()[2].getBuffer());
                     encImg.setTimestamp(img.getTimestamp());
 
-                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
+                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, bufInfo.presentationTimeUs, 0);
                     decoder.releaseOutputBuffer(outIdx, false);
                 } else if(outIdx >= 0) {
                     Log.d("VPreproc", "Autorelease");
@@ -243,9 +244,12 @@ public class PreprocessingPipeline {
             }
             encoder.stop();
             muxer.stop();
+            encoder.release();
+            muxer.release();
 
             // close everything else
             decoder.stop();
+            encoder.release();
 
             Log.d("VPreproc", "All done!");
             return null;
