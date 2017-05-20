@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,13 +11,13 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/promptChooseDecks"
+            android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:gravity="center"
-            android:text="@string/label_choose_decks"
+            android:text="@string/label_choose_quiz_type"
             android:textSize="30sp"
             tools:ignore="HardcodedText" />
 
@@ -62,17 +62,6 @@
             android:textSize="30sp"
             tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:gravity="center"
-            android:text="@string/label_choose_quiz_type"
-            android:textSize="30sp"
-            tools:ignore="HardcodedText" />
-
         <RadioGroup
             android:id="@+id/radioGroupQuestionCount"
             android:layout_width="match_parent"
@@ -105,12 +94,30 @@
                 android:layout_weight="1"
                 android:onClick="onNumQuestionsClicked"
                 android:text="@string/button_fifty_questions" />
+
+            <RadioButton
+                android:id="@+id/radioButtonAllQuestions"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_all_questions" />
         </RadioGroup>
+
+        <TextView
+            android:id="@+id/promptChooseDecks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            android:text="@string/label_choose_decks"
+            android:textSize="30sp"
+            tools:ignore="HardcodedText" />
 
         <ScrollView
             android:id="@+id/deckListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="0.24">
 
             <LinearLayout
@@ -140,4 +147,4 @@
             android:text="@string/button_take_quiz" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

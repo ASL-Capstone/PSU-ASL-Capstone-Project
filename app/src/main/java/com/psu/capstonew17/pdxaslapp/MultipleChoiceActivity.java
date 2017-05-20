@@ -79,6 +79,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
             if (toAdd != null)
                 decksForQuiz.add(toAdd);
+
         }
         TestManager.Options opts = new TestManager.Options();
         opts.recordStats = false;
