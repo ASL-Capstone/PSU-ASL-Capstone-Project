@@ -72,11 +72,7 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
 
                 if(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))     //status of the connection has changed
                 {
-                    if(wifiManager == null){ return;}                               //if not instantiated return
-                    NetworkInfo ntwkInfo = (NetworkInfo)intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-                    //get connection info if we are connected
-                    if (ntwkInfo.isConnected()) {wifiManager.requestConnectionInfo(wifiChannel, (WifiP2pManager.ConnectionInfoListener)activity);}
-                    else {/*TODO: handle case where we aren't connected*/ }
+
                 }
                 else if(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))    //if the list of peers has changed
                 {
@@ -84,7 +80,11 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
                 }
                 else if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
                 {
-                    //handle case
+                    if(wifiManager == null){ return;}                               //if not instantiated return
+                    NetworkInfo ntwkInfo = (NetworkInfo)intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+                    //get connection info if we are connected
+                    if (ntwkInfo.isConnected()) {wifiManager.requestConnectionInfo(wifiChannel, (WifiP2pManager.ConnectionInfoListener)activity);}
+                    else {/*TODO: handle case where we aren't connected*/ }
                 }
                 else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action))
                 {
