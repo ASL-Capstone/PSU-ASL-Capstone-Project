@@ -142,7 +142,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 break;
 
 
-            case R.id.button_submit:
+                case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!videoLabelCheck() || video == null){
