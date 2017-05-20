@@ -1,10 +1,12 @@
 package com.psu.capstonew17.backend.sharing;
 import android.app.Service;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.net.NetworkInfo;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
@@ -35,6 +37,7 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
     private WifiP2pManager.Channel wifiChannel;
     private BroadcastReceiver wifiReceiver;
     private final IBinder mBinder = new Binder();
+    private Activity activity;
     @Override
     public IBinder onBind(Intent intent) {return mBinder;}
     //find peers to connect with
@@ -67,14 +70,17 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
                 // TODO: handle events for server side
                 String action = intent.getAction();
 
-                if(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))
+                if(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))     //status of the connection has changed
                 {
-                    //handle case
+                    if(wifiManager == null){ return;}                               //if not instantiated return
+                    NetworkInfo ntwkInfo = (NetworkInfo)intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+                    //get connection info if we are connected
+                    if (ntwkInfo.isConnected()) {wifiManager.requestConnectionInfo(wifiChannel, (WifiP2pManager.ConnectionInfoListener)activity);}
+                    else {/*TODO: handle case where we aren't connected*/ }
                 }
-                else if(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))
+                else if(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))    //if the list of peers has changed
                 {
-                    //handle case
-
+                    if(wifiManager != null){wifiManager.requestPeers(wifiChannel,peerListener);}        //if wifi manager has been instantiated, refresh list of peers
                 }
                 else if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
                 {
@@ -103,8 +109,9 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
         return instance;
     }
 
-    private SharingManager() {
-
+    private SharingManager(){}
+    private SharingManager(Activity activity) {
+        activity = this.activity;
     }
 
     /**
