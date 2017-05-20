@@ -2,6 +2,7 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
+    public static final String VIDEO_TO_SEND = "com.psu.capstonew17.pdxaslapp.VIDEO_FROM_EDITCARD";
+
     private Uri videoUri;
     private VideoView videoView;
 
@@ -73,9 +76,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         start_stop_switch = (Switch) findViewById(R.id.start_stop_switch);
         start_stop_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean fromUser) {
-                if(fromUser) {
-                    endTimeSwitch = start_stop_switch.getShowText(); //set endTime to false if start selected; true if stop
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                endTimeSwitch = isChecked;
+                if(endTimeSwitch) {
+                    //endTimeSwitch = start_stop_switch.getShowText(); //set endTime to false if start selected; true if stop
+                    Toast.makeText(getApplicationContext(), "The seek bar will now update the STOP TIME", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "The seek bar will now update the START TIME", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -91,6 +98,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 //UNCOMMENT once backend connected - submitEdits(view);
+                submitEdits(view);
+                /*
                 Intent returnIntent = new Intent();
                 if(videoUri != null) {
                     returnIntent.setData(videoUri);
@@ -101,6 +110,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     setResult(Activity.RESULT_CANCELED, returnIntent);
                     finish();
                 }
+                */
             }
         });
 
@@ -126,20 +136,32 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 //TO DO
-                Toast.makeText(getApplicationContext(), "Starting to seek", Toast.LENGTH_SHORT).show();
+                if(endTimeSwitch) {
+                    Toast.makeText(getApplicationContext(), "Starting to seek - this will update STOP TIME crop", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Starting to seek - updating START TIME crop", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //TO DO
+                //String startString = "Start Time: ";
+                //String stopString = "Stop Time: ";
+                Resources resources = getResources();
+
                 if(endTimeSwitch) {
                     Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                     //endTimeText.setText(R.string.stop_time_label + currentProgress);
+                    endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
                     importOptions.endTime = currentProgress;
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                     //startTimeText.setText(R.string.start_time_label + currentProgress);
+                    //startTimeText.setText("Start time: " + String.valueOf(currentProgress));
+                    startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
                     importOptions.startTime = currentProgress;
                 }
 
@@ -191,9 +213,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
          *  - adjust when seekBar changed
          */
         startTimeText = (TextView) findViewById(R.id.textViewStartTimeLabel);
-        startTimeText.setText(R.string.start_time_default);
+        startTimeText.setText(R.string.start_time_label);
         endTimeText = (TextView) findViewById(R.id.textViewStopTimeLabel);
-        endTimeText.setText(R.string.stop_time_default + videoView.getDuration());
+        endTimeText.setText(R.string.stop_time_label);
 
         /*
         //FOR NOW, just return the un-edited video back to 'CreateCard'
@@ -220,12 +242,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(R.id.submitButtonEditCard == view.getId()){
-
             //UNcomment once backend is working + connected
-            //submitEdits(view);
-
+            submitEdits(view);
             //FOR NOW, just return the un-edited video back to 'CreateCard'
             //Will change once connected to backend, and time-cropping is functional
+
+            /*
             Intent returnIntent = new Intent();
             if(videoUri != null) {
                 returnIntent.setData(videoUri);
@@ -236,8 +258,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
             }
-
-
+            */
         }
     }
 
@@ -270,10 +291,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onComplete(Video vid) {
                 //TO DO: once edited, send this video back to 'CreateCardActivity'
-
                 Intent returnIntent = new Intent();
-                returnIntent.setData(videoUri);
-
+                returnIntent.putExtra(VIDEO_TO_SEND, vid);
+                //returnIntent.setData(videoUri);
+                setResult(Activity.RESULT_OK, returnIntent);
+                /*
                 if(videoUri != null) {
                     setResult(Activity.RESULT_OK, returnIntent);
                     //finish();
@@ -282,6 +304,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     setResult(Activity.RESULT_CANCELED, returnIntent);
                     //finish();
                 }
+                */
                 finish();
             }
 

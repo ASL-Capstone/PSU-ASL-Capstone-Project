@@ -90,10 +90,10 @@
     <string name="start_stop_edit">Edit Start/Stop time</string>
     <string name="start">start</string>
     <string name="stop">stop</string>
-    <string name="start_time_label">Start time:</string>
-    <string name="stop_time_label">Stop time:</string>
+    <string name="start_time_label">Start time: not set (ms)</string>
+    <string name="stop_time_label">Stop time: not set (ms)</string>
     <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
-    <string name="start_time_default">Start time: 0:00</string>
-    <string name="stop_time_default">Stop time:</string>
+    <string name="start_time_default">Start time: %1$d (ms)</string>
+    <string name="stop_time_default">Stop time: %1$d (ms)</string>
     <string name="seekBar_startSeeking_msg">Start seeking</string>
 </resources>
