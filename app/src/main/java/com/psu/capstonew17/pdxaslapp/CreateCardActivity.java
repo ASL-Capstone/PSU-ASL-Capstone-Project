@@ -101,6 +101,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         if (savedInstanceState == null) {
             vidFragment = (VideoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_video);
+
+            vidFragment.setDisplayVideo(null);
         }
 
 

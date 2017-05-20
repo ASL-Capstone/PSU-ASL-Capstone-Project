@@ -10,15 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.api.Video;
 
 
 public class VideoFragment extends Fragment {
 
-    private CustomVideoView videoView;
+    private VideoView videoView;
     private MediaController mediaController;
-    private MediaPlayer mediaPlayer;
+    private int position = 0;
 
     /**
      * This event is called first, before creation of fragment view
@@ -52,7 +53,7 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video_view, container, false);
-        videoView = (CustomVideoView) view.findViewById(R.id.videoView);
+        videoView = (VideoView) view.findViewById(R.id.videoView);
         return view;
     }
 
@@ -74,7 +75,6 @@ public class VideoFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.videoView = null;
-        this.mediaPlayer = null;
         this.mediaController = null;
     }
 
@@ -88,20 +88,20 @@ public class VideoFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        mediaPlayer = new MediaPlayer();
-        mediaController = new MediaController(getContext());
+        if (mediaController == null) {
+            mediaController = new MediaController(getContext());
+        }
+
+        mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
+        videoView.start();
+
     }
 
     public void setDisplayVideo(Video video) {
-        video.configurePlayer(mediaPlayer);
+//        video.configurePlayer(videoView);
 
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-                videoView.setMediaController(mediaController);
-                mp.start();
-            }
-        });
+        // this setpath for testing only
+        videoView.setVideoPath("http://www.android-examples.com/wp-content/uploads/2016/01/sample_video.3gp");
     }
 }
