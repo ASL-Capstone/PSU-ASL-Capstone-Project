@@ -63,6 +63,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private String videoLabel;
     private Video video;
 
+    private VideoFragment vidFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         editText = (EditText) findViewById(R.id.edit_text_video_answer);
         editText.setOnClickListener(this);
 
-        videoView = (VideoView) findViewById (R.id.videoView_create_card);
+//        videoView = (VideoView) findViewById (R.id.videoView_create_card);
 
         ArrayList<Deck> deckList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
@@ -96,6 +98,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         listView = (ListView) findViewById(R.id.list_items);
         myAdapter =  new CustomArrayListAdapter(this, R.layout.list_row, list);
         listView.setAdapter(myAdapter);
+
+        if (savedInstanceState == null) {
+            vidFragment = (VideoFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_video);
+        }
+
 
 
         // hide views
@@ -142,7 +149,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 break;
 
 
-                case R.id.button_submit:
+            case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
