@@ -21,7 +21,8 @@ public class ExternalCardManager implements CardManager{
     private AslDbHelper dbHelper;
 
     public static CardManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
+        ExternalVideoManager.getInstance(context);
         return INSTANCE;
     }
 
@@ -41,6 +42,7 @@ public class ExternalCardManager implements CardManager{
             String answer = cursor.getString(cursor.getColumnIndex(CardEntry.COLUMN_ANSWER));
             return new ExternalCard(id, ExternalVideoManager.INSTANCE.getVideo(videoId), answer);
         }
+        cursor.close();
         return null;
     }
 
