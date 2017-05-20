@@ -91,7 +91,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onClick(View view) {
                 //UNCOMMENT once backend connected - submitEdits(view);
-
                 Intent returnIntent = new Intent();
                 if(videoUri != null) {
                     returnIntent.setData(videoUri);
@@ -119,8 +118,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser) { //if seekBar movement is user-initiated, adjust video accordingly
-                    videoView.seekTo(progress*1000);
-                    currentProgress = progress*1000; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
+                    videoView.seekTo(progress);
+                    currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
             }
 
@@ -134,13 +133,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //TO DO
                 if(endTimeSwitch) {
-                    Toast.makeText(getApplicationContext(), "Setting stop time crop", Toast.LENGTH_SHORT).show();
-                    endTimeText.setText(R.string.stop_time_label + currentProgress);
+                    Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
+                    //endTimeText.setText(R.string.stop_time_label + currentProgress);
                     importOptions.endTime = currentProgress;
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Setting start time crop", Toast.LENGTH_SHORT).show();
-                    startTimeText.setText(R.string.start_time_label + currentProgress);
+                    Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
+                    //startTimeText.setText(R.string.start_time_label + currentProgress);
                     importOptions.startTime = currentProgress;
                 }
 
