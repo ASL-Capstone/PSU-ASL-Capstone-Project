@@ -98,7 +98,9 @@ public class VideoFragment extends Fragment {
 
     }
 
+
     public void setDisplayVideo(Video video) {
+        // uncomment line below when back end api change to using videoview instead of mediaplayer
 //        video.configurePlayer(videoView);
 
         // this setpath for testing only
