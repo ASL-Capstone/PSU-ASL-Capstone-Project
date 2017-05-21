@@ -40,6 +40,8 @@ public class ExternalCardManager implements CardManager{
         if(cursor.moveToFirst()){
             int videoId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_VIDEO));
             String answer = cursor.getString(cursor.getColumnIndex(CardEntry.COLUMN_ANSWER));
+            cursor.close();
+            db.close();
             return new ExternalCard(id, ExternalVideoManager.INSTANCE.getVideo(videoId), answer);
         }
         cursor.close();
@@ -57,6 +59,7 @@ public class ExternalCardManager implements CardManager{
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             cursor.close();
+            db.close();
             throw new ObjectAlreadyExistsException("A card for this video already exists.");
         }
         cursor.close();
