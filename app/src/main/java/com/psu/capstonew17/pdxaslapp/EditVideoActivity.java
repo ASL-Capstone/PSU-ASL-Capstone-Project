@@ -22,6 +22,7 @@ import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
     public static final String VIDEO_TO_SEND = "com.psu.capstonew17.pdxaslapp.VIDEO_FROM_EDITCARD";
+    public static final String ERROR = "There was an ERROR with import options";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -155,6 +156,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                     //endTimeText.setText(R.string.stop_time_label + currentProgress);
                     endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
+                    //endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
                     importOptions.endTime = currentProgress;
                 }
                 else {
@@ -162,6 +164,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     //startTimeText.setText(R.string.start_time_label + currentProgress);
                     //startTimeText.setText("Start time: " + String.valueOf(currentProgress));
                     startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
+                    //startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
                     importOptions.startTime = currentProgress;
                 }
 
@@ -311,6 +314,10 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 //TO DO: indicate "Failure" to calling routine
                 Intent returnIntent = new Intent();
                 returnIntent.setData(videoUri);
+
+                //'err' is null -checked
+                returnIntent.putExtra(ERROR, err);
+
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 Toast.makeText(getApplicationContext(), "From EditCard: Failed to Edit Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
                 finish();
