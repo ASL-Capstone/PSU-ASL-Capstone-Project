@@ -184,11 +184,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         if(videoUri == null) {
             importOptions.endTime = 0;
             Toast.makeText(this, "From EditCard: No URI Passed", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
-        }
-        else {
+        } else {
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     seekBar.setMax(videoView.getDuration()); //NEEDS TESTING!
@@ -281,7 +279,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         VideoManager videoEditor = ExternalVideoManager.getInstance(this);
 
         //NEED TO: determine how to get video file path to pass to backend
-        videoEditor.importVideo(getApplicationContext(), videoUri, importOptions, new VideoManager.VideoImportListener() {
+        videoEditor.importVideo(this, videoUri, importOptions, new VideoManager.VideoImportListener() {
             @Override
             public void onProgressUpdate(int current, int max) {
                 //TO DO: indicate video loading progress bar

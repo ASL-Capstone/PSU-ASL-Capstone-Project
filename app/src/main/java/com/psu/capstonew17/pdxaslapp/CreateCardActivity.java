@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.MediaController;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -31,7 +29,6 @@ import com.psu.capstonew17.backend.data.ExternalCardManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -263,6 +260,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                     imo.quality = 20;
                     imo.cropRegion = null;
 
+
                     vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
                         @Override
                         public void onProgressUpdate(int current, int max) {
@@ -281,6 +279,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                             videoErrorToast();
                         }
                     });
+
                 }
                 break;
 
