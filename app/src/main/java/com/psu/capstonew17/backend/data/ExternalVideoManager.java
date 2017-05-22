@@ -13,11 +13,15 @@ import android.util.Log;
 import com.psu.capstonew17.backend.api.*;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -59,6 +63,59 @@ public class ExternalVideoManager implements VideoManager {
         return video;
     }
 
+    public Video decodeVideo(byte [] bytes){
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA256");
+        } catch(NoSuchAlgorithmException e) {
+            Log.d("VideoManager", "System does not support SHA256 hash", e);
+            return null;
+        }
+
+        // generate an output file location
+        final File outFile = new File(Environment.getDataDirectory().getAbsoluteFile(),
+                UUID.randomUUID().toString());
+
+        Video video = null;
+        byte[] sha = null;
+        try {
+            InputStream input = new ByteArrayInputStream(bytes);
+            OutputStream output = new FileOutputStream(outFile);
+            byte [] data = new byte[8192];
+            int len;
+            while((len = input.read(data)) != -1){
+                output.write(data, 0, len);
+                digest.update(data, 0, len);
+            }
+            sha = digest.digest();
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+            String query = dbHelper.buildSelectQuery(
+                    VideoEntry.TABLE_NAME,
+                    Arrays.asList(VideoEntry.COLUMN_SHA + "='" + sha.toString() + "'")
+            );
+            Cursor cursor = db.rawQuery(query, null);
+            if(cursor.moveToFirst()){
+                int videoId = cursor.getInt(cursor.getColumnIndex(VideoEntry.COLUMN_ID));
+                String videoPath = cursor.getString(cursor.getColumnIndex(VideoEntry.COLUMN_PATH));
+                File existingVideo = new File(videoPath);
+                outFile.delete();
+                video = new ExternalVideo(videoId, existingVideo.getAbsoluteFile());
+            }
+            else{
+                // create the new video
+                ContentValues values = new ContentValues();
+                values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
+                values.put(VideoEntry.COLUMN_SHA, sha.toString());
+                int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
+                video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
+            }
+            cursor.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return video;
+    }
 
     @Override
     public void importVideo(Context ctx, final Uri video, final ImportOptions options, VideoImportListener handler) {
