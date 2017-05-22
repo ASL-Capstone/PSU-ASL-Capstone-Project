@@ -8,16 +8,19 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.api.*;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 
-class ExternalCard implements Card {
+class ExternalCard implements Card, EncodeableObject {
     private int cardId;
     private Video video;
     private String answer;
@@ -133,5 +136,18 @@ class ExternalCard implements Card {
         parcel.writeInt(cardId);
         parcel.writeTypedObject(video, 0);
         parcel.writeString(answer);
+    }
+
+    @Override
+    public byte[] encodeToByteArray() throws IOException {
+        byte [] answerBytes = this.answer.getBytes();
+        byte [] videoBytes = ((EncodeableObject) this.video).encodeToByteArray();
+        ByteBuffer b = ByteBuffer.allocate(12 + answerBytes.length + videoBytes.length);
+        b.putInt(this.cardId);
+        b.putInt(answerBytes.length);
+        b.put(answerBytes);
+        b.putInt(videoBytes.length);
+        b.put(videoBytes);
+        return b.array();
     }
 }

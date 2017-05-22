@@ -6,11 +6,15 @@ import android.media.MediaPlayer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.api.*;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
-class ExternalVideo implements Video {
+class ExternalVideo implements Video, EncodeableObject {
     private File videoFile;
     private int videoId;
 
@@ -51,5 +55,25 @@ class ExternalVideo implements Video {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(videoFile.getAbsolutePath());
         parcel.writeInt(videoId);
+    }
+
+    private byte[] readFile() throws IOException{
+        RandomAccessFile f = new RandomAccessFile(this.videoFile, "r");
+        try{
+            int length = ((int) f.length());
+            byte[] data = new byte[length];
+            f.readFully(data);
+            return data;
+        }finally {
+            f.close();
+        }
+    }
+
+    @Override
+    public byte[] encodeToByteArray() throws IOException{
+        byte[] fileBytes = readFile();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        out.write(fileBytes);
+        return out.toByteArray();
     }
 }
