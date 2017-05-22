@@ -27,14 +27,17 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     private Uri videoUri;
     private VideoView videoView;
 
-    //newly added to 'EditVideoActivity'
+    //UI
     private SeekBar seekBar; //tracks current video's progress
     private Switch start_stop_switch; // off = modify stop time; on = modify start time
     private boolean endTimeSwitch; // set to value of above switch
     private Button submitButton; //attached to submit button (sends modifications to backend)
     private TextView startTimeText; //displays current starting point of video
     private TextView endTimeText; //displays current ending point of video
+
+    //local helper variables
     private int currentProgress; //current progress of user-initiated seekBar movement
+    private boolean firstAdjustment; //used to handle error message when using "start/stop" switch and seekBar
 
     //Vars to pass to backend //may replace with local vars at some point
     VideoManager.ImportOptions importOptions;
@@ -43,6 +46,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     //private int endTime;
     //private int quality;
     //private Rect cropRegion; //STRETCH GOAL!!!
+
+    //
+
 
 
     //Private inner-class used to update the seekBar
@@ -69,6 +75,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         videoView = (VideoView) findViewById(R.id.videoView_edit_video); //connect to video view in EditVideo layout
 
         //NOTE - each layout init block will be converted to a separate local method during 'polish'
+
+        //set up as first run-through
+        firstAdjustment = true;
 
         /**Set up start_stop switch
          *  - connect to button
@@ -116,6 +125,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         });
 
 
+
+
+
+
+
+
+
         /**Set up seekBar connectivity
          *  - connect to videoVidew
          *  - set up progress change to connect to startTime/endTime
@@ -153,24 +169,42 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 Resources resources = getResources();
 
                 if(endTimeSwitch) {
-                    Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
-                    //endTimeText.setText(R.string.stop_time_label + currentProgress);
-                    endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
-                    //endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
-                    importOptions.endTime = currentProgress;
+                    if(firstAdjustment || timeSelectionCheck(importOptions.startTime, currentProgress)) {
+                        Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
+                        //endTimeText.setText(R.string.stop_time_label + currentProgress);
+                        endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
+                        //endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
+                        importOptions.endTime = currentProgress;
+                        firstAdjustment = false;
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
-                    //startTimeText.setText(R.string.start_time_label + currentProgress);
-                    //startTimeText.setText("Start time: " + String.valueOf(currentProgress));
-                    startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
-                    //startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
-                    importOptions.startTime = currentProgress;
+                    if(firstAdjustment || timeSelectionCheck(currentProgress, importOptions.endTime)) {
+                        Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
+                        //startTimeText.setText(R.string.start_time_label + currentProgress);
+                        //startTimeText.setText("Start time: " + String.valueOf(currentProgress));
+                        startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
+                        //startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((currentProgress/1000)/60), ((currentProgress/1000)%60)));
+                        importOptions.startTime = currentProgress;
+                        firstAdjustment = false;
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
             }
         });
 
+
+
+
+        //GET Intent passed from CreateACard Activity
+        Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
+        videoUri = intent.getData(); //get video URI data passed via an Intent from 'CreateCardActivity'
 
         //initialize import-options structure
         importOptions = new VideoManager.ImportOptions();
@@ -178,11 +212,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         importOptions.cropRegion = null;
         //importOptions.deleteAfter = false;
         importOptions.startTime = 0;
+        //importOptions.endTime = Integer.MAX_VALUE; //will get dynamically set to video duration
         importOptions.quality = 10; //default quality
-
-        //GET Intent passed from CreateACard Activity
-        Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
-        videoUri = intent.getData(); //get video URI data passed via an Intent from 'CreateCardActivity'
 
         if(videoUri == null) {
             importOptions.endTime = 0;
@@ -196,7 +227,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     seekBar.postDelayed(onEverySecond, 1000); //1000 milli-second delay
                 }
             });
-
 
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
 
@@ -264,6 +294,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
 
+    /**
+     *
+     * @return false, if the time crop region selected is less than 1 ms
+     */
+    private boolean timeSelectionCheck(int startTime, int endTime) {
+        return ((endTime - startTime) > 0);
+    }
 
 
 
