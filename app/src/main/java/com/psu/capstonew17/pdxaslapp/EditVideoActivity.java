@@ -22,7 +22,7 @@ import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
     public static final String EDITED_VIDEO = "edited_video";
-    public static final String ERROR = "There was an ERROR with import options";
+    public static final String ERROR = "ERROR_with_importing_options";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -335,6 +335,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 returnIntent.setData(videoUri);
                 returnIntent.putExtra(EDITED_VIDEO, vid);
                 setResult(Activity.RESULT_OK, returnIntent);
+
+                //Bundle bundle = returnIntent.getParcelableExtra(EDITED_VIDEO);
+                //bundle.
                 /*
                 if(videoUri != null) {
                     setResult(Activity.RESULT_OK, returnIntent);
