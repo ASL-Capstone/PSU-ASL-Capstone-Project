@@ -71,41 +71,43 @@ class SharePackage {
         List<Deck> decks = new ArrayList<Deck>();
         Map<Integer, Card> idToCardMap = new HashMap<Integer, Card>();
         SharePackage sharePackage = null;
-        ExternalVideoManager vm = (ExternalVideoManager) ExternalVideoManager.getInstance(context);
-        ExternalCardManager cm = (ExternalCardManager) ExternalCardManager.getInstance(context);
-        ExternalDeckManager dm = (ExternalDeckManager) ExternalDeckManager.getInstance(context);
+        ExternalVideoManager videoManager = (ExternalVideoManager) ExternalVideoManager.getInstance(context);
+        ExternalCardManager cardManager = (ExternalCardManager) ExternalCardManager.getInstance(context);
+        ExternalDeckManager deckManager = (ExternalDeckManager) ExternalDeckManager.getInstance(context);
         try {
             // decode number of cards
             byte[] numCardBytes = new byte[4];
             in.read(numCardBytes);
             int numCards = ByteBuffer.wrap(numCardBytes).getInt();
             hash.update(numCardBytes);
+            byte [] cardIdBytes = new byte[4];
+            byte [] answerLengthBytes = new byte[4];
+            byte [] videoLengthBytes = new byte[4];
+            byte [] answerBytes;
+            byte [] videoBytes;
             // decode cards
             for(int i = 0; i < numCards; i++){
-                byte [] cardIdBytes = new byte[4];
                 in.read(cardIdBytes);
                 hash.update(cardIdBytes);
-                int cardId = ByteBuffer.wrap(cardIdBytes).getInt();
-                byte [] answerLengthBytes = new byte[4];
                 in.read(answerLengthBytes);
                 hash.update(answerLengthBytes);
-                int answerLength = ByteBuffer.wrap(answerLengthBytes).getInt();
-                byte [] answerBytes = new byte[answerLength];
+                answerBytes = new byte[ByteBuffer.wrap(answerLengthBytes).getInt()];
                 in.read(answerBytes);
                 hash.update(answerBytes);
-                String answer = new String(answerBytes);
-                byte [] videoLengthBytes = new byte[4];
                 in.read(videoLengthBytes);
                 hash.update(videoLengthBytes);
-                int videoLength = ByteBuffer.wrap(videoLengthBytes).getInt();
-                byte [] videoBytes = new byte[videoLength];
+                videoBytes = new byte[ByteBuffer.wrap(videoLengthBytes).getInt()];
                 in.read(videoBytes);
                 hash.update(videoBytes);
                 // create video file and card object, add to SharePackage cards
-                Video video = vm.decodeVideo(videoBytes);
-                Card card = cm.buildCard(video, answer);
-                cards.add(card);
-                idToCardMap.put(cardId, card);
+                Video video = videoManager.decodeVideo(videoBytes);
+                try {
+                    Card card = cardManager.buildCard(video, new String(answerBytes));
+                    cards.add(card);
+                    idToCardMap.put(ByteBuffer.wrap(cardIdBytes).getInt(), card);
+                } catch (ObjectAlreadyExistsException e) {
+                    Log.println(Log.INFO, "obj already exists", e.toString());
+                }
             }
             // decode number of decks
             byte [] numDeckBytes = new byte[4];
@@ -113,43 +115,41 @@ class SharePackage {
             hash.update(numDeckBytes);
             int numDecks = ByteBuffer.wrap(numDeckBytes).getInt();
             List<Card> cardsInDeck;
+            byte [] deckIdBytes = new byte[4];
+            byte [] nameLengthBytes = new byte[4];
+            byte [] numCardsInDeckBytes = new byte[4];
+            byte [] cIdBytes = new byte[4];
+            byte [] nameBytes;
             // decode decks
             for(int i = 0; i < numDecks; i++){
-                byte [] deckIdBytes = new byte[4];
                 in.read(deckIdBytes);
                 hash.update(deckIdBytes);
-                int deckId = ByteBuffer.wrap(deckIdBytes).getInt();
-                byte [] nameLengthBytes = new byte[4];
                 in.read(nameLengthBytes);
                 hash.update(nameLengthBytes);
-                int nameLength = ByteBuffer.wrap(nameLengthBytes).getInt();
-                byte [] nameBytes = new byte[nameLength];
+                nameBytes = new byte[ByteBuffer.wrap(nameLengthBytes).getInt()];
                 in.read(nameBytes);
                 hash.update(nameBytes);
-                String name = new String(nameBytes);
-                byte [] numCardsInDeckBytes = new byte[4];
                 in.read(numCardsInDeckBytes);
                 hash.update(numCardsInDeckBytes);
-                int numCardsInDeck = ByteBuffer.wrap(numCardsInDeckBytes).getInt();
                 cardsInDeck = new ArrayList<Card>();
-                for(int c = 0; c < numCardsInDeck; c++){
-                    byte [] cIdBytes = new byte[4];
+                for(int c = 0; c < ByteBuffer.wrap(numCardsInDeckBytes).getInt(); c++){
                     in.read(cIdBytes);
                     hash.update(cIdBytes);
-                    int cId = ByteBuffer.wrap(cIdBytes).getInt();
-                    Card existingCard = idToCardMap.get(cId);
+                    Card existingCard = idToCardMap.get(ByteBuffer.wrap(cIdBytes).getInt());
                     if(existingCard != null){
                         cardsInDeck.add(existingCard);
                     }
                 }
                 // create deck object, add to SharePackage decks
-                Deck deck = dm.buildDeck(name, cardsInDeck);
-                decks.add(deck);
+                try {
+                    Deck deck = deckManager.buildDeck(new String(nameBytes), cardsInDeck);
+                    decks.add(deck);
+                } catch (ObjectAlreadyExistsException e) {
+                    Log.println(Log.INFO, "obj already exists", e.toString());
+                }
             }
             sharePackage = new SharePackage(cards, decks);
-        } catch (IOException e){
-            e.printStackTrace();
-        } catch (ObjectAlreadyExistsException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return sharePackage;
