@@ -46,6 +46,7 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
+        db.close();
     }
 
     @Override
@@ -64,6 +65,7 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
+        db.close();
     }
 
     public int getId() {
@@ -82,6 +84,7 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
+        db.close();
     }
 
     @Override
@@ -94,11 +97,17 @@ class ExternalCard implements Card {
         );
         Cursor cursor = db.rawQuery(query, null);
         List<Deck> decks = new ArrayList<Deck>();
+        List<Integer> deckIds = new ArrayList<Integer>();
         while(cursor.moveToNext()){
-            int deckId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_DECK));
-            decks.add(ExternalDeckManager.INSTANCE.getDeck(deckId));
+            int id = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_DECK));
+            deckIds.add(id);
         }
         cursor.close();
+        db.close();
+
+        for(Integer i : deckIds){
+            decks.add(ExternalDeckManager.INSTANCE.getDeck(i));
+        }
         return decks;
     }
 

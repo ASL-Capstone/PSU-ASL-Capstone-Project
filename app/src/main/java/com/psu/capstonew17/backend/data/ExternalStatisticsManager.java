@@ -63,6 +63,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
             numAnswered++;
         }
         cursor.close();
+        db.close();
         long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
@@ -95,6 +96,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
             numAnswered++;
         }
         cursor.close();
+        db.close();
         long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
@@ -128,6 +130,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
             numAnswered++;
         }
         cursor.close();
+        db.close();
         long avgTime = Long.valueOf(totalTime / numAnswered);
         return new ExternalStatistics(correctCards, incorrectCards, avgTime);
     }
