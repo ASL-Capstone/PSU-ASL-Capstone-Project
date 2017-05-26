@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -92,11 +91,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         deckList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
         for (int i = 0; i < deckList.size(); i++)
-            listRows.add(new ListRow(deckList.get(i).getName() , false));
+            listRows.add(new ListRow(deckList.get(i).getName(), false));
 
         listView = (ListView) findViewById(R.id.list_items);
         myAdapter =  new CustomArrayListAdapter(this, R.layout.list_row, listRows);
         listView.setAdapter(myAdapter);
+        listView.setVisibility(View.INVISIBLE);
 
 
         // hide views
@@ -245,7 +245,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         Log.d("videoinfo", videoUri.getPath());
                         intent = new Intent(this, EditVideoActivity.class);
                         intent.setData( videoUri);
-                        startActivity(intent);
                         startActivityForResult(intent, REQUEST_EDIT_VIDEO);
                         finish();
                     }
@@ -274,6 +273,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                             video = vid;
                             startVideo();
                             bttSubmit.setVisibility(View.VISIBLE);
+                            listView.setVisibility(View.VISIBLE);
                         }
 
                         @Override
