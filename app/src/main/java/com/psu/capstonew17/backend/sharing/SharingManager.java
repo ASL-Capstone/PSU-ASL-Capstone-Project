@@ -200,23 +200,20 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
                     Socket socket = new Socket();                //create unconnected socket
                     socket.connect(new InetSocketAddress(configuration.deviceAddress,port),10000);  //connect socket to server with ip address (MAC address identified above), port 8080, and timeout value in ms
                     OutputStream outStream = socket.getOutputStream();
-                    ObjectOutputStream objOut = new ObjectOutputStream(outStream);
-                    objOut.writeObject(decks);
-                    objOut.close();
-                }catch (FileNotFoundException exc){exc.printStackTrace();}catch (IOException exc){exc.printStackTrace();}
+                    ObjectOutputStream objOut = new ObjectOutputStream(outStream);                  //graph java object to output stream
+                    objOut.writeObject(decks);                                                      //write deck to output stream
+                    objOut.close();                                                                 //close streams to release resources
+                    outStream.close();
+                }catch (FileNotFoundException exc){exc.printStackTrace();}catch (IOException exc){exc.printStackTrace();}   //exception handling
 
             }
-
             @Override
             public void onFailure(int i) {
                //handle
             }
         });
-
         return bmap;
     }
-
-
 
     @Override
     public void receive(String code, RxOptions opts, SharingReceiveListener listener) {
