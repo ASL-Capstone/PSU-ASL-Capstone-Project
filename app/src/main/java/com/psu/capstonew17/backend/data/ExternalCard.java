@@ -46,7 +46,6 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
-        db.close();
     }
 
     @Override
@@ -65,7 +64,6 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
-        db.close();
     }
 
     public int getId() {
@@ -84,7 +82,6 @@ class ExternalCard implements Card {
                 CardEntry.TABLE_NAME,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
-        db.close();
     }
 
     @Override
@@ -103,7 +100,6 @@ class ExternalCard implements Card {
             deckIds.add(id);
         }
         cursor.close();
-        db.close();
 
         for(Integer i : deckIds){
             decks.add(ExternalDeckManager.INSTANCE.getDeck(i));

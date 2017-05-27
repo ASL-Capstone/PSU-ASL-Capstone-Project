@@ -55,7 +55,6 @@ public class ExternalTestManager implements TestManager{
             }
             cursor.close();
         }
-        db.close();
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
         }
