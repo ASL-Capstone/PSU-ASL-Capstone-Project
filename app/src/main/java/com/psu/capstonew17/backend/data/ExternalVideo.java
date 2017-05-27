@@ -2,9 +2,9 @@
 
 package com.psu.capstonew17.backend.data;
 
-import android.media.MediaPlayer;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.api.*;
@@ -28,8 +28,8 @@ class ExternalVideo implements Video, EncodeableObject {
     }
 
     @Override
-    public void configurePlayer(MediaPlayer player) {
-
+    public void configurePlayer(VideoView player) {
+        player.setVideoPath(videoFile.getPath());
     }
 
     public static Parcelable.Creator CREATOR = new Creator() {
