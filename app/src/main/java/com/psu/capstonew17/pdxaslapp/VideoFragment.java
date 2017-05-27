@@ -1,7 +1,7 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
-import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.api.Video;
@@ -19,7 +18,6 @@ public class VideoFragment extends Fragment {
 
     private VideoView videoView;
     private MediaController mediaController;
-    private int position = 0;
 
     /**
      * This event is called first, before creation of fragment view

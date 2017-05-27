@@ -31,44 +31,40 @@ public class BaseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
-            case R.id.item_multiple_choice:
-                intent = new Intent(this, MultipleChoiceActivity.class);
+            case R.id.item_sub_menu_choose_quiz:
+                intent = new Intent(this, TakeQuizSubMenuActivity.class);
                 startActivity(intent);
-                break;
-
-            case R.id.item_flash_cards:
-                intent = new Intent(this, FlashCardActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.item_write_up:
-                intent = new Intent(this, WriteUpActivity.class);
-                startActivity(intent);
+                finish();
                 break;
 
             case R.id.item_create_card:
                 intent = new Intent(this, CreateCardActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.item_delete_card:
                 intent = new Intent(this, DeleteCardActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.item_ced_decks:
                 intent = new Intent(this, CreateEditDeleteDeckActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.item_share:
                 intent = new Intent(this, ReceiveDeckActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.item_receive:
                 intent = new Intent(this, ShareDeckActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);

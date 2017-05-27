@@ -3,54 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
-
-    <item android:title="CHOOSE QUIZ"
+    <item android:title="@string/menu_item_choose_quiz"
         android:id="@+id/item_sub_menu_choose_quiz"
-        android:showAsAction="never"
-        tools:ignore="AppCompatResource,HardcodedText">
-        <menu >
-            <item android:title="Multiple Choice"
-                android:id="@+id/item_multiple_choice"
-                android:showAsAction="never" />
-            <item android:title="Flash Cards"
-                android:id="@+id/item_flash_cards"
-                android:showAsAction="never" />
-            <item android:title="Write Up"
-                android:id="@+id/item_write_up"
-                android:showAsAction="never" />
-        </menu>
-    </item>
-    <item android:title="MANAGE CARD"
+        android:showAsAction='never'
+        tools:ignore="AppCompatResource" />
+
+    <item android:title="@string/menu_item_manage_card"
         android:id="@+id/item_sub_menu_manage_card"
         android:showAsAction="never"
-        tools:ignore="AppCompatResource,HardcodedText">
+        tools:ignore="AppCompatResource">
         <menu >
-            <item android:title="Create Card"
+            <item android:title="@string/menu_item_create_card"
                 android:id="@+id/item_create_card"
-                android:showAsAction="never"
-                tools:ignore="HardcodedText" />
-            <item android:title="Delete Card"
+                android:showAsAction="never" />
+            <item android:title="@string/menu_item_delete_card"
                 android:id="@+id/item_delete_card"
-                android:showAsAction="never"
-                tools:ignore="HardcodedText" />
+                android:showAsAction="never" />
         </menu>
     </item>
-    <item android:title="MANAGE DECKS "
+    <item android:title="@string/menu_item_manage_decks"
         android:id="@+id/item_sub_menu_manage_decks"
         android:showAsAction="never"
-        tools:ignore="AppCompatResource,HardcodedText">
+        tools:ignore="AppCompatResource">
         <menu >
-            <item android:title="Create/Edit/Delete Decks"
+            <item android:title="@string/menu_item_create_edit_delete_decks"
                 android:id="@+id/item_ced_decks"
-                android:showAsAction="never"
-                tools:ignore="HardcodedText" />
-            <item android:title="Share"
+                android:showAsAction="never" />
+            <item android:title="@string/menu_item_share"
                 android:id="@+id/item_share"
                 android:showAsAction="never" />
-            <item android:title="Receive Decks"
+            <item android:title="@string/menu_item_receive_decks"
                 android:id="@+id/item_receive"
-                android:showAsAction="never"
-                tools:ignore="AppCompatResource,HardcodedText" />
+                android:showAsAction="never" />
         </menu>
     </item>
 </menu>

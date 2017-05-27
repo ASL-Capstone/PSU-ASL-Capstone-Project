@@ -61,7 +61,6 @@ class ExternalDeck implements Deck, EncodeableObject {
                 DeckEntry.TABLE_NAME, values,
                 DeckEntry.COLUMN_ID + "=" + this.deckId, null
         );
-        db.close();
     }
 
     public int getDeckId(){
@@ -107,7 +106,6 @@ class ExternalDeck implements Deck, EncodeableObject {
         // update lists
         dbCards.clear();
         dbCards.addAll(mutableCards);
-        db.close();
     }
 
     @Override
@@ -119,7 +117,6 @@ class ExternalDeck implements Deck, EncodeableObject {
                 DeckEntry.TABLE_NAME,
                 DeckEntry.COLUMN_ID + "=" + this.deckId, null
         );
-        db.close();
     }
 
     private void removeCardsFromDeck(){
@@ -129,7 +126,6 @@ class ExternalDeck implements Deck, EncodeableObject {
                 RelationEntry.TABLE_NAME,
                 RelationEntry.COLUMN_DECK + "=" + this.deckId, null
         );
-        db.close();
     }
 
     @Override

@@ -42,7 +42,6 @@ public class ExternalDefaultDeck implements Deck {
             cardIds.add(id);
         }
         cursor.close();
-        db.close();
         for(Integer i : cardIds){
             cards.add(ExternalCardManager.INSTANCE.getCard(i));
         }

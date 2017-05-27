@@ -103,7 +103,6 @@ class ExternalQuestion implements Question {
                 AnswerEntry.TABLE_NAME, values,
                 AnswerEntry.COLUMN_ID + "=" + this.questionId, null
         );
-        db.close();
         return new Pair<Boolean, String>(correct, this.card.getAnswer());
     }
 }
