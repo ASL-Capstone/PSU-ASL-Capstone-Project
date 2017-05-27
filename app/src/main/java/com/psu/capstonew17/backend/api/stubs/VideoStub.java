@@ -1,9 +1,9 @@
 package com.psu.capstonew17.backend.api.stubs;
 
-import android.media.MediaPlayer;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.api.Video;
 
@@ -13,7 +13,7 @@ import com.psu.capstonew17.backend.api.Video;
 
 public class VideoStub implements Video {
 
-    public void configurePlayer(MediaPlayer player){
+    public void configurePlayer(VideoView player){
         return;
     }
 
