@@ -108,14 +108,7 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
             curQuestion = currTest.next();
             answerInput.getText().clear();
             // TODO test Video Playing
-            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-            curQuestion.getVideo().configurePlayer(mPlayer);
+            curQuestion.getVideo().configurePlayer(vidDisplay);
             mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {

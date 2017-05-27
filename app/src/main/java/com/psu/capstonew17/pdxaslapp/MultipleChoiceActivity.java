@@ -43,10 +43,6 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     RadioGroup answers;
     // The Question that is being currently presented to the User.
     Question curQuestion;
-    // Media Controller
-    MediaController mediaController;
-    // Media Player
-    MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +92,9 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // currTest = new testMultiChoiceTest();
         // Hook up the Radio Container and the Submit Button
         answers = (RadioGroup)findViewById(R.id.MultiChoiceAnswerRadioGroup);
-        submit = (Button)findViewById(R.id.button_submit);
+        submit = (Button)findViewById(R.id.button_mult_submit);
         submit.setOnClickListener(this);
         questionVideo = (VideoView) findViewById(R.id.videoViewMultiChoice);
-        questionVideo.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
         // Load the First Question
         loadQuestion();
     }
@@ -124,22 +114,8 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 answers.addView(add);
             }
             //TODO Test video
-            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-            curQuestion.getVideo().configurePlayer(mPlayer);
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.setLooping(true);
-                    questionVideo.setMediaController(mediaController);
-                    mp.start();
-                }
-            });
+            curQuestion.getVideo().configurePlayer(questionVideo);
+            questionVideo.start();
         }
         //No more questions leave quiz activity
         else{
