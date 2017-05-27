@@ -38,25 +38,6 @@ public class SharingServer extends Service {
             public void onReceive(Context context, Intent intent) {
                 // TODO: handle events for server side
                 String action = intent.getAction();
-
-                if(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action))
-                {
-                    //handle case
-                }
-                else if(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))
-                {
-                    //handle case
-
-                }
-                else if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action))
-                {
-                    //handle case
-                }
-                else if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action))
-                {
-                    //if empty, find peers
-
-                }
             }
         };
         registerReceiver(wifiReceiver, intentFilter);

@@ -7,14 +7,17 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.api.*;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-class ExternalDeck implements Deck {
+class ExternalDeck implements Deck, EncodeableObject {
     private int deckId;
     private String deckName;
     private List<Card> mutableCards, dbCards;
@@ -165,5 +168,20 @@ class ExternalDeck implements Deck {
         parcel.writeString(deckName);
         parcel.writeTypedList(mutableCards);
         parcel.writeTypedList(dbCards);
+    }
+
+    @Override
+    public byte[] encodeToByteArray() throws IOException {
+        byte [] nameBytes = this.deckName.getBytes();
+        int numCards = this.mutableCards.size();
+        ByteBuffer b = ByteBuffer.allocate(12 + nameBytes.length + (numCards*4));
+        b.putInt(this.deckId);
+        b.putInt(nameBytes.length);
+        b.put(nameBytes);
+        b.putInt(numCards);
+        for(Card c : this.mutableCards){
+            b.putInt(((ExternalCard) c).getId());
+        }
+        return b.array();
     }
 }

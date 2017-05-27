@@ -1,5 +1,6 @@
 package com.psu.capstonew17.backend.sharing;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -18,10 +19,12 @@ class ClientSession {
     private static final String TAG = "ServerSession";
     private Socket sck;
     private byte[] key;
+    private Context context;
 
-    public ClientSession(Socket sock, byte[] key) {
+    public ClientSession(Socket sock, byte[] key, Context context) {
         sck = sock;
         this.key = key;
+        this.context = context;
     }
 
     /**
@@ -73,7 +76,7 @@ class ClientSession {
             return null;
         }
         // Serialization format must be self-terminating. Hash must be updated with all content bytes.
-        SharePackage pack = SharePackage.deserializeFrom(in, hash);
+        SharePackage pack = SharePackage.deserializeFrom(in, hash, context);
 
         // respond with checksum
         out.write(hash.digest());
