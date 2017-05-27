@@ -153,7 +153,6 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
         param.netPassword = randomString(rand, 32);
 
         // generate QR code
-        // TODO: figure out ZXing
         String ParamTotal = param.ssid + param.keySource + param.netPassword;   //concat param strings
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix bmat = null;
@@ -188,7 +187,7 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
         configuration.deviceAddress = aDevice.deviceAddress;    //MAC address IDing device
         configuration.wps.setup= WpsInfo.PBC;           //wifi protected setup push button config
         wifiManager.connect(wifiChannel, configuration, new WifiP2pManager.ActionListener() {
-            //will using our own callback routine insted of WifiP2pManager.ActionListener()
+            //will be using our own callback routine insted of WifiP2pManager.ActionListener()
             @Override
             public void onSuccess() {
                 //if/else cases in broadcast reciver will provide noitificaiton for successful connect
