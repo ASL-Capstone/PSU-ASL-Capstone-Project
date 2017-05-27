@@ -8,13 +8,13 @@
     <Button
         android:text="@string/button_submit"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/button_submit"
         android:textColor="#ffffff"
         android:textSize="18sp"
         android:layout_marginBottom="1sp"
         android:layout_marginTop="1sp"
         android:background="@drawable/background5"
-        android:layout_gravity="bottom"
+        android:layout_gravity="center_horizontal|bottom"
         />
 </LinearLayout>

@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
@@ -77,10 +79,17 @@
             android:name=".EditDeckActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".DispQRCodeActivity"
+            android:screenOrientation="portrait" />
+
         <service
             android:name="com.psu.capstonew17.backend.sharing.SharingServer"
             android:enabled="true"
             android:exported="false"></service>
+
+
+
     </application>
 
 </manifest>

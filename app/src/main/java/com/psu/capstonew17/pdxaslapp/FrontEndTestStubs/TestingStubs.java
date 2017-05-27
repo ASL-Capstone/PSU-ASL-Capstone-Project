@@ -64,6 +64,37 @@ public class TestingStubs {
             d = new testDeck();
             d.setName("Deck Three");
             ret.add(d);
+
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+            d.setName("Deck Three");
+            ret.add(d);
+
+
+
+
         } catch (ObjectAlreadyExistsException e){}
         return ret;
     }

@@ -19,7 +19,6 @@ import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.TestManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import com.psu.capstonew17.backend.data.ExternalTestManager;
-import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.testMultiChoiceTest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +43,6 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     RadioGroup answers;
     // The Question that is being currently presented to the User.
     Question curQuestion;
-    // Media Controller
-    MediaController mediaController;
-    // Media Player
-    MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,9 +71,16 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // TODO Test the actual backend quiz generation
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
-            Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
-            if (toAdd != null)
-                decksForQuiz.add(toAdd);
+            try {
+                Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
+                if (toAdd != null)
+                    decksForQuiz.add(toAdd);
+            }
+            catch (IndexOutOfBoundsException e){
+                Toast.makeText(getBaseContext(), "Error Invalid Decks", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
         }
         TestManager.Options opts = new TestManager.Options();
         opts.recordStats = false;
@@ -90,15 +92,9 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // currTest = new testMultiChoiceTest();
         // Hook up the Radio Container and the Submit Button
         answers = (RadioGroup)findViewById(R.id.MultiChoiceAnswerRadioGroup);
-        submit = (Button)findViewById(R.id.button_submit);
+        submit = (Button)findViewById(R.id.button_mult_submit);
         submit.setOnClickListener(this);
         questionVideo = (VideoView) findViewById(R.id.videoViewMultiChoice);
-        questionVideo.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
         // Load the First Question
         loadQuestion();
     }
@@ -118,22 +114,8 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                 answers.addView(add);
             }
             //TODO Test video
-            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-            curQuestion.getVideo().configurePlayer(mPlayer);
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.setLooping(true);
-                    questionVideo.setMediaController(mediaController);
-                    mp.start();
-                }
-            });
+            curQuestion.getVideo().configurePlayer(questionVideo);
+            questionVideo.start();
         }
         //No more questions leave quiz activity
         else{
@@ -181,7 +163,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // Currently only one needed button but added switch in case of future need
         switch (view.getId()) {
             // Case: User hit the submit button
-            case R.id.button_submit:
+            case R.id.button_mult_submit:
                 switch (processAnswer()) {
                     // Case: User entered correct answer
                     case 1:

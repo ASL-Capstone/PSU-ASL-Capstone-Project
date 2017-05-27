@@ -21,7 +21,7 @@ public class ExternalTestManager implements TestManager{
     private AslDbHelper dbHelper;
 
     public static TestManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
         return INSTANCE;
     }
 
@@ -53,10 +53,15 @@ public class ExternalTestManager implements TestManager{
                 Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
                 questions.add(q);
             }
+            cursor.close();
         }
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
         }
-        return new ExternalTest(questions.subList(0, opts.count), null);
+        int numQuestions = questions.size();
+        if(opts.count < questions.size()){
+            numQuestions = opts.count;
+        }
+        return new ExternalTest(questions.subList(0, numQuestions), null);
     }
 }

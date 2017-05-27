@@ -1,34 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="top|bottom"
     android:orientation="vertical"
     android:weightSum="1">
 
     <!-- TODO  add scroll view for large sets of decks-->
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioGroup
-                android:id="@+id/deckList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </LinearLayout>
-    </ScrollView>
-
-    <Button
-        android:id="@+id/button3"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_share"
-        tools:ignore="HardcodedText" />
+        android:layout_gravity="top"
+        android:foregroundGravity="top"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/decksView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/deckList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center_vertical"
+        android:foregroundGravity="bottom|center_vertical"
+        android:gravity="bottom|center_vertical"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_gravity="bottom"
+            android:foregroundGravity="bottom"
+            android:gravity="bottom"
+            android:text="@string/button_share"
+            android:textAlignment="center"
+            tools:ignore="HardcodedText"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </LinearLayout>
