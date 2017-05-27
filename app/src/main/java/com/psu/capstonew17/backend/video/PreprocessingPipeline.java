@@ -34,6 +34,7 @@ public class PreprocessingPipeline {
     public interface PreprocessingListener {
         void onCompleted();
         void onFailed();
+        void onProgress(int current, int max);
     }
 
     public PreprocessingPipeline(Context ctx, File outFile, Uri in, VideoManager.ImportOptions opts) throws IOException {
@@ -52,7 +53,7 @@ public class PreprocessingPipeline {
         op.execute(Pair.create(input, output));
     }
 
-    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Void, Void> {
+    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Pair<Integer, Integer>, Void> {
         @Override
         protected Void doInBackground(Pair<Uri, File>... inputs) {
             Uri in = inputs[0].first;
@@ -144,6 +145,11 @@ public class PreprocessingPipeline {
                         (bufInfo.presentationTimeUs < (options.endTime*1000))) {
                     Image img = decoder.getOutputImage(outIdx);
 
+                    // update progress
+                    publishProgress(Pair.create(
+                            (int)(bufInfo.presentationTimeUs/1000) - options.startTime,
+                            (options.endTime - options.startTime)));
+
                     // process the image
                     // TODO: KNN quantization happens here
 
@@ -200,6 +206,12 @@ public class PreprocessingPipeline {
             decoder.stop();
 
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Pair<Integer, Integer>... values) {
+            if(listener != null) listener.onProgress(values[0].first, values[0].second);
+            super.onProgressUpdate(values);
         }
 
         @Override

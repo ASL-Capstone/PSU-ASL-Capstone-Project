@@ -189,6 +189,9 @@ public class ExternalVideoManager implements VideoManager {
             }
 
             @Override
+            public void onProgress(int c, int m) { handle.onProgressUpdate(c, m); }
+
+            @Override
             public void onFailed() {
                 handle.onFailed(null);
             }
