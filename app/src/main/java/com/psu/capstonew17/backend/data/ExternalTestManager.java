@@ -58,6 +58,10 @@ public class ExternalTestManager implements TestManager{
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
         }
-        return new ExternalTest(questions.subList(0, opts.count), null);
+        int numQuestions = questions.size();
+        if(opts.count < questions.size()){
+            numQuestions = opts.count;
+        }
+        return new ExternalTest(questions.subList(0, numQuestions), null);
     }
 }
