@@ -35,8 +35,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     ArrayList<Deck> decksForQuiz;
     // The Test that is being used for this quiz
     Test currTest;
-    // TODO Hook up actual Test Manager
-    TestManager testManager;
     // The Radio Group that is dynamically filled with the potential answers for the question.
     RadioGroup answers;
     // The Question that is being currently presented to the User.
@@ -65,7 +63,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
             deckNamesForQuiz = new ArrayList<>(extras.getStringArrayList("Decks"));
         }
         // Shouldn't happen but is here to help with dev.
-        else if(deckNamesForQuiz == null) {
+        if(deckNamesForQuiz == null) {
             Toast.makeText(this, "Error! No Decks Selected" , Toast.LENGTH_SHORT).show();
             finish();
             return;
