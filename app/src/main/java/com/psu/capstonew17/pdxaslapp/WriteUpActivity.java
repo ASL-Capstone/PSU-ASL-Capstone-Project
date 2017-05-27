@@ -107,7 +107,6 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         if (currTest.hasNext()) {
             curQuestion = currTest.next();
             answerInput.getText().clear();
-            // TODO test Video Playing
             curQuestion.getVideo().configurePlayer(vidDisplay);
             vidDisplay.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override

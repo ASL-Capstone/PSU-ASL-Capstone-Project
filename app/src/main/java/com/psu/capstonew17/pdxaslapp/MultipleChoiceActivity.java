@@ -26,8 +26,6 @@ import java.util.List;
 public class MultipleChoiceActivity extends BaseActivity implements View.OnClickListener {
     // Names Passed into the activity from quiz selection activity.
     private ArrayList<String> deckNamesForQuiz;
-    // Used for test generation when the back end is hooked in.
-    private ArrayList<Deck> decksForQuiz;
     // Number of Question passed in from the quiz selection activity.
     private int numQuestions;
     // The Test that is being used for this quiz
@@ -44,7 +42,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
     // The Question that is being currently presented to the User.
     private Question curQuestion;
 
-    private android.widget.MediaController mediaController;
+    private MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +69,8 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         }
         // Get the generic Test
         // TODO Test the actual backend quiz generation
+        // Used for test generation when the back end is hooked in.
+        ArrayList<Deck> decksForQuiz;
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
             try {
@@ -100,6 +100,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         mediaController = new MediaController(this);
         // Load the First Question
         loadQuestion();
+        Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
     }
 
     protected void loadQuestion(){
