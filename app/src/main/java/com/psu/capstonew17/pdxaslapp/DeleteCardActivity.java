@@ -56,7 +56,7 @@ public class DeleteCardActivity extends BaseActivity {
                 List<String> deletedDecks = new ArrayList<>();
                 for (Deck curr : decks){
                     List<Card> cardsInDeck = curr.getCards();
-                    if(cardsInDeck.size() < 3)
+                    if(cardsInDeck.size() > 2)
                         cardsInDeck.remove(card);
                     else {
                         deletedDecks.add(curr.getName());
@@ -76,7 +76,7 @@ public class DeleteCardActivity extends BaseActivity {
 
     public void decksDeletedMsg(List<String> deletedDecks) {
         StringBuilder sb = new StringBuilder();
-        sb.append(R.string.deleted_decks);
+        sb.append(getResources().getString(R.string.deleted_decks));
         for (int i = 0; i < deletedDecks.size(); i++){
             sb.append(deletedDecks.get(i));
             if (i < deletedDecks.size() - 1)
