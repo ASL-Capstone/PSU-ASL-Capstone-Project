@@ -1,6 +1,12 @@
 package com.psu.capstonew17.backend.sharing;
 import android.app.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,6 +19,7 @@ import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
+import android.net.wifi.p2p.WifiP2pInfo;
 import android.net.wifi.p2p.WifiP2pManager;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -141,7 +148,7 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
     }
 
     @Override
-    public Bitmap transmit(List<Card> cards, List<Deck> decks, TxOptions opts, SharingTransmitListener listener) {
+    public Bitmap transmit(List<Card> cards, final List<Deck> decks, TxOptions opts, SharingTransmitListener listener) {
         int timeout = opts.timeout;
         int maxTargets = opts.maxTargets;
 
@@ -175,6 +182,37 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
 
         Bitmap bmap = Bitmap.createBitmap(width,height,Bitmap.Config.RGB_565);
         bmap.setPixels(pix, 0, width, 0,0,width, height);
+
+
+            /*
+                Attempt to connect to device peer list, if successful, throw asynchronous thread to manage data transmission
+          */
+        WifiP2pDevice aDevice = listOfPeers.get(0); //get device in front of list
+        final WifiP2pConfig configuration = new WifiP2pConfig();
+        configuration.deviceAddress = aDevice.deviceAddress;    //MAC address IDing device
+        configuration.wps.setup= WpsInfo.PBC;           //wifi protected setup push button config
+        wifiManager.connect(wifiChannel, configuration, new WifiP2pManager.ActionListener() {
+
+            @Override
+            public void onSuccess() {   //if successful, throw asynchronous thread to connect to server
+                int port = 8080;
+                try{
+                    Socket socket = new Socket();                //create unconnected socket
+                    socket.connect(new InetSocketAddress(configuration.deviceAddress,port),10000);  //connect socket to server with ip address (MAC address identified above), port 8080, and timeout value in ms
+                    OutputStream outStream = socket.getOutputStream();
+                    ObjectOutputStream objOut = new ObjectOutputStream(outStream);
+                    objOut.writeObject(decks);
+                    objOut.close();
+                }catch (FileNotFoundException exc){exc.printStackTrace();}catch (IOException exc){exc.printStackTrace();}
+
+            }
+
+            @Override
+            public void onFailure(int i) {
+               //handle
+            }
+        });
+
         return bmap;
     }
 
@@ -182,21 +220,6 @@ public class SharingManager extends Service implements com.psu.capstonew17.backe
 
     @Override
     public void receive(String code, RxOptions opts, SharingReceiveListener listener) {
-        WifiP2pDevice aDevice = listOfPeers.get(0); //get device in front of list
-        WifiP2pConfig configuration = new WifiP2pConfig();
-        configuration.deviceAddress = aDevice.deviceAddress;    //MAC address IDing device
-        configuration.wps.setup= WpsInfo.PBC;           //wifi protected setup push button config
-        wifiManager.connect(wifiChannel, configuration, new WifiP2pManager.ActionListener() {
-            //will be using our own callback routine insted of WifiP2pManager.ActionListener()
-            @Override
-            public void onSuccess() {
-                //if/else cases in broadcast reciver will provide noitificaiton for successful connect
-            }
 
-            @Override
-            public void onFailure(int i) {
-                System.out.println("Failed to connect");
-            }
-        });
     }
 }
