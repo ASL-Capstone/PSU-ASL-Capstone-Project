@@ -95,6 +95,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
+        vidDisplay.setVisibility(View.INVISIBLE);
         if(currTest.hasNext()) {
             // TODO hook video up
             curQuestion = currTest.next();
@@ -134,6 +135,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                         mp.start();
                     }
                 });
+                vidDisplay.setVisibility(View.VISIBLE);
                 break;
         }
 
