@@ -94,4 +94,12 @@
     <string name="start_time_label">Start time:</string>
     <string name="stop_time_label">Stop time:</string>
     <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
+    <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
+    <string name="menu_item_manage_card">MANAGE CARD</string>
+    <string name="menu_item_create_card">Create Card</string>
+    <string name="menu_item_create_edit_delete_decks">Create/Edit/Delete Decks</string>
+    <string name="menu_item_delete_card">Delete Card</string>
+    <string name="menu_item_manage_decks">MANAGE DECKS</string>
+    <string name="menu_item_receive_decks">Receive Decks</string>
+    <string name="menu_item_share">Share</string>
 </resources>
