@@ -125,13 +125,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         });
 
 
-
-
-
-
-
-
-
         /**Set up seekBar connectivity
          *  - connect to videoVidew
          *  - set up progress change to connect to startTime/endTime
@@ -178,6 +171,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
                         importOptions.endTime = currentProgress;
+                        //importOptions.endTime = videoView.getDuration();
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -191,6 +185,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
                         importOptions.startTime = currentProgress;
+                        //importOptions.startTime = 0;
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -202,9 +197,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
             }
         });
-
-
-
 
         //GET Intent passed from CreateACard Activity
         Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
@@ -227,7 +219,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
-                    seekBar.setMax(videoView.getDuration()); //NEEDS TESTING!
+                    seekBar.setMax(videoView.getDuration()); 
                     seekBar.postDelayed(onEverySecond, 1000); //1000 milli-second delay
                 }
             });
@@ -266,7 +258,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             finish();
         }
         */
-
     }
 
 
