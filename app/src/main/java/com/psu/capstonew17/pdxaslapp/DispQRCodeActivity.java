@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.SharingTransmitListener;
-import com.psu.capstonew17.backend.api.stubs.SharingTransmitListenerStub;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import com.psu.capstonew17.backend.sharing.SharingManager;
 
@@ -42,45 +41,46 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         imageView = (ImageView) findViewById(R.id.qrCodeView);
         downloads = (TextView) findViewById(R.id.textSharedCount);
         //Set the Downloads Display to show number of downloads
-        String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
+        String downloadDisplay = String.valueOf(downloadCount) + " " + getString(R.string.shared_counter);
         downloads.setText(downloadDisplay);
 
+        //Get the deck manager and use it to get the decks
         DeckManager deckManager = ExternalDeckManager.getInstance(this);
-
-
         List<Deck> decks = deckManager.getDecks(deckName);
 
+        //Create the sharing transmit listener and overload member functions
         SharingTransmitListener listener = new SharingTransmitListener(){
             @Override
             public void onClientConnect(String peerID) {
 
             }
 
+            //Function called when deck is transmitted successfully
             @Override
             public void onTransmittedSuccessfully(String peerID) {
                 downloadCount += 1;
-                String downloadDisplay = String.valueOf(downloadCount) + getString(R.string.shared_counter);
+                String downloadDisplay = String.valueOf(downloadCount) + " " + getString(R.string.shared_counter);
                 downloads.setText(downloadDisplay);
             }
 
+            //Function output error messages when an error occurs
             @Override
             public void onClientError(String peerID, DisconnectReason why) {
                 switch(why){
                     case AUTH_FAILURE:
                         Toast.makeText(getApplicationContext(), "Authorization Failed for Sharing", Toast.LENGTH_SHORT);
                         break;
-                    case CHECKSUM_ERROR: //TODO Find a correct output for this error
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT);
-                        break;
                     case TIMEOUT:
                         Toast.makeText(getApplicationContext(), "Sharing Timed Out", Toast.LENGTH_SHORT);
                         break;
+                    case CHECKSUM_ERROR:
                     default:
-                        Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), "Error Sharing Deck", Toast.LENGTH_SHORT);
                 }
             }
         };
 
+        //Call method to share the decks/Get the QR code
         com.psu.capstonew17.backend.api.SharingManager sharer = SharingManager.getInstance();
         SharingManager.TxOptions ops = new SharingManager.TxOptions();
         ops.timeout = 360;
@@ -88,6 +88,7 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         qrCode = sharer.transmit(null, decks,ops, listener);
 
 
+        //Set the QR code
         if(qrCode != null) {
             imageView.setImageBitmap(qrCode);
         }
@@ -104,9 +105,8 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
                 startActivity(intent);
                 finish();
                 return;
-            default:
+           default:
                 break;
-
         }
     }
 }

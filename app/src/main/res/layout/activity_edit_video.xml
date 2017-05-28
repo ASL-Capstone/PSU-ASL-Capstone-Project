@@ -4,88 +4,99 @@
     android:id="@+id/activity_edit_video"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:weightSum="1"
     android:orientation="vertical">
 
-    <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-        android:id="@+id/layout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:padding="3dp"
-        android:layout_weight="5">
+        android:layout_height="wrap_content"
+        android:layout_weight="0.9"
+        android:orientation="vertical">
 
-        <VideoView
+
+        <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+            android:id="@+id/layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_gravity="center"
+            android:layout_weight="5"
+            android:gravity="center"
+            android:padding="3dp">
+
+            <VideoView
+                android:id="@+id/videoView_edit_video"
+                android:layout_width="match_parent"
+                android:layout_height="280dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="5dp" />
+
+        </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+
+        <SeekBar
+            android:id="@+id/seekBarEditVideo"
             android:layout_width="match_parent"
-            android:layout_height="280dp"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoView_edit_video" />
+            android:layout_height="wrap_content" />
 
-    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
-
-
-    <SeekBar
-        android:id="@+id/seekBarEditVideo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/textViewDelFromGal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/textview"
-        android:textAlignment="center"
-        tools:text="@string/delete_from_gallery" />
-
-    <ToggleButton
-        android:id="@+id/toggleButtonDelFromGal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:text="@string/togglebutton"
-        android:textOff="@string/NO"
-        android:textOn="@string/YES" />
-
-    <Switch
-        android:id="@+id/start_stop_switch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:showText="true"
-        android:splitTrack="false"
-        android:text="@string/start_stop_edit"
-        android:textAlignment="textStart"
-        android:textOff="@string/start"
-        android:textOn="@string/stop"
-        tools:checked="false" />
-
-    <TextView
-        android:id="@+id/textViewStartTimeLabel"
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
-        android:text="@string/start_time_label" />
-
-    <TextView
-        android:id="@+id/textViewStopTimeLabel"
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
-        android:text="@string/stop_time_label" />
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="bottom">
-
-        <include
-            android:id="@+id/submitButtonEditCard"
-            layout="@layout/submit_button"
+        <TextView
+            android:id="@+id/textViewDelFromGal"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
-            android:visibility="visible"></include>
+            android:text="@string/delete_from_gallery"
+            android:textAlignment="center"
+            tools:text="@string/delete_from_gallery" />
 
-    </TableRow>
+        <ToggleButton
+            android:id="@+id/toggleButtonDelFromGal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="@string/togglebutton"
+            android:textOff="@string/NO"
+            android:textOn="@string/YES" />
+
+        <Switch
+            android:id="@+id/start_stop_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:showText="true"
+            android:splitTrack="false"
+            android:text="@string/start_stop_edit"
+            android:textAlignment="textStart"
+            android:textOff="@string/start"
+            android:textOn="@string/stop"
+            tools:checked="true" />
+
+        <TextView
+            android:id="@+id/textViewStartTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start_time_label"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/textViewStopTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop_time_label"
+            android:visibility="visible" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/submitButtonEditCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_submit" />
+    </LinearLayout>
 
 
 </LinearLayout>

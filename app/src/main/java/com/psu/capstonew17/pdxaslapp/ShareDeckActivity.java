@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Deck;
-import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
+import com.psu.capstonew17.backend.api.DeckManager;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 import java.util.List;
 
@@ -24,12 +22,6 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
     private LinearLayout ll;
     private RadioGroup rg;
     private List<Deck> decks;
-    private ScrollView sv;
-
-    //Popup Window Objects
-    private PopupWindow popupWindow;
-    private LinearLayout popupLL;
-    private ImageView imageView;
 
 
 
@@ -38,12 +30,16 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.share);
 
+        //Set up layout objects
         this.ll = new LinearLayout(this);
         this.rg = new RadioGroup(this);
         this.ll.setOrientation(LinearLayout.VERTICAL);
+        this.submit = (Button) findViewById(R.id.button3);
+        this.submit.setOnClickListener(this);
 
-        //TODO Database call should go here
-        this.decks = TestingStubs.manyDecks();
+        //Get the decks from the database
+        DeckManager manager = ExternalDeckManager.getInstance(this);
+        this.decks = manager.getDecks(null);
 
         //Create Radio Buttons For Each Deck and add them to the RadioGroup
         int i = 0;
@@ -55,10 +51,7 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
             ++i;
         }
         ((ViewGroup)findViewById(R.id.deckList)).addView(this.rg);
-        this.submit = (Button) findViewById(R.id.button3);
-        this.submit.setOnClickListener(this);
 
-        //this.sv = (ScrollView) findViewById(R.id.decksView);
     }
 
     @Override
@@ -66,10 +59,11 @@ public class ShareDeckActivity extends BaseActivity implements View.OnClickListe
         switch(view.getId()){
             case R.id.button3:
                 int id = this.rg.getCheckedRadioButtonId();
-                if(id != -1){
+                if(id != -1){ //Check that the id is valid and a deck has been selected
                     Deck toShare = decks.get(id);
                     Intent intent = new Intent(this, DispQRCodeActivity.class);
                     intent.putExtra("DECKNAME", toShare.getName());
+                    //Start show QR code intent
                     startActivity(intent);
                     finish();
                     return;

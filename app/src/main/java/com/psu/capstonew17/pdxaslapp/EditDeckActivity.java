@@ -29,7 +29,7 @@ public class EditDeckActivity extends BaseActivity {
     private List<Card>      cardsInDeck;
     private List<ListRow>   cardStructs;
     private EditText        textBox;
-    private final String    CHECKED_INDEX   = "checkedIndex";
+    private final String    CHECKED_DECK   = "checkedDeck";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +37,21 @@ public class EditDeckActivity extends BaseActivity {
         setContentView(R.layout.activity_edit_deck);
 
         DeckManager deckManager = ExternalDeckManager.getInstance(this);
-        List<Deck>  decks       = deckManager.getDecks(null);
         allCards                = deckManager.getDefaultDeck().getCards();
         cardStructs             = new ArrayList<>();
 
         //get the index of the selected deck to edit
-        int checkedIndex = 0;
-        if(getIntent().hasExtra(CHECKED_INDEX)) {
+        String checkedDeck = "";
+        if(getIntent().hasExtra(CHECKED_DECK)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                checkedIndex = bundle.getInt(CHECKED_INDEX);
+                checkedDeck = bundle.getString(CHECKED_DECK);
             }
         }
 
-        deck        = decks.get(checkedIndex);
+        List<Deck>  deckList       = deckManager.getDecks(checkedDeck);
+
+        deck        = deckList.get(0);
         cardsInDeck = deck.getCards();
 
         //set the edit text box to the name of the deck

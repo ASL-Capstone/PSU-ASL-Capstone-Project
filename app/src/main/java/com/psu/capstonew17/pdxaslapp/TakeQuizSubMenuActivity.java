@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
@@ -20,12 +21,15 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
 
 public class TakeQuizSubMenuActivity extends BaseActivity {
+    // Vars for user choices
     private int numQuestions;
     private enum  quizType{NONE,FLASH_CARD,MULTIPLE_CHOICE,WRITE_UP}
     private quizType quizOption;
+    // Visual Elements
     private RadioGroup numGroup;
     private TextView numPrompt;
     private LinearLayout deckLayout;
+    private Space space;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,28 +40,28 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
         setContentView(R.layout.activity_take_quiz_submenu);
         deckLayout = (LinearLayout)findViewById(R.id.deckListLayout);
 
-
-        //get Decks
-        //TODO uncomment back end call in quiz selector activity when ready
         //get Decks from backend
-        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
+        ArrayList<Deck> deckList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
 
         //get Decks from current testing
-        ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
+        //ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
 
         //set the multiple choice specific part to be invisible
         numGroup = (RadioGroup) findViewById(R.id.radioGroupQuestionCount);
         numGroup.setVisibility(View.GONE);
         numPrompt = (TextView) findViewById(R.id.textViewChooseNumberOfQuestions);
         numPrompt.setVisibility(View.GONE);
-
+        // Number of Decks
         int numDecks = deckList.size();
+        // Loop through and add the decks to the check list.
         for(int i = 0; i < numDecks; ++i){
+            // Get the Name
             final String deckName = (deckList.get(i).getName());
+            // Create and Name the Check boxes
             CheckBox ch = new CheckBox(this);
             ch.setText(deckName);
             deckLayout.addView(ch);
-
+            // Add on checked behavior
             ch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -69,11 +73,10 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                     }
                 }
             });
-
         }
     }
 
-
+    // On take quiz clicked
     public void takeQuizButtonClicked(View view){
         Intent intent;
         ArrayList<String> decks = new ArrayList<String>();
@@ -103,18 +106,23 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                         questionCount.putInt("numQuestions", numQuestions);
                         intent.putExtras(questionCount);
                         intent.putStringArrayListExtra("Decks",decks);
+                        // Start new intent
                         startActivity(intent);
                         finish();
                         break;
                     case FLASH_CARD:
+                        // Setup intent
                         intent = new Intent(this, FlashCardActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
+                        // Start new intent
                         startActivity(intent);
                         finish();
                         break;
                     case WRITE_UP:
+                        // Setup intent
                         intent = new Intent(this, WriteUpActivity.class);
                         intent.putStringArrayListExtra("Decks",decks);
+                        // Start new intent
                         startActivity(intent);
                         finish();
                         break;
@@ -123,11 +131,13 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
         }
     }
 
+    // handles quiz type selection
     public void onQuizTypeClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
         switch (view.getId()) {
             case R.id.radioButtonFlashCard:
+                // setup for flash card quiz
                 if(checked) {
                     quizOption = quizType.FLASH_CARD;
                     numGroup.setVisibility(View.GONE);
@@ -135,6 +145,7 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                 }
                 break;
             case R.id.radioButtonMultipleChoice:
+                // setup for multiple choice quiz
                 if(checked) {
                     quizOption = quizType.MULTIPLE_CHOICE;
                     numGroup.setVisibility(View.VISIBLE);
@@ -143,6 +154,7 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                 break;
             case R.id.radioButtonWriteUp:
                 if(checked) {
+                    // setup for write up quiz
                     quizOption = quizType.WRITE_UP;
                     numGroup.setVisibility(View.GONE);
                     numPrompt.setVisibility(View.GONE);
@@ -152,6 +164,7 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
 
     }
 
+    // handles number of questions for the quiz
     public void onNumQuestionsClicked(View view) {
         boolean checked = ((RadioButton) view).isChecked();
 
@@ -168,7 +181,11 @@ public class TakeQuizSubMenuActivity extends BaseActivity {
                 if(checked)
                     numQuestions = 10;
                 break;
+            case R.id.radioButtonAllQuestions:
+                if (checked)
+                    // Should be enough to cause all cards to be used?
+                    numQuestions = 99999;
+                break;
         }
-
     }
 }

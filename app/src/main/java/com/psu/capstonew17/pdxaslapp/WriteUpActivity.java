@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,7 +43,6 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     private VideoView vidDisplay;
     private EditText answerInput;
     private MediaController mediaController;
-    private MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,19 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         // Declare and enable buttons
         bttSubmit = (Button) this.findViewById(R.id.button_quizWriteUpSubmit);
         bttSubmit.setOnClickListener(this);
+        mediaController = new MediaController(this);
+        //TODO Test enter key works identically to submit
+        bttSubmit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
+                //If the keyevent is a key-down event on the "enter" button
+                if ((keyevent.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    processQuestion();
+                    loadQuestion();
+                    return true;
+                }
+                return false;
+            }
+        });
         // Setup VideoView and Text Display
         answerInput = (EditText) findViewById(R.id.editTextWriteUpAnswerField);
         vidDisplay = (VideoView) findViewById(R.id.videoViewWriteUpQuiz);
@@ -94,16 +107,8 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         if (currTest.hasNext()) {
             curQuestion = currTest.next();
             answerInput.getText().clear();
-            // TODO test Video Playing
-            mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            });
-            curQuestion.getVideo().configurePlayer(mPlayer);
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            curQuestion.getVideo().configurePlayer(vidDisplay);
+            vidDisplay.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.setLooping(true);

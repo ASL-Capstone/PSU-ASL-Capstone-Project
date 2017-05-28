@@ -30,6 +30,7 @@
     <string name="button_ten_questions">10</string>
     <string name="button_thirty_questions">30</string>
     <string name="button_fifty_questions">50</string>
+    <string name="button_all_questions">All</string>
 
     <!-- Labels -->
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
@@ -69,7 +70,12 @@
     <string name="card_name_lngth_error1">"Label length should be greater than "</string>
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
+    <string name="select_card">Please select a card</string>
+    <string name="deleted_decks">"The following decks were deleted: "</string>
+    <string name="import_video_error">Problem importing video</string>
+    <string name="card_in_use_error">Card is still in use</string>
 
+    <!-- Edit Card/Share Card strings -->
     <string name="button_record">Record</string>
     <string name="button_get_from_gallery">Gallery</string>
     <string name="button_edit_video">Edit</string>
@@ -86,7 +92,18 @@
     <string name="start_stop_edit">Edit Start/Stop time</string>
     <string name="start">start</string>
     <string name="stop">stop</string>
-    <string name="start_time_label">Start time:</string>
-    <string name="stop_time_label">Stop time:</string>
+    <string name="start_time_label">Start time: not set (ms)</string>
+    <string name="stop_time_label">Stop time: not set (ms)</string>
     <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
+    <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
+    <string name="menu_item_manage_card">MANAGE CARD</string>
+    <string name="menu_item_create_card">Create Card</string>
+    <string name="menu_item_create_edit_delete_decks">Create/Edit/Delete Decks</string>
+    <string name="menu_item_delete_card">Delete Card</string>
+    <string name="menu_item_manage_decks">MANAGE DECKS</string>
+    <string name="menu_item_receive_decks">Receive Decks</string>
+    <string name="menu_item_share">Share</string>
+    <string name="start_time_default">Start time: %1$d (ms)</string>
+    <string name="stop_time_default">Stop time: %1$d (ms)</string>
+    <string name="seekBar_startSeeking_msg">Start seeking</string>
 </resources>
