@@ -154,10 +154,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             public void onStartTrackingTouch(SeekBar seekBar) {
                 //TO DO
                 if(endTimeSwitch) {
-                    Toast.makeText(getApplicationContext(), "Starting to seek - this will update STOP TIME crop", Toast.LENGTH_SHORT).show();
+                    //This Toast is just for testing purposes
+                    //Toast.makeText(getApplicationContext(), "Starting to seek - this will update STOP TIME crop", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Starting to seek - updating START TIME crop", Toast.LENGTH_SHORT).show();
+                    //This Toast is just for testing purposes
+                    //Toast.makeText(getApplicationContext(), "Starting to seek - updating START TIME crop", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -167,29 +169,30 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 //String startString = "Start Time: ";
                 //String stopString = "Stop Time: ";
                 Resources resources = getResources();
+                boolean wrongOrder;
 
                 //if the switch is set to "Stop"
                 if(endTimeSwitch) {
                     //checks is first attempt to adjust OR ensures that endtime comes AFTER start time
-                    if(firstAdjustment || timeSelectionCheck(importOptions.startTime, currentProgress)) {
+                    if(firstAdjustment || (wrongOrder = timeSelectionCheck(importOptions.startTime, currentProgress))) {
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
                         importOptions.endTime = currentProgress;
                         firstAdjustment = false;
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    if(firstAdjustment || timeSelectionCheck(currentProgress, importOptions.endTime)) {
+                    if(firstAdjustment || (wrongOrder = timeSelectionCheck(currentProgress, importOptions.endTime))) {
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
                         importOptions.startTime = currentProgress;
                         firstAdjustment = false;
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -293,10 +296,10 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     /**
      *
-     * @return false, if the time crop region selected is less than 1 ms
+     * @return false, if the time crop region selected is less than 2000 ms (2 Seconds)
      */
     private boolean timeSelectionCheck(int startTime, int endTime) {
-        return ((endTime - startTime) > 0);
+        return ((endTime - startTime) >= 1000);
     }
 
 
