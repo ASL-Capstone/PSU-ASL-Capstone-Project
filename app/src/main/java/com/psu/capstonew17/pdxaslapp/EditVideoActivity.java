@@ -169,27 +169,31 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 //String startString = "Start Time: ";
                 //String stopString = "Stop Time: ";
                 Resources resources = getResources();
-                boolean wrongOrder;
+                //boolean wrongOrder;
 
                 //if the switch is set to "Stop"
                 if(endTimeSwitch) {
                     //checks is first attempt to adjust OR ensures that endtime comes AFTER start time
-                    if(firstAdjustment || (wrongOrder = timeSelectionCheck(importOptions.startTime, currentProgress))) {
+                    if(firstAdjustment || timeSelectionCheck(importOptions.startTime, currentProgress)) {
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
                         importOptions.endTime = currentProgress;
                         firstAdjustment = false;
+                        //TEST
+                        displayOptions();
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "stop time must be AFTER start time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
-                    if(firstAdjustment || (wrongOrder = timeSelectionCheck(currentProgress, importOptions.endTime))) {
+                    if(firstAdjustment || timeSelectionCheck(currentProgress, importOptions.endTime)) {
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
                         importOptions.startTime = currentProgress;
                         firstAdjustment = false;
+                        //TEST
+                        displayOptions();
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
@@ -303,6 +307,15 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     }
 
 
+    /**
+     * displays the current import options settings
+     *
+     * used for testing
+     */
+    private void displayOptions() {
+        Toast.makeText(getApplicationContext(), "Import Options -\nStart: " + importOptions.startTime + "\nEnd: " + importOptions.endTime +
+                "\nQuality: " + importOptions.quality + "\nCrop Region: " + importOptions.cropRegion, Toast.LENGTH_SHORT).show();
+    }
 
 
 
