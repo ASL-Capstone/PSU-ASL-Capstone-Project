@@ -21,7 +21,7 @@ import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
-    public static final String EDITED_VIDEO = "edited_video";
+    public static final String EDITED_VIDEO = "video";
     public static final String ERROR = "ERROR_with_importing_options";
 
     private Uri videoUri;
@@ -41,14 +41,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     //Vars to pass to backend //may replace with local vars at some point
     VideoManager.ImportOptions importOptions;
-    //private boolean deleteAfter;
-    //private int startTime;
-    //private int endTime;
-    //private int quality;
-    //private Rect cropRegion; //STRETCH GOAL!!!
-
-    //
-
 
 
     //Private inner-class used to update the seekBar
@@ -64,7 +56,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
         }
     };
-
 
 
     @Override
@@ -109,18 +100,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             public void onClick(View view) {
                 //UNCOMMENT once backend connected - submitEdits(view);
                 submitEdits(view);
-                /*
-                Intent returnIntent = new Intent();
-                if(videoUri != null) {
-                    returnIntent.setData(videoUri);
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }
-                else {
-                    setResult(Activity.RESULT_CANCELED, returnIntent);
-                    finish();
-                }
-                */
             }
         });
 
