@@ -43,7 +43,6 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
     private VideoView vidDisplay;
     private EditText answerInput;
     private MediaController mediaController;
-    private MediaPlayer mPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +51,7 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         // Declare and enable buttons
         bttSubmit = (Button) this.findViewById(R.id.button_quizWriteUpSubmit);
         bttSubmit.setOnClickListener(this);
+        mediaController = new MediaController(this);
         //TODO Test enter key works identically to submit
         bttSubmit.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
@@ -107,9 +107,8 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         if (currTest.hasNext()) {
             curQuestion = currTest.next();
             answerInput.getText().clear();
-            // TODO test Video Playing
             curQuestion.getVideo().configurePlayer(vidDisplay);
-            mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            vidDisplay.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer mp) {
                     mp.setLooping(true);

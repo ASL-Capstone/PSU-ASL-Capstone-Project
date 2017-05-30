@@ -41,7 +41,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     Question curQuestion;
     private VideoView vidDisplay;
     private TextView answerDisplay;
-    private MediaPlayer mediaPlayer;
     private android.widget.MediaController mediaController;
 
     @Override
@@ -58,7 +57,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         answerDisplay = (TextView) findViewById(R.id.textView_FlashCardAnswer);
         vidDisplay = (VideoView) findViewById(R.id.videoView_flashCard);
         mediaController = new android.widget.MediaController(this);
-        mediaPlayer = new MediaPlayer();
         // Unpack the bundles list of Deck Names and the number of Questions for the Quiz
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -118,7 +116,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                //TODO test video display
                 curQuestion.getVideo().configurePlayer(vidDisplay);
                 vidDisplay.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                     @Override

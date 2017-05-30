@@ -25,24 +25,24 @@ import java.util.List;
 
 public class MultipleChoiceActivity extends BaseActivity implements View.OnClickListener {
     // Names Passed into the activity from quiz selection activity.
-    ArrayList<String> deckNamesForQuiz;
-    // Used for test generation when the back end is hooked in.
-    ArrayList<Deck> decksForQuiz;
+    private ArrayList<String> deckNamesForQuiz;
     // Number of Question passed in from the quiz selection activity.
-    int numQuestions;
+    private int numQuestions;
     // The Test that is being used for this quiz
-    Test currTest;
+    private Test currTest;
     // Submit button used by this activity
-    Button submit;
-    VideoView questionVideo;
+    private Button submit;
+    private VideoView questionVideo;
     // Tracks number of questions the user has answered
-    int totalQuestions;
+    private int totalQuestions;
     // Tracks number of correct responses the user gave
-    int totalCorrect;
+    private int totalCorrect;
     // The Radio Group that is dynamically filled with the potential answers for the question.
-    RadioGroup answers;
+    private RadioGroup answers;
     // The Question that is being currently presented to the User.
-    Question curQuestion;
+    private Question curQuestion;
+
+    private MediaController mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +69,8 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         }
         // Get the generic Test
         // TODO Test the actual backend quiz generation
+        // Used for test generation when the back end is hooked in.
+        ArrayList<Deck> decksForQuiz;
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
             try {
@@ -95,8 +97,10 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         submit = (Button)findViewById(R.id.button_mult_submit);
         submit.setOnClickListener(this);
         questionVideo = (VideoView) findViewById(R.id.videoViewMultiChoice);
+        mediaController = new MediaController(this);
         // Load the First Question
         loadQuestion();
+        Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
     }
 
     protected void loadQuestion(){
@@ -115,7 +119,21 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             }
             //TODO Test video
             curQuestion.getVideo().configurePlayer(questionVideo);
-            questionVideo.start();
+            questionVideo.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer mp, int what, int extra) {
+                    Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+            questionVideo.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.setLooping(true);
+                    questionVideo.setMediaController(mediaController);
+                    mp.start();
+                }
+            });
         }
         //No more questions leave quiz activity
         else{
