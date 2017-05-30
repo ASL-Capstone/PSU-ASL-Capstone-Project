@@ -40,6 +40,7 @@ public class ExternalCardManager implements CardManager{
         if(cursor.moveToFirst()){
             int videoId = cursor.getInt(cursor.getColumnIndex(CardEntry.COLUMN_VIDEO));
             String answer = cursor.getString(cursor.getColumnIndex(CardEntry.COLUMN_ANSWER));
+            cursor.close();
             return new ExternalCard(id, ExternalVideoManager.INSTANCE.getVideo(videoId), answer);
         }
         cursor.close();

@@ -18,7 +18,7 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 public class CreateEditDeleteDeckActivity extends BaseActivity{
     static final int        MIN_CARDS       = 2;
     static final int        MAX_STRG_LNGTH  = 50;
-    private final String    CHECKED_INDEX   = "checkedIndex";
+    private final String    CHECKED_DECK   = "checkedDeck";
 
     private RadioGroup  deckRG;
     private List<Deck>  decks;
@@ -74,7 +74,7 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         } else {
             Intent intent;
             intent = new Intent(this, EditDeckActivity.class);
-            intent.putExtra(CHECKED_INDEX, index);
+            intent.putExtra(CHECKED_DECK, decks.get(index).getName());
             startActivity(intent);
         }
     }

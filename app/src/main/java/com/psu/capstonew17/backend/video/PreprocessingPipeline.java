@@ -36,6 +36,7 @@ public class PreprocessingPipeline {
     public interface PreprocessingListener {
         void onCompleted();
         void onFailed();
+        void onProgress(int current, int max);
     }
 
     public PreprocessingPipeline(Context ctx, File outFile, Uri in, VideoManager.ImportOptions opts) throws IOException {
@@ -54,7 +55,7 @@ public class PreprocessingPipeline {
         op.execute(Pair.create(input, output));
     }
 
-    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Pair<Long,Long>, Void> {
+    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Pair<Integer, Integer>, Void> {
         @Override
         protected Void doInBackground(Pair<Uri, File>... inputs) {
             Uri in = inputs[0].first;
@@ -169,14 +170,12 @@ public class PreprocessingPipeline {
                         int length = extractor.readSampleData(ibuf, 0);
                         if (length == -1) {
                             extractorDone = true;
-                            extractor.release();
                             Log.d("VPreproc", "Extractor done");
                             decoder.queueInputBuffer(inIdx, 0, 0, -1,
                                     MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                             break;
                         }
                         long ptime = extractor.getSampleTime();
-                        publishProgress(Pair.create(ptime, maxTime));
                         extractor.advance();
                         decoder.queueInputBuffer(inIdx, 0, length, ptime, 0);
                     }
@@ -189,6 +188,11 @@ public class PreprocessingPipeline {
                        // (bufInfo.presentationTimeUs >= (options.startTime*1000)) &&
                        // (bufInfo.presentationTimeUs < (options.endTime*1000))) {
                     Image img = decoder.getOutputImage(outIdx);
+
+                    // update progress
+                    publishProgress(Pair.create(
+                            (int)(bufInfo.presentationTimeUs/1000) - options.startTime,
+                            (options.endTime - options.startTime)));
 
                     // process the image
                     // TODO: KNN quantization happens here
@@ -212,7 +216,7 @@ public class PreprocessingPipeline {
                     encImg.getPlanes()[2].getBuffer().put(img.getPlanes()[2].getBuffer());
                     encImg.setTimestamp(img.getTimestamp());
 
-                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, bufInfo.presentationTimeUs, 0);
+                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
                     decoder.releaseOutputBuffer(outIdx, false);
                 } else if(outIdx >= 0) {
                     Log.d("VPreproc", "Autorelease");
@@ -244,15 +248,18 @@ public class PreprocessingPipeline {
             }
             encoder.stop();
             muxer.stop();
-            encoder.release();
-            muxer.release();
 
             // close everything else
             decoder.stop();
-            encoder.release();
 
             Log.d("VPreproc", "All done!");
             return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Pair<Integer, Integer>... values) {
+            if(listener != null) listener.onProgress(values[0].first, values[0].second);
+            super.onProgressUpdate(values);
         }
 
         @Override
@@ -260,11 +267,6 @@ public class PreprocessingPipeline {
             if(listener != null) {
                 listener.onCompleted();
             }
-        }
-
-        @Override
-        protected void onProgressUpdate(Pair<Long, Long>[] values) {
-            Log.d("VPreproc", String.format("%f", values[0].first.floatValue() / values[0].second.floatValue()));
         }
 
         @Override

@@ -35,15 +35,12 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     ArrayList<Deck> decksForQuiz;
     // The Test that is being used for this quiz
     Test currTest;
-    // TODO Hook up actual Test Manager
-    TestManager testManager;
     // The Radio Group that is dynamically filled with the potential answers for the question.
     RadioGroup answers;
     // The Question that is being currently presented to the User.
     Question curQuestion;
     private VideoView vidDisplay;
     private TextView answerDisplay;
-    private MediaPlayer mPlayer;
     private android.widget.MediaController mediaController;
 
     @Override
@@ -59,13 +56,14 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         // Setup VideoView and Text Display
         answerDisplay = (TextView) findViewById(R.id.textView_FlashCardAnswer);
         vidDisplay = (VideoView) findViewById(R.id.videoView_flashCard);
+        mediaController = new android.widget.MediaController(this);
         // Unpack the bundles list of Deck Names and the number of Questions for the Quiz
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             deckNamesForQuiz = new ArrayList<>(extras.getStringArrayList("Decks"));
         }
         // Shouldn't happen but is here to help with dev.
-        else if(deckNamesForQuiz == null) {
+        if(deckNamesForQuiz == null) {
             Toast.makeText(this, "Error! No Decks Selected" , Toast.LENGTH_SHORT).show();
             finish();
             return;
@@ -95,6 +93,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
+        vidDisplay.setVisibility(View.INVISIBLE);
         if(currTest.hasNext()) {
             // TODO hook video up
             curQuestion = currTest.next();
@@ -117,16 +116,15 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                //TODO test video display
-                curQuestion.getVideo().configurePlayer(mPlayer);
-                mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                curQuestion.getVideo().configurePlayer(vidDisplay);
+                vidDisplay.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(MediaPlayer mp, int what, int extra) {
                         Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 });
-                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                vidDisplay.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         mp.setLooping(true);
@@ -134,6 +132,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                         mp.start();
                     }
                 });
+                vidDisplay.setVisibility(View.VISIBLE);
                 break;
         }
 

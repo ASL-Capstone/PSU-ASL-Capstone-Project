@@ -35,7 +35,8 @@ public class VideoInstrumentalTest {
 
         //Don't know where the onErrorListener is
 
-        video.configurePlayer(player);
+        // TODO: Fix me
+        video.configurePlayer(null);
     }
 
     /*

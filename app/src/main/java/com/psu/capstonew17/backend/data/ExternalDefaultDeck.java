@@ -36,11 +36,15 @@ public class ExternalDefaultDeck implements Deck {
         String query = dbHelper.buildSelectQuery(AslDbContract.CardEntry.TABLE_NAME, null);
         Cursor cursor = db.rawQuery(query, null);
         List<Card> cards = new ArrayList<Card>();
+        List<Integer> cardIds = new ArrayList<Integer>();
         while(cursor.moveToNext()){
-            int cardId = cursor.getInt(cursor.getColumnIndex(AslDbContract.CardEntry.COLUMN_ID));
-            cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
+            int id = cursor.getInt(cursor.getColumnIndex(AslDbContract.CardEntry.COLUMN_ID));
+            cardIds.add(id);
         }
         cursor.close();
+        for(Integer i : cardIds){
+            cards.add(ExternalCardManager.INSTANCE.getCard(i));
+        }
         return cards;
     }
 
