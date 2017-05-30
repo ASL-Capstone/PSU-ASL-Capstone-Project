@@ -148,7 +148,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     //checks is first attempt to adjust OR ensures that endtime comes AFTER start time
                     if(firstAdjustment || timeSelectionCheck(importOptions.startTime, currentProgress)) {
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
-                        endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), currentProgress));
+                        endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((float)currentProgress/1000f)));
                         importOptions.endTime = currentProgress;
                         //importOptions.endTime = videoView.getDuration();
                         firstAdjustment = false;
@@ -156,13 +156,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
                     if(firstAdjustment || timeSelectionCheck(currentProgress, importOptions.endTime)) {
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
-                        startTimeText.setText(String.format(resources.getString(R.string.start_time_default), currentProgress));
+                        startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((float)currentProgress/1000f)));
                         importOptions.startTime = currentProgress;
                         //importOptions.startTime = 0;
                         firstAdjustment = false;
@@ -170,7 +170,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 1 second)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -273,7 +273,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      * @return false, if the time crop region selected is less than 2000 ms (2 Seconds)
      */
     private boolean timeSelectionCheck(int startTime, int endTime) {
-        return ((endTime - startTime) >= 1000);
+        return ((endTime - startTime) >= 2000);
     }
 
 
@@ -283,8 +283,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      * used for testing
      */
     private void displayOptions() {
-        Toast.makeText(getApplicationContext(), "Import Options -\nStart: " + importOptions.startTime + "\nEnd: " + importOptions.endTime +
-                "\nQuality: " + importOptions.quality + "\nCrop Region: " + importOptions.cropRegion, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Import Options -\nStart: " + importOptions.startTime + "(ms)\nEnd: " + importOptions.endTime +
+                "(ms)\nQuality: " + importOptions.quality + "\nCrop Region: " + importOptions.cropRegion, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -347,7 +347,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 returnIntent.putExtra(ERROR, err);
 
                 setResult(Activity.RESULT_CANCELED, returnIntent);
-                Toast.makeText(getApplicationContext(), "From EditCard: Failed to Edit Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from backend
+                Toast.makeText(getApplicationContext(), "Failed to Import Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from backend
                 finish();
             }
         });
