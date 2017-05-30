@@ -12,6 +12,7 @@ import android.media.MediaMuxer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.util.Pair;
 
 import com.psu.capstonew17.backend.api.VideoManager;
@@ -155,6 +156,7 @@ public class PreprocessingPipeline {
                     // TODO: KNN quantization happens here
 
                     // load it into the encoder
+                    int inIdx;
                     while ((inIdx = encoder.dequeueInputBuffer(10000)) == -1) {
                         Log.d("VPreproc", "Dumping data to mux");
                         // move output into muxer
