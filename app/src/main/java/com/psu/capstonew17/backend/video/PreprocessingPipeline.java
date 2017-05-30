@@ -36,6 +36,7 @@ public class PreprocessingPipeline {
     public interface PreprocessingListener {
         void onCompleted();
         void onFailed();
+        void onProgress(int current, int max);
     }
 
     public PreprocessingPipeline(Context ctx, File outFile, Uri in, VideoManager.ImportOptions opts) throws IOException {
@@ -54,7 +55,7 @@ public class PreprocessingPipeline {
         op.execute(Pair.create(input, output));
     }
 
-    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Pair<Long,Long>, Void> {
+    private class PreprocessingOperation extends AsyncTask<Pair<Uri, File>, Pair<Integer, Integer>, Void> {
         @Override
         protected Void doInBackground(Pair<Uri, File>... inputs) {
             Uri in = inputs[0].first;
@@ -176,7 +177,6 @@ public class PreprocessingPipeline {
                             break;
                         }
                         long ptime = extractor.getSampleTime();
-                        publishProgress(Pair.create(ptime, maxTime));
                         extractor.advance();
                         decoder.queueInputBuffer(inIdx, 0, length, ptime, 0);
                     }
@@ -184,22 +184,26 @@ public class PreprocessingPipeline {
 
                 // read a chunk out of the decoder if available
                 int outIdx = decoder.dequeueOutputBuffer(bufInfo, 10000);
-                if(outIdx >= 0) {
-                //if((outIdx >= 0) &&
-                       // (bufInfo.presentationTimeUs >= (options.startTime*1000)) &&
-                       // (bufInfo.presentationTimeUs < (options.endTime*1000))) {
+                if ((outIdx >= 0) &&
+                        (bufInfo.presentationTimeUs >= (options.startTime * 1000)) &&
+                        (bufInfo.presentationTimeUs < (options.endTime * 1000))) {
                     Image img = decoder.getOutputImage(outIdx);
+
+                    // update progress
+                    publishProgress(Pair.create(
+                            (int) (bufInfo.presentationTimeUs / 1000) - options.startTime,
+                            (options.endTime - options.startTime)));
 
                     // process the image
                     // TODO: KNN quantization happens here
 
                     // load it into the encoder
-                    while((inIdx = encoder.dequeueInputBuffer(10000)) == -1) {
+                    while ((inIdx = encoder.dequeueInputBuffer(10000)) == -1) {
                         Log.d("VPreproc", "Dumping data to mux");
                         // move output into muxer
                         MediaCodec.BufferInfo encBufInfo = new MediaCodec.BufferInfo();
                         int encOutIdx = encoder.dequeueOutputBuffer(encBufInfo, -1);
-                        if(encOutIdx < 0) continue;
+                        if (encOutIdx < 0) continue;
                         ByteBuffer obuf = encoder.getOutputBuffer(encOutIdx);
                         muxer.writeSampleData(videoTrackIdx, obuf, encBufInfo);
                         encoder.releaseOutputBuffer(encOutIdx, false);
@@ -214,10 +218,10 @@ public class PreprocessingPipeline {
 
                     encoder.queueInputBuffer(inIdx, 0, bufInfo.size, bufInfo.presentationTimeUs, 0);
                     decoder.releaseOutputBuffer(outIdx, false);
-                } else if(outIdx >= 0) {
+                } else if (outIdx >= 0) {
                     Log.d("VPreproc", "Autorelease");
                     decoder.releaseOutputBuffer(outIdx, false);
-                } else if(extractorDone) {
+                } else if (extractorDone) {
                     done = true;
                 }
             }
@@ -256,15 +260,16 @@ public class PreprocessingPipeline {
         }
 
         @Override
+        protected void onProgressUpdate(Pair<Integer, Integer>... values) {
+            if(listener != null) listener.onProgress(values[0].first, values[0].second);
+            super.onProgressUpdate(values);
+        }
+
+        @Override
         protected void onPostExecute(Void aVoid) {
             if(listener != null) {
                 listener.onCompleted();
             }
-        }
-
-        @Override
-        protected void onProgressUpdate(Pair<Long, Long>[] values) {
-            Log.d("VPreproc", String.format("%f", values[0].first.floatValue() / values[0].second.floatValue()));
         }
 
         @Override
