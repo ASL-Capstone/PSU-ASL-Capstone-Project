@@ -12,7 +12,6 @@ import android.media.MediaMuxer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.util.Pair;
 
 import com.psu.capstonew17.backend.api.VideoManager;
@@ -134,22 +133,21 @@ public class PreprocessingPipeline {
                                     MediaCodec.BUFFER_FLAG_END_OF_STREAM);
                             break;
                         }
-                        long ptime = extractor.getSampleTime();
                         extractor.advance();
                         decoder.queueInputBuffer(inIdx, 0, length, -1, 0);
                     }
                 }
 
                 // read a chunk out of the decoder if available
-                int outIdx = decoder.dequeueOutputBuffer(bufInfo, 10000);
-                if ((outIdx >= 0) &&
-                        (bufInfo.presentationTimeUs >= (options.startTime * 1000)) &&
-                        (bufInfo.presentationTimeUs < (options.endTime * 1000))) {
+                int outIdx = decoder.dequeueOutputBuffer(bufInfo, 10);
+                if((outIdx >= 0) &&
+                        (bufInfo.presentationTimeUs > (options.startTime*1000)) &&
+                        (bufInfo.presentationTimeUs < (options.endTime*1000))) {
                     Image img = decoder.getOutputImage(outIdx);
 
                     // update progress
                     publishProgress(Pair.create(
-                            (int) (bufInfo.presentationTimeUs / 1000) - options.startTime,
+                            (int)(bufInfo.presentationTimeUs/1000) - options.startTime,
                             (options.endTime - options.startTime)));
 
                     // process the image
@@ -157,12 +155,10 @@ public class PreprocessingPipeline {
 
                     // load it into the encoder
                     int inIdx;
-                    while ((inIdx = encoder.dequeueInputBuffer(10000)) == -1) {
-                        Log.d("VPreproc", "Dumping data to mux");
+                    while((inIdx = encoder.dequeueInputBuffer(10)) == -1) {
                         // move output into muxer
                         MediaCodec.BufferInfo encBufInfo = new MediaCodec.BufferInfo();
                         int encOutIdx = encoder.dequeueOutputBuffer(encBufInfo, -1);
-                        if (encOutIdx < 0) continue;
                         ByteBuffer obuf = encoder.getOutputBuffer(encOutIdx);
                         muxer.writeSampleData(videoTrackIdx, obuf, encBufInfo);
                         encoder.releaseOutputBuffer(encOutIdx, false);
@@ -175,12 +171,9 @@ public class PreprocessingPipeline {
                     img.getPlanes()[2].getBuffer().put(encImg.getPlanes()[2].getBuffer());
                     encImg.setTimestamp(img.getTimestamp());
 
-                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, bufInfo.presentationTimeUs, 0);
+                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
                     decoder.releaseOutputBuffer(outIdx, false);
-                } else if (outIdx >= 0) {
-                    Log.d("VPreproc", "Autorelease");
-                    decoder.releaseOutputBuffer(outIdx, false);
-                } else if (extractorDone) {
+                } else if(extractorDone) {
                     done = true;
                 }
             }
