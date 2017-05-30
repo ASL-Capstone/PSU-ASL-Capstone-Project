@@ -55,13 +55,13 @@ public class BaseActivity extends AppCompatActivity {
                 finish();
                 break;
 
-            case R.id.item_share:
+            case R.id.item_receive:
                 intent = new Intent(this, ReceiveDeckActivity.class);
                 startActivity(intent);
                 finish();
                 break;
 
-            case R.id.item_receive:
+            case R.id.item_share:
                 intent = new Intent(this, ShareDeckActivity.class);
                 startActivity(intent);
                 finish();

@@ -41,7 +41,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
     Question curQuestion;
     private VideoView vidDisplay;
     private TextView answerDisplay;
-    private MediaPlayer mPlayer;
     private android.widget.MediaController mediaController;
 
     @Override
@@ -57,6 +56,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         // Setup VideoView and Text Display
         answerDisplay = (TextView) findViewById(R.id.textView_FlashCardAnswer);
         vidDisplay = (VideoView) findViewById(R.id.videoView_flashCard);
+        mediaController = new android.widget.MediaController(this);
         // Unpack the bundles list of Deck Names and the number of Questions for the Quiz
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -93,6 +93,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
+        vidDisplay.setVisibility(View.INVISIBLE);
         if(currTest.hasNext()) {
             // TODO hook video up
             curQuestion = currTest.next();
@@ -115,16 +116,15 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                 loadQuestion();
                 break;
             case R.id.button_showAnswer:
-                //TODO test video display
-                curQuestion.getVideo().configurePlayer(mPlayer);
-                mPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                curQuestion.getVideo().configurePlayer(vidDisplay);
+                vidDisplay.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(MediaPlayer mp, int what, int extra) {
                         Toast.makeText(getBaseContext(), "Error Playing Video", Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 });
-                mPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                vidDisplay.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         mp.setLooping(true);
@@ -132,6 +132,7 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
                         mp.start();
                     }
                 });
+                vidDisplay.setVisibility(View.VISIBLE);
                 break;
         }
 
