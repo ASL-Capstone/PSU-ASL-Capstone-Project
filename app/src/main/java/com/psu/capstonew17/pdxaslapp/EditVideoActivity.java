@@ -15,14 +15,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
-import com.psu.capstonew17.backend.api.Video;
 import com.psu.capstonew17.backend.api.VideoManager;
-import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
     public static final String EDITED_VIDEO = "video";
     public static final String ERROR = "ERROR_with_importing_options";
+    public static final String START = "start";
+    public static final String END = "end";
+    public static final String QUALITY = "quality";
+    private static final String CROP = "cropRegion";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -95,13 +97,16 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
          *
          */
         submitButton = (Button) findViewById(R.id.submitButtonEditCard);
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(this);
+
+        /*submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //UNCOMMENT once backend connected - submitEdits(view);
                 submitEdits(view);
             }
         });
+        */
 
 
         /**Set up seekBar connectivity
@@ -300,12 +305,18 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         //MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         //retriever.setDataSource(this, videoUri);
         //String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-
+        Intent returnIntent = new Intent();
+        returnIntent.setData(videoUri);
+        returnIntent.putExtra(START, importOptions.startTime);
+        returnIntent.putExtra(END, importOptions.endTime);
+        returnIntent.putExtra(CROP, importOptions.cropRegion); //will be null for MVP
+        returnIntent.putExtra(QUALITY, importOptions.quality);
+        setResult(Activity.RESULT_OK, returnIntent);
+        finish();
+        /*
         //OUTLINE TO CONNECT TO BACKEND
         VideoManager videoEditor = ExternalVideoManager.getInstance(this);
-
         //TEST
-
         //NEED TO: determine how to get video file path to pass to backend
         videoEditor.importVideo(this, videoUri, importOptions, new VideoManager.VideoImportListener() {
             @Override
@@ -321,19 +332,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 returnIntent.setData(videoUri);
                 returnIntent.putExtra(EDITED_VIDEO, vid);
                 setResult(Activity.RESULT_OK, returnIntent);
-
-                //Bundle bundle = returnIntent.getParcelableExtra(EDITED_VIDEO);
-                //bundle.
-                /*
-                if(videoUri != null) {
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    //finish();
-                }
-                else {
-                    setResult(Activity.RESULT_CANCELED, returnIntent);
-                    //finish();
-                }
-                */
                 finish();
             }
 
@@ -342,18 +340,15 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 //TO DO: indicate "Failure" to calling routine
                 Intent returnIntent = new Intent();
                 returnIntent.setData(videoUri);
-
                 //'err' is null -checked
                 returnIntent.putExtra(ERROR, err);
-
                 setResult(Activity.RESULT_CANCELED, returnIntent);
                 Toast.makeText(getApplicationContext(), "Failed to Import Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from backend
                 finish();
             }
         });
-
+        */
     }
-
 
 
 

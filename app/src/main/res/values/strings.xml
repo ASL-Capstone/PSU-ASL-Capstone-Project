@@ -92,8 +92,8 @@
     <string name="start_stop_edit">Edit Start/Stop time</string>
     <string name="start">start</string>
     <string name="stop">stop</string>
-    <string name="start_time_label">Start time: not set (ms)</string>
-    <string name="stop_time_label">Stop time: not set (ms)</string>
+    <string name="start_time_label">Start time: not set (sec)</string>
+    <string name="stop_time_label">Stop time: not set (sec)</string>
     <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
     <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
     <string name="menu_item_manage_card">MANAGE CARD</string>
