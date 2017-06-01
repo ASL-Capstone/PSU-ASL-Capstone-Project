@@ -106,4 +106,7 @@
     <string name="start_time_default">Start time: %1$f (sec)</string>
     <string name="stop_time_default">Stop time: %1$f (sec)</string>
     <string name="seekBar_startSeeking_msg">Start seeking</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
+    <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
 </resources>

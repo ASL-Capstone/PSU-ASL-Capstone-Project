@@ -1,3 +1,4 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
 import android.app.Activity;
@@ -14,7 +15,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import com.psu.capstonew17.backend.api.VideoManager;
 
 
@@ -32,10 +32,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     //UI
     private SeekBar seekBar; //tracks current video's progress
     private Switch start_stop_switch; // off = modify stop time; on = modify start time
+    private Switch deleteFromGalSwitch; //switch used to indicate video should be removed from gallery
+    private boolean deleteFromGal;
     private boolean endTimeSwitch; // set to value of above switch
     private Button submitButton; //attached to submit button (sends modifications to backend)
+    private Button playPauseButton;
     private TextView startTimeText; //displays current starting point of video
     private TextView endTimeText; //displays current ending point of video
+    private TextView seekPositionDisplay;
 
     //local helper variables
     private int currentProgress; //current progress of user-initiated seekBar movement
@@ -43,7 +47,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     //Vars to pass to backend //may replace with local vars at some point
     VideoManager.ImportOptions importOptions;
-
 
     //Private inner-class used to update the seekBar
     private final Runnable onEverySecond = new Runnable() {
@@ -54,7 +57,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
 
             if(videoView.isPlaying()) {
-                seekBar.postDelayed(onEverySecond, 1000);
+                seekBar.postDelayed(onEverySecond, 0); //int changes "pace" of seek ball
             }
         }
     };
@@ -82,13 +85,32 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 endTimeSwitch = isChecked;
                 if(endTimeSwitch) {
-                    //endTimeSwitch = start_stop_switch.getShowText(); //set endTime to false if start selected; true if stop
                     Toast.makeText(getApplicationContext(), "The seek bar will now update the STOP TIME", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "The seek bar will now update the START TIME", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+
+        /**
+         * Set up the "Delete From Gallery" swtich;
+         * Determines if the video should be removed from the gallery following the edit
+         */
+        deleteFromGalSwitch = (Switch) findViewById(R.id.DeleteFromGallerySwitch);
+        deleteFromGalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isNo) {
+                deleteFromGal = (!isNo);
+                if(deleteFromGal) {
+                    Toast.makeText(getApplicationContext(), "The video will be removed from the Gallery", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "The video will remain in the Gallery", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
 
 
         /**Set up the submit button
@@ -109,6 +131,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         */
 
 
+        /**
+         * Set up the seek bar position display text
+         */
+        seekPositionDisplay = (TextView) findViewById(R.id.seekDisplayEditCard);
+        seekPositionDisplay.setText(R.string.seekDisplayDefault);
+
+
         /**Set up seekBar connectivity
          *  - connect to videoVidew
          *  - set up progress change to connect to startTime/endTime
@@ -119,12 +148,18 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         //seekBar.setMax(videoView.getDuration()); //set 'seekBar's max limit to videos's length
         //connect seekBar functionality to video --> video should respond to seekBar movement with these
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            Resources resources = getResources();
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser) { //if seekBar movement is user-initiated, adjust video accordingly
                     videoView.seekTo(progress);
                     currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
+                else {
+                    seekBar.setProgress(progress);
+                }
+                seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)progress/1000f)));
             }
 
             @Override
@@ -182,6 +217,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
         });
 
+
+
+
+
+
+
         //GET Intent passed from CreateACard Activity
         Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
         videoUri = intent.getData(); //get video URI data passed via an Intent from 'CreateCardActivity'
@@ -201,17 +242,39 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         } else {
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                Resources resources = getResources();
                 @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    seekBar.setMax(videoView.getDuration()); 
-                    seekBar.postDelayed(onEverySecond, 1000); //1000 milli-second delay
+                public void onPrepared(final MediaPlayer mediaPlayer) {
+                    seekBar.setMax(mediaPlayer.getDuration());
+                    seekBar.postDelayed(onEverySecond, 0); //0 milli-second delay (was 1000)
+                    //mediaPlayer.setLooping(true); video will loop indefinitely
+                    //set DEFAULT max video length to original video length
+                    importOptions.endTime = videoView.getDuration();
+
+                    /**
+                     * Set up play/pause button to allow the user to replay and pause the video
+                     */
+                    playPauseButton = (Button) findViewById(R.id.PlayPauseButtonEdit);
+                    playPauseButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(mediaPlayer.isPlaying()) {
+                                mediaPlayer.pause();
+                                //seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                                //seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)mediaPlayer.getCurrentPosition()/1000f)));
+                            }
+                            else {
+                                //videoView.resume();
+                                mediaPlayer.start();
+                                //seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                                //seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)mediaPlayer.getCurrentPosition()/1000f)));
+                            }
+                        }
+                    });
                 }
             });
 
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
-
-            //set DEFAULT max video length to original video length
-            importOptions.endTime = videoView.getDuration();
 
             //calls setOnPreparedListener??
             videoView.start(); //start AFTER setting up the seek bar
@@ -301,7 +364,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      *
      * @param view
      */
-    public void submitEdits(View view) {
+    private void submitEdits(View view) {
         //MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         //retriever.setDataSource(this, videoUri);
         //String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
