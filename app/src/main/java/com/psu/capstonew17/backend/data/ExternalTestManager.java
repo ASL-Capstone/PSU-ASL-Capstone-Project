@@ -40,9 +40,14 @@ public class ExternalTestManager implements TestManager{
                     Arrays.asList(RelationEntry.COLUMN_DECK + "=" + ((ExternalDeck) deck).getDeckId())
             );
             Cursor cursor = db.rawQuery(query, null);
-            while(cursor.moveToNext()){
+            List<Integer> cardIds = new ArrayList<Integer>();
+            while(cursor.moveToNext()) {
                 int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
-                Card card = ExternalCardManager.INSTANCE.getCard(cardId);
+                cardIds.add(cardId);
+            }
+            cursor.close();
+            for(Integer id : cardIds){
+                Card card = ExternalCardManager.INSTANCE.getCard(id);
                 Question.Type t;
                 if(opts.questionTypes == opts.QUESTION_MULTIPLE_CHOICE){
                     t = Question.Type.MULTIPLE_CHOICE;
@@ -53,7 +58,6 @@ public class ExternalTestManager implements TestManager{
                 Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
                 questions.add(q);
             }
-            cursor.close();
         }
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
