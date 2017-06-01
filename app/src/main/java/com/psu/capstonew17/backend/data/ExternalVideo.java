@@ -43,6 +43,10 @@ class ExternalVideo implements Video, EncodeableObject {
         return this.videoId;
     }
 
+    public String getVideoPath(){
+        return this.videoFile.getAbsolutePath();
+    }
+
     @Override
     public void configurePlayer(VideoView player) {
         if(uriPath != null){

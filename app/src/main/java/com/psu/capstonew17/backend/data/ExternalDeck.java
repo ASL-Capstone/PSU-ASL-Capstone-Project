@@ -110,21 +110,20 @@ class ExternalDeck implements Deck, EncodeableObject {
 
     @Override
     public void delete() {
-        removeCardsFromDeck();
         dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // remove references to deck
         db.delete(
                 DeckEntry.TABLE_NAME,
                 DeckEntry.COLUMN_ID + "=" + this.deckId, null
         );
-    }
-
-    private void removeCardsFromDeck(){
-        dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(
                 RelationEntry.TABLE_NAME,
                 RelationEntry.COLUMN_DECK + "=" + this.deckId, null
+        );
+        db.delete(
+                AnswerEntry.TABLE_NAME,
+                AnswerEntry.COLUMN_DECK + "=" + this.deckId, null
         );
     }
 
