@@ -3,6 +3,7 @@ package com.psu.capstonew17.pdxaslapp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
@@ -44,6 +45,10 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     static final int GET_VIDEO = 1;
     static final int REQUEST_EDIT_VIDEO = 3;
+    public static final String START = "start";
+    public static final String END = "end";
+    public static final String QUALITY = "quality";
+    private static final String CROP = "cropRegion";
 
     static final int MIN_LABEL_LENGTH = 3;
     static final int MAX_LABEL_LENGTH = 250;
@@ -55,9 +60,9 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private Button bttSubmit;
     private Button bttGetVideo;
     private Button bttRecordVideo;
-    private Button bttUseVideo;
     private EditText editText;
     private VideoView videoView;
+    private ProgressDialog progressDialog;
     private Card card;
 
     private String videoLabel;
@@ -80,8 +85,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttRecordVideo = (Button) findViewById(R.id.buttonRecordVideo);
         bttRecordVideo.setOnClickListener(this);
 
-        bttUseVideo = (Button) findViewById(R.id.buttonUseVIdeo);
-        bttUseVideo.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Importing video");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCanceledOnTouchOutside(false);
 
         editText = (EditText) findViewById(R.id.edit_text_video_answer);
         editText.setOnClickListener(this);
@@ -125,21 +133,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 startActivityForResult(Intent.createChooser(intent, SELECT_VIDEO),
                         GET_VIDEO);
                 break;
-
-            case R.id.buttonUseVIdeo:
-                //TODO Package video URI and call edit video intent
-
-                if (videoUri != null) {
-                    Log.d("videoinfo", videoUri.toString());
-                    Log.d("videoinfo", videoUri.getPath());
-                    intent = new Intent(this, EditVideoActivity.class);
-                    intent.setData(videoUri);
-//                    startActivity(intent);
-                    startActivityForResult(intent, REQUEST_EDIT_VIDEO);
-                    finish();
-                }
-                break;
-
 
                 case R.id.button_submit:
                 videoLabel = editText.getText().toString();
@@ -220,17 +213,16 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     }
 
     protected void startVideo(){
-        videoView.setOnPreparedListener (new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
-
-//        video.configurePlayer(videoView);
-        videoView.setVideoURI(videoUri);
+        video.configurePlayer(videoView);
         videoView.setVisibility(View.VISIBLE);
         videoView.start();
+    }
+
+    protected void stopVideo(){
+        videoView.stopPlayback();
+        videoView.setVisibility(View.INVISIBLE);
+        bttSubmit.setVisibility(View.INVISIBLE);
+        listView.setVisibility(View.INVISIBLE);
     }
 
     protected void videoErrorToast(){
@@ -240,72 +232,54 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
         switch (requestCode) {
-
             case GET_VIDEO:
                 if (resultCode == RESULT_OK) {
                     videoUri = intent.getData();
 
-                    //TODO: uncomment and test this once editvideo is complete
-                    /*
                     if(videoUri != null){
-                        Log.d("videoinfo", videoUri.toString());
-                        Log.d("videoinfo", videoUri.getPath());
                         intent = new Intent(this, EditVideoActivity.class);
                         intent.setData( videoUri);
                         startActivityForResult(intent, REQUEST_EDIT_VIDEO);
-                        finish();
-                    }
-                    */
-
-                    //TODO: this is just for now, remove this once editvideo is complete
-                    if (videoFileCheck()) {
-                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-                        retriever.setDataSource(this, videoUri);
-                        VideoManager vm = ExternalVideoManager.getInstance(this);
-                        VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
-
-                        String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                        imo.startTime = 0;
-                        imo.endTime = Integer.parseInt(endTime);
-                        imo.quality = 20;
-                        imo.cropRegion = null;
-
-                        vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
-                            @Override
-                            public void onProgressUpdate(int current, int max) {
-
-                            }
-
-                            @Override
-                            public void onComplete(Video vid) {
-                                video = vid;
-                                startVideo();
-                                bttSubmit.setVisibility(View.VISIBLE);
-                                listView.setVisibility(View.VISIBLE);
-                            }
-
-                            @Override
-                            public void onFailed(Throwable err) {
-                                videoErrorToast();
-                            }
-                        });
                     }
                 }
                 break;
 
             case REQUEST_EDIT_VIDEO:
                 if (resultCode == Activity.RESULT_OK) {
-                    video = intent.getParcelableExtra("video");
-                    startVideo();
-                    bttSubmit.setVisibility(View.VISIBLE);
+                    stopVideo();
+                    VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
+                    Bundle bundle = intent.getExtras();
+                    imo.startTime   = bundle.getInt(START);
+                    imo.endTime     = bundle.getInt(END);
+                    imo.quality     = bundle.getInt(QUALITY);
+                    imo.cropRegion  = bundle.getParcelable(CROP);
+
+                    VideoManager vm = ExternalVideoManager.getInstance(this);
+                    progressDialog.show();
+                    vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
+                        @Override
+                        public void onProgressUpdate(int current, int max) {
+                        }
+
+                        @Override
+                        public void onComplete(Video vid) {
+                            video = vid;
+                            progressDialog.hide();
+                            startVideo();
+                            bttSubmit.setVisibility(View.VISIBLE);
+                            listView.setVisibility(View.VISIBLE);
+
+                        }
+
+                        @Override
+                        public void onFailed(Throwable err) {
+                                videoErrorToast();
+                            }
+                    });
                 }
                 break;
-
         }
-
-
     }
 }
 
