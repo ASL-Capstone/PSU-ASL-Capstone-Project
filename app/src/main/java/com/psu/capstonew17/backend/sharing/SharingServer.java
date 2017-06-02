@@ -14,6 +14,16 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Binder;
 import android.os.IBinder;
+
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Deck;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -91,5 +101,40 @@ public class SharingServer extends Service {
             }
 
 
+    /*
+  Called from SharingManager, attempt to connect to device peer list, if successful, throw asynchronous thread to manage data transmission
+*/
+    public void initiateConnect(List<Card> cards, final List<Deck> decks) {
+        WifiP2pDevice aDevice = listOfPeers.get(0); //get device in front of list
+        final WifiP2pConfig configuration = new WifiP2pConfig();
+        configuration.deviceAddress = aDevice.deviceAddress;    //MAC address IDing device
+        configuration.wps.setup = WpsInfo.PBC;                    //wifi protected setup push button config
+        wifiManager.connect(wifiChannel, configuration, new WifiP2pManager.ActionListener() {
 
+            @Override
+            public void onSuccess() {   //if successful, throw asynchronous thread to connect to server
+                int port = 8080;
+                try {
+                    Socket socket = new Socket();                //create unconnected socket
+                    socket.connect(new InetSocketAddress(configuration.deviceAddress, port), 10000);  //connect socket to server with ip address (MAC address identified above), port 8080, and timeout value in ms
+                    OutputStream outStream = socket.getOutputStream();
+                    ObjectOutputStream objOut = new ObjectOutputStream(outStream);                  //graph java object to output stream
+                    objOut.writeObject(decks);                                                      //write deck to output stream
+                    objOut.close();                                                                 //close streams to release resources
+                    outStream.close();
+                } catch (FileNotFoundException exc) {
+                    exc.printStackTrace();
+                } catch (IOException exc) {
+                    exc.printStackTrace();
+                }   //exception handling
+
+            }
+
+            @Override
+            public void onFailure(int i) {
+                //handle
+            }
+
+        });
+    }
 }
