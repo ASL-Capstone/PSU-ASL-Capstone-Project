@@ -45,7 +45,7 @@ class ExternalCard implements Card, EncodeableObject {
         dbHelper = ExternalCardManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(CardEntry.COLUMN_VIDEO, ((ExternalVideo) v).getVideoId());
+        values.put(CardEntry.COLUMN_VIDEO, v.getVideoId());
         db.update(
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
@@ -70,7 +70,8 @@ class ExternalCard implements Card, EncodeableObject {
         );
     }
 
-    public int getId() {
+    @Override
+    public int getCardId() {
         return cardId;
     }
 
@@ -91,15 +92,14 @@ class ExternalCard implements Card, EncodeableObject {
                 AnswerEntry.COLUMN_CARD + "=" + this.cardId, null
         );
         // are there any more cards using this video?
-        ExternalVideo v = ((ExternalVideo) this.video);
         String query = dbHelper.buildSelectQuery(
                 CardEntry.TABLE_NAME,
-                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + v.getVideoId())
+                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + this.video.getVideoId())
         );
         Cursor cursor = db.rawQuery(query, null);
         if(!cursor.moveToFirst()){
             // no longer in use
-            File vFile = new File(v.getVideoPath());
+            File vFile = new File(((ExternalVideo) this.video).getVideoPath());
             if(vFile.exists()){
                 vFile.delete();
             }

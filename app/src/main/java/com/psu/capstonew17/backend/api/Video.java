@@ -11,4 +11,9 @@ public interface Video extends Parcelable {
      * method.
      */
     void configurePlayer(VideoView player);
+
+    /**
+     * Get the video's id
+     */
+    int getVideoId();
 }

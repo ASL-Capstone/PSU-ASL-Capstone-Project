@@ -63,6 +63,7 @@ class ExternalDeck implements Deck, EncodeableObject {
         );
     }
 
+    @Override
     public int getDeckId(){
         return  this.deckId;
     }
@@ -83,7 +84,7 @@ class ExternalDeck implements Deck, EncodeableObject {
 
         for(Card card: this.dbCards) {
             if(!mutableCards.contains(card)) {
-                whereArgs[1] = String.valueOf(((ExternalCard)card).getId());
+                whereArgs[1] = String.valueOf((card).getCardId());
 
                 db.delete(RelationEntry.TABLE_NAME,
                         String.format("%s = ? AND %s = ?",
@@ -98,7 +99,7 @@ class ExternalDeck implements Deck, EncodeableObject {
             if(!dbCards.contains(card)) {
                 ContentValues values = new ContentValues();
                 values.put(RelationEntry.COLUMN_DECK, deckId);
-                values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+                values.put(RelationEntry.COLUMN_CARD, card.getCardId());
                 db.insert(RelationEntry.TABLE_NAME, null, values);
             }
         }
@@ -175,7 +176,7 @@ class ExternalDeck implements Deck, EncodeableObject {
         b.put(nameBytes);
         b.putInt(numCards);
         for(Card c : this.mutableCards){
-            b.putInt(((ExternalCard) c).getId());
+            b.putInt(c.getCardId());
         }
         return b.array();
     }

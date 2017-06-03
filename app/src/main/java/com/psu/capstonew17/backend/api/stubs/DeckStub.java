@@ -20,6 +20,11 @@ public class DeckStub implements Deck {
         return this.name;
     }
 
+    @Override
+    public int getDeckId() {
+        return 0;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

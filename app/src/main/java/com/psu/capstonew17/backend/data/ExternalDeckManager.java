@@ -138,7 +138,7 @@ public class ExternalDeckManager implements DeckManager{
         for(Card card : cards){
             values = new ContentValues();
             values.put(RelationEntry.COLUMN_DECK, deckId);
-            values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+            values.put(RelationEntry.COLUMN_CARD, card.getCardId());
             db.insert(RelationEntry.TABLE_NAME, null, values);
         }
         return new ExternalDeck(deckId, name, cards);

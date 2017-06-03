@@ -52,7 +52,7 @@ public class ExternalCardManager implements CardManager{
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String query = dbHelper.buildSelectQuery(
                 CardEntry.TABLE_NAME,
-                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + ((ExternalVideo) video).getVideoId())
+                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + video.getVideoId())
         );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
@@ -61,7 +61,7 @@ public class ExternalCardManager implements CardManager{
         }
         cursor.close();
         ContentValues values = new ContentValues();
-        values.put(CardEntry.COLUMN_VIDEO, ((ExternalVideo) video).getVideoId());
+        values.put(CardEntry.COLUMN_VIDEO, video.getVideoId());
         values.put(CardEntry.COLUMN_ANSWER, answer);
         int id = (int) db.insert(CardEntry.TABLE_NAME, null, values);
         return new ExternalCard(id, video, answer);

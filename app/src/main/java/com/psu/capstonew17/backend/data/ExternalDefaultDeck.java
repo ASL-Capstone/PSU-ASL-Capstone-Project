@@ -25,6 +25,11 @@ public class ExternalDefaultDeck implements Deck {
     }
 
     @Override
+    public int getDeckId() {
+        return deckId;
+    }
+
+    @Override
     public void setName(String name) throws ObjectAlreadyExistsException {
         return;
     }
