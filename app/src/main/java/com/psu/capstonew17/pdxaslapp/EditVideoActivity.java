@@ -19,8 +19,6 @@ import com.psu.capstonew17.backend.api.VideoManager;
 
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
-    public static final String EDITED_VIDEO = "video";
-    public static final String ERROR = "ERROR_with_importing_options";
     public static final String START = "start";
     public static final String END = "end";
     public static final String QUALITY = "quality";
@@ -72,7 +70,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
         //NOTE - each layout init block will be converted to a separate local method during 'polish'
 
-        //set up as first run-through
+        //set up as first run-through; controls some error Toasts
         firstAdjustment = true;
 
         /**Set up start_stop switch
@@ -111,8 +109,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         });
 
 
-
-
         /**Set up the submit button
          *  - connect to button
          *  - have button execute call to backend
@@ -120,15 +116,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
          */
         submitButton = (Button) findViewById(R.id.submitButtonEditCard);
         submitButton.setOnClickListener(this);
-
-        /*submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //UNCOMMENT once backend connected - submitEdits(view);
-                submitEdits(view);
-            }
-        });
-        */
 
 
         /**
@@ -145,7 +132,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         //MOVE SEEK BAR SET-UP TO SEPARATE METHOD
         //connect seekBar to xml
         seekBar = (SeekBar) findViewById(R.id.seekBarEditVideo);
-        //seekBar.setMax(videoView.getDuration()); //set 'seekBar's max limit to videos's length
         //connect seekBar functionality to video --> video should respond to seekBar movement with these
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             Resources resources = getResources();
@@ -157,7 +143,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
                 else {
-                    seekBar.setProgress(progress);
+                    //seekBar.setProgress(progress);
                 }
                 seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)progress/1000f)));
             }
@@ -213,15 +199,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             }
         });
-
-
-
-
-
-
 
         //GET Intent passed from CreateACard Activity
         Intent intent = getIntent(); //get Intent passed from 'CreateCardActivity'
@@ -242,14 +221,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         } else {
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                Resources resources = getResources();
                 @Override
                 public void onPrepared(final MediaPlayer mediaPlayer) {
                     seekBar.setMax(mediaPlayer.getDuration());
                     seekBar.postDelayed(onEverySecond, 0); //0 milli-second delay (was 1000)
-                    //mediaPlayer.setLooping(true); video will loop indefinitely
+                    mediaPlayer.setLooping(true); //video will loop indefinitely
                     //set DEFAULT max video length to original video length
-                    importOptions.endTime = videoView.getDuration();
+                    importOptions.endTime = mediaPlayer.getDuration();
 
                     /**
                      * Set up play/pause button to allow the user to replay and pause the video
@@ -260,20 +238,16 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         public void onClick(View view) {
                             if(mediaPlayer.isPlaying()) {
                                 mediaPlayer.pause();
-                                //seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                                //seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)mediaPlayer.getCurrentPosition()/1000f)));
                             }
                             else {
-                                //videoView.resume();
+                                seekBar.postDelayed(onEverySecond, 0);
                                 mediaPlayer.start();
-                                //seekBar.setProgress(mediaPlayer.getCurrentPosition());
-                                //seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)mediaPlayer.getCurrentPosition()/1000f)));
                             }
                         }
                     });
                 }
             });
-
+            
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
 
             //calls setOnPreparedListener??
@@ -291,21 +265,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         endTimeText = (TextView) findViewById(R.id.textViewStopTimeLabel);
         endTimeText.setText(R.string.stop_time_label);
 
-        /*
-        //FOR NOW, just return the un-edited video back to 'CreateCard'
-        //Will change once connected to backend, and time-cropping is functional
-        Intent returnIntent = new Intent();
-        if(videoUri != null) {
-            returnIntent.setData(videoUri);
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
-        }
-        else {
-            setResult(Activity.RESULT_CANCELED, returnIntent);
-            finish();
-        }
-        */
     }
+
+
 
 
     /**
@@ -315,23 +277,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(R.id.submitButtonEditCard == view.getId()){
-            //UNcomment once backend is working + connected
-            submitEdits(view);
-            //FOR NOW, just return the un-edited video back to 'CreateCard'
-            //Will change once connected to backend, and time-cropping is functional
-
-            /*
-            Intent returnIntent = new Intent();
-            if(videoUri != null) {
-                returnIntent.setData(videoUri);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-            else {
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
-            }
-            */
+            submitEdits();
         }
     }
 
@@ -360,14 +306,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     /**
      * Called when user hits the submit button
      *
-     * *NOTE* currently not called, will un-comment in other methods, once back_end connectivity is verified
-     *
-     * @param view
      */
-    private void submitEdits(View view) {
-        //MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        //retriever.setDataSource(this, videoUri);
-        //String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+    private void submitEdits() {
         Intent returnIntent = new Intent();
         returnIntent.setData(videoUri);
         returnIntent.putExtra(START, importOptions.startTime);
@@ -376,41 +316,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         returnIntent.putExtra(QUALITY, importOptions.quality);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-        /*
-        //OUTLINE TO CONNECT TO BACKEND
-        VideoManager videoEditor = ExternalVideoManager.getInstance(this);
-        //TEST
-        //NEED TO: determine how to get video file path to pass to backend
-        videoEditor.importVideo(this, videoUri, importOptions, new VideoManager.VideoImportListener() {
-            @Override
-            public void onProgressUpdate(int current, int max) {
-                //TO DO: indicate video loading progress bar
-                //finish();
-            }
-
-            @Override
-            public void onComplete(Video vid) {
-                //TO DO: once edited, send this video back to 'CreateCardActivity'
-                Intent returnIntent = new Intent();
-                returnIntent.setData(videoUri);
-                returnIntent.putExtra(EDITED_VIDEO, vid);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-
-            @Override
-            public void onFailed(Throwable err) {
-                //TO DO: indicate "Failure" to calling routine
-                Intent returnIntent = new Intent();
-                returnIntent.setData(videoUri);
-                //'err' is null -checked
-                returnIntent.putExtra(ERROR, err);
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                Toast.makeText(getApplicationContext(), "Failed to Import Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from backend
-                finish();
-            }
-        });
-        */
     }
 
 
