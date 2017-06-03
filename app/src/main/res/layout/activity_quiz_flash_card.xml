@@ -20,6 +20,19 @@
 
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
+    <TextView
+        android:id="@+id/textView_FlashCardAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/prompt_text_field"
+        android:padding="8dp"
+        android:text=""
+        android:textSize="18sp" />
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -41,19 +54,6 @@
             android:text="@string/button_flash_card_next_question" />
 
     </TableRow>
-
-    <TextView
-        android:id="@+id/textView_FlashCardAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:layout_weight="1"
-        android:hint="@string/prompt_text_field"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text=""
-        android:textSize="18sp" />
 
 
 </LinearLayout>
