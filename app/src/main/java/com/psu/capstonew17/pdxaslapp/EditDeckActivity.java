@@ -29,7 +29,6 @@ public class EditDeckActivity extends BaseActivity {
     private List<Card>      cardsInDeck;
     private List<ListRow>   cardStructs;
     private EditText        textBox;
-    private final String    CHECKED_DECK   = "checkedDeck";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +41,10 @@ public class EditDeckActivity extends BaseActivity {
 
         //get the index of the selected deck to edit
         String checkedDeck = "";
-        if(getIntent().hasExtra(CHECKED_DECK)) {
+        if(getIntent().hasExtra(CreateEditDeleteDeckActivity.CHECKED_DECK)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                checkedDeck = bundle.getString(CHECKED_DECK);
+                checkedDeck = bundle.getString(CreateEditDeleteDeckActivity.CHECKED_DECK);
             }
         }
 

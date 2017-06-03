@@ -24,7 +24,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public static final String START = "start";
     public static final String END = "end";
     public static final String QUALITY = "quality";
-    private static final String CROP = "cropRegion";
+    public static final String CROP = "cropRegion";
 
     private Uri videoUri;
     private VideoView videoView;

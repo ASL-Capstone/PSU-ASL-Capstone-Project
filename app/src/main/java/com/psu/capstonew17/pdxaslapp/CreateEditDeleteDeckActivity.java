@@ -19,7 +19,7 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 public class CreateEditDeleteDeckActivity extends BaseActivity{
     static final int        MIN_CARDS       = 2;
     static final int        MAX_STRG_LNGTH  = 50;
-    private final String    CHECKED_DECK   = "checkedDeck";
+    static final String     CHECKED_DECK   = "checkedDeck";
 
     private RadioGroup  deckRG;
     private TextView    noDeckMsg;
