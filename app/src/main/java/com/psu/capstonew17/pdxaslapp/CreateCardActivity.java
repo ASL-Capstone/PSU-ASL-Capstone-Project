@@ -312,7 +312,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         public void onComplete(Video vid) {
                             video = vid;
                             startVideo();
-                            progressDialog.hide();
+                            progressDialog.dismiss();
                         }
 
                         //if importing fails.
