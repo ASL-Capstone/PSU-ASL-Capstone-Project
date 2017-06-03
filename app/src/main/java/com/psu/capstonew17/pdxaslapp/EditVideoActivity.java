@@ -164,10 +164,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //TO DO
-                //String startString = "Start Time: ";
-                //String stopString = "Stop Time: ";
                 Resources resources = getResources();
-                //boolean wrongOrder;
 
                 //if the switch is set to "Stop"
                 if(endTimeSwitch) {
@@ -176,7 +173,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((float)currentProgress/1000f)));
                         importOptions.endTime = currentProgress;
-                        //importOptions.endTime = videoView.getDuration();
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -190,7 +186,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((float)currentProgress/1000f)));
                         importOptions.startTime = currentProgress;
-                        //importOptions.startTime = 0;
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -210,9 +205,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         importOptions = new VideoManager.ImportOptions();
         //These members will eventually be set by EditVideo layout
         importOptions.cropRegion = null;
-        //importOptions.deleteAfter = false;
         importOptions.startTime = 0;
-        //importOptions.endTime = Integer.MAX_VALUE; //will get dynamically set to video duration
         importOptions.quality = 10; //default quality
 
         if(videoUri == null) {
