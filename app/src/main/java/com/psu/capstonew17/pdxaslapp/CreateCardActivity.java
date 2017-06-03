@@ -43,8 +43,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private CustomArrayListAdapter myAdapter;
     private Uri videoUri;
 
-    static final int GET_VIDEO = 1;
-    static final int REQUEST_EDIT_VIDEO = 3;
+    static final int GET_VIDEO          = 1;
+    static final int REQUEST_EDIT_VIDEO = 2;
     public static final String START = "start";
     public static final String END = "end";
     public static final String QUALITY = "quality";
@@ -53,7 +53,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     static final int MIN_LABEL_LENGTH = 3;
     static final int MAX_LABEL_LENGTH = 250;
 
-    static final int REQ_CAMERA_PERMS = 4;
+    static final int REQ_CAMERA_PERMS       = 1;
+    static final int REQ_EXT_STORAGE_PERMS  = 2;
 
     private final String SELECT_VIDEO = "Select Video";
 
@@ -87,7 +88,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Importing video");
+        progressDialog.setMessage(getResources().getString(R.string.importing_video));
         progressDialog.setIndeterminate(true);
         progressDialog.setCanceledOnTouchOutside(false);
 
@@ -127,14 +128,17 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 break;
 
             case R.id.buttonFromGallery:
-                intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, SELECT_VIDEO),
-                        GET_VIDEO);
+                if (PackageManager.PERMISSION_GRANTED ==
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    dispatchGalleryIntent();
+
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            REQ_EXT_STORAGE_PERMS);
+                }
                 break;
 
-                case R.id.button_submit:
+            case R.id.button_submit:
                 videoLabel = editText.getText().toString();
 
                 if (!videoLabelCheck() || video == null){
@@ -156,7 +160,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         }
                         finish();
                     } catch (ObjectAlreadyExistsException e){
-                        //toast here
+                        Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT);
                     }
                 }
                 break;
@@ -173,6 +177,16 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                     Toast.makeText(this, R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
                 }
             }
+            break;
+
+            case REQ_EXT_STORAGE_PERMS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchGalleryIntent();
+                } else {
+                    Toast.makeText(this, R.string.card_storage_perm_error, Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
         }
     }
 
@@ -198,6 +212,14 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             return false;
         }
         return true;
+    }
+
+    private void dispatchGalleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, SELECT_VIDEO),
+                GET_VIDEO);
     }
 
     private void dispatchTakeVideoIntent() {
