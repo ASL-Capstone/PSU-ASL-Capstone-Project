@@ -56,16 +56,19 @@
     <string name="button_use_video">Use This Video</string>
 
     <!-- Deck creation/editing strings -->
+    <string name="no_decks_msg">There aren\'t any decks to list!</string>
     <string name="deck_name_length_error">"Deck name must be at least 1 character and less than "</string>
     <string name="deck_size_error">Select at least two cards</string>
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
 
     <!-- Card creation/deletion strings -->
+    <string name="importing_video">Importing video</string>
+    <string name="card_already_exists">This card alreay exists!</string>
     <string name="card_select_deck_error">Please select at least one deck</string>
-    <string name="card_video_file_error">Error: File not exists</string>
-    <string name="card_record_video_error">Record Video Failed</string>
-    <string name="card_camera_perm_error">Camera Not Available</string>
+    <string name="card_record_video_error">Record video failed</string>
+    <string name="card_camera_perm_error">Camera not available</string>
+    <string name="card_storage_perm_error">External storage not available</string>
     <string name="card_uri_error">Error: Missing Uri!</string>
     <string name="card_name_lngth_error1">"Label length should be greater than "</string>
     <string name="card_name_lngth_error2">" characters and less than "</string>

@@ -51,7 +51,7 @@ public class CreateDeckActivity extends BaseActivity {
 
         //set ListView options, create an instance of the CardList
         //adapter and set it as the adapter of the ListView
-        ListView cardListView = (ListView)findViewById(R.id.createCardListView);
+        ListView cardListView = (ListView)findViewById(R.id.list_items);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         CustomArrayListAdapter adapter =
                 new CustomArrayListAdapter(this, R.layout.list_row, cardStructs);
@@ -60,17 +60,18 @@ public class CreateDeckActivity extends BaseActivity {
     }
 
     //onClick for the submit/done button.
-    //TODO: constrict length of text entered in edit text
     public void onCreateSubmitClicked(View view) {
         List<Card> cardsInDeck = new ArrayList<>();
         String deckName = textBox.getText().toString().trim();
 
+        //go through the list for the list view and add any cards that are selected
         for (int i = 0; i < cardStructs.size(); i++) {
             ListRow curr = cardStructs.get(i);
             if(curr.isChecked)
                 cardsInDeck.add(allCards.get(i));
         }
 
+        //is the deck name long/short enough?
         if (TextUtils.isEmpty(deckName)
                 || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -78,14 +79,17 @@ public class CreateDeckActivity extends BaseActivity {
             stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
             Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
+        //are there enough elected cards?
         } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
             Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
 
+        //everything looks good, we can create the deck
         } else {
             try {
                 deckManager.buildDeck(textBox.getText().toString(), cardsInDeck);
                 finish();
 
+            //Poo, the deck already exists. This means that the name the user entered isn't unique.
             } catch(ObjectAlreadyExistsException e) {
                 Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
             }

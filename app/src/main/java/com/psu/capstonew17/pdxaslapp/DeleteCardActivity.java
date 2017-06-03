@@ -26,13 +26,14 @@ public class DeleteCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_card);
 
-        //get Decks from current testing
         deckManager = ExternalDeckManager.getInstance(this);
         cards       = deckManager.getDefaultDeck().getCards();
         cardRG      = (RadioGroup) findViewById(R.id.cardRButtons);
         populateRadioGroup();
     }
 
+    //clear the checked card, populate the radiogroup again
+    //called after a card is deleted
     public void populateRadioGroup(){
         cardRG.clearCheck();
         cardRG.removeAllViews();
@@ -45,8 +46,10 @@ public class DeleteCardActivity extends BaseActivity {
         }
     }
 
+    //user wants to delete that card they checked.
     public void onDeleteClicked(View view) {
         int index = cardRG.getCheckedRadioButtonId();
+        //If the checked index is -1 the user never selected a card to delete. Silly user.
         if (index == -1) {
             Toast.makeText(this, R.string.select_card, Toast.LENGTH_SHORT).show();
         } else {
@@ -54,6 +57,8 @@ public class DeleteCardActivity extends BaseActivity {
                 Card card = cards.get(index);
                 List<Deck> decks = card.getUsers();
                 List<String> deletedDecks = new ArrayList<>();
+                //we have to either remove the card from every deck it is in, or delete the deck
+                //if it will have less than 2 cards in it after the card is removed
                 for (Deck curr : decks){
                     List<Card> cardsInDeck = curr.getCards();
                     if(cardsInDeck.size() > 2)
@@ -64,16 +69,22 @@ public class DeleteCardActivity extends BaseActivity {
                     }
                     curr.commit();
                 }
+                //now we can (hopefully) delete the card
                 card.delete();
+                //did we delete any decks? let's let the user know
                 if(!deletedDecks.isEmpty())
                     decksDeletedMsg(deletedDecks);
+                //repopulate the radiogroup so that it's still accurate
                 populateRadioGroup();
+
             } catch(ObjectInUseException e) {
+                //poo, something went wrong. card was still a member of a deck.
                 Toast.makeText(this, R.string.card_in_use_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    //the message that is displayed when one or more decks are deleted.
     public void decksDeletedMsg(List<String> deletedDecks) {
         StringBuilder sb = new StringBuilder();
         sb.append(getResources().getString(R.string.deleted_decks));
@@ -82,6 +93,6 @@ public class DeleteCardActivity extends BaseActivity {
             if (i < deletedDecks.size() - 1)
                 sb.append(", ");
         }
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 }
