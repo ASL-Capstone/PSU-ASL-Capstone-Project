@@ -51,7 +51,7 @@ public class CreateDeckActivity extends BaseActivity {
 
         //set ListView options, create an instance of the CardList
         //adapter and set it as the adapter of the ListView
-        ListView cardListView = (ListView)findViewById(R.id.createCardListView);
+        ListView cardListView = (ListView)findViewById(R.id.list_items);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         CustomArrayListAdapter adapter =
                 new CustomArrayListAdapter(this, R.layout.list_row, cardStructs);

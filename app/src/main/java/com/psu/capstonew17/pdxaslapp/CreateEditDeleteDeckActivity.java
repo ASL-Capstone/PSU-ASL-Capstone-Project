@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.psu.capstonew17.backend.api.Deck;
@@ -21,6 +22,7 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     private final String    CHECKED_DECK   = "checkedDeck";
 
     private RadioGroup  deckRG;
+    private TextView    noDeckMsg;
     private List<Deck>  decks;
     private DeckManager deckManager;
 
@@ -28,6 +30,9 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_delete_deck);
+
+        noDeckMsg = (TextView) findViewById(R.id.noDecksText);
+        noDeckMsg.setText(R.string.no_decks_msg);
 
         deckManager = ExternalDeckManager.getInstance(this);
         deckRG      = (RadioGroup) findViewById(R.id.deckRButtons);
@@ -38,6 +43,11 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         deckRG.clearCheck();
         deckRG.removeAllViews();
         decks = deckManager.getDecks(null);
+
+        if(decks.size() > 0)
+            noDeckMsg.setVisibility(View.GONE);
+        else
+            noDeckMsg.setVisibility(View.VISIBLE);
 
         for (int i = 0; i < decks.size(); i++) {
             RadioButton currRad = new RadioButton(this);
