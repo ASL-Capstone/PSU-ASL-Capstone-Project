@@ -74,10 +74,12 @@ public class EditDeckActivity extends BaseActivity {
         cardListView.setItemsCanFocus(false);
     }
 
-    //TODO: constrict length of text entered in edit text
+    //The user is done editing the deck.
     public void onEditSubmitClicked(View view) {
         String deckName = textBox.getText().toString().trim();
 
+        //add all of the selected cards, if there are cards that are in the deck, but the user
+        //deselected then they need to be removed from the deck.
         for (int i = 0; i < cardStructs.size(); i++){
             Card curr = allCards.get(i);
             if (!cardsInDeck.contains(curr) && cardStructs.get(i).isChecked) {
@@ -88,6 +90,7 @@ public class EditDeckActivity extends BaseActivity {
             }
         }
 
+        //is the deck name length within a valid range?
         if (TextUtils.isEmpty(deckName)
                 || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -95,16 +98,19 @@ public class EditDeckActivity extends BaseActivity {
             stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
             Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
-
+        //are there going to be enough cards in the deck?
         } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
             Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
 
+        //everything looks good, we can create the deck.
         } else {
             if (!TextUtils.equals(deckName, deck.getName())) {
                 try {
                     deck.setName(textBox.getText().toString());
                     deck.commit();
                     finish();
+
+                //darn, a deck already exists with this name!
                 } catch (ObjectAlreadyExistsException e) {
                     Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
                 }

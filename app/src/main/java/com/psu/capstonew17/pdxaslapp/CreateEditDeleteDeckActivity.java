@@ -39,11 +39,14 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         populateRadioGroup();
     }
 
+    //populates the radiogroup with decks from the DB, unchecks any selected deck.
     public void populateRadioGroup(){
         deckRG.clearCheck();
         deckRG.removeAllViews();
         decks = deckManager.getDecks(null);
 
+        //if there aren't any decks then display a message so that the user doesn't think
+        //that this menu is broken
         if(decks.size() > 0)
             noDeckMsg.setVisibility(View.GONE);
         else
@@ -57,17 +60,21 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         }
     }
 
+    //the user wants to create a new deck
     public void onCreateClicked(View view) {
         Intent intent;
         intent = new Intent(this, CreateDeckActivity.class);
         startActivity(intent);
     }
 
+    //the user wants to delete an existing deck
     public void onDeleteClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
+        //if the index is -1 then the user hasn't selected any decks. silly user.
         if(index == -1) {
             Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
 
+        //delete the selected deck, repopulate the radio group so that it's accurate.
         } else {
             Deck selectedDeck = decks.get(index);
             selectedDeck.delete();
@@ -76,8 +83,10 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         }
     }
 
+    //the user wants to edit an existing deck.
     public void onEditClicked(View view) {
         int index = deckRG.getCheckedRadioButtonId();
+        //if the index is -1 then the user hasn't selected a deck. silly user
         if(index == -1) {
             Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
 
@@ -90,6 +99,7 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     }
 
     @Override
+    //we need to repopulate the radio group after returning from creating or editing a deck
     protected void onResume(){
         super.onResume();
         populateRadioGroup();
