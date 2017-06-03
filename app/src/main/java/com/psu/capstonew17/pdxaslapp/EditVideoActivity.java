@@ -23,6 +23,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public static final String END = "end";
     public static final String QUALITY = "quality";
     public static final String CROP = "cropRegion";
+    public static final String DELETE = "deleteFromGallery?";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -302,12 +303,13 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      */
     private void submitEdits() {
         Intent returnIntent = new Intent();
-        returnIntent.setData(videoUri);
-        returnIntent.putExtra(START, importOptions.startTime);
-        returnIntent.putExtra(END, importOptions.endTime);
+        returnIntent.setData(videoUri); //video location
+        returnIntent.putExtra(START, importOptions.startTime); //user-selected start time
+        returnIntent.putExtra(END, importOptions.endTime); //user-selected stop time
         returnIntent.putExtra(CROP, importOptions.cropRegion); //will be null for MVP
-        returnIntent.putExtra(QUALITY, importOptions.quality);
-        setResult(Activity.RESULT_OK, returnIntent);
+        returnIntent.putExtra(QUALITY, importOptions.quality); //video quality (MVP default - 10)
+        returnIntent.putExtra(DELETE, deleteFromGal); //delete original video from gallery?
+        setResult(Activity.RESULT_OK, returnIntent); //indicate successful result to return to CreateCardActivity
         finish();
     }
 
