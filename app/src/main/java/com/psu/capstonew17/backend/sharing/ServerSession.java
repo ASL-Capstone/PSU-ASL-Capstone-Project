@@ -17,7 +17,7 @@ import java.util.Random;
  * Created by noahz on 4/28/17.
  */
 
-class ServerSession {
+class ServerSession implements Runnable {
     private static final String TAG = "ServerSession";
     private Socket sck;
     private byte[] key;
@@ -32,9 +32,15 @@ class ServerSession {
     /**
      * Handle the given client connection
      */
-    public void run() throws IOException {
-        OutputStream out = sck.getOutputStream();
-        InputStream in = sck.getInputStream();
+    public void run() {
+        OutputStream out;
+        InputStream in;
+        try {
+            out = sck.getOutputStream();
+            in = sck.getInputStream();
+        } catch(IOException e) {
+            return;
+        }
 
         // generate challenge
         byte[] challenge_salt = Protocol.randomBytes(new Random(), 32);
@@ -43,7 +49,10 @@ class ServerSession {
             hash = MessageDigest.getInstance("SHA2");
         } catch(NoSuchAlgorithmException e) {
             Log.wtf(TAG, "Cannot construct SHA2 hash", e);
-            sck.close();
+            try {
+                sck.close();
+            } catch(IOException e2) {
+            }
             return;
         }
         hash.update(challenge_salt);
@@ -52,19 +61,33 @@ class ServerSession {
 
         if(response.length != 32) {
             Log.wtf(TAG, "Invalid SHA2 hash length");
-            sck.close();
+            try {
+                sck.close();
+            } catch(IOException e) {
+            }
             return;
         }
 
         // send challenge and get response
-        out.write(challenge_salt);
+        try {
+            out.write(challenge_salt);
+        } catch(IOException e) {
+            return;
+        }
 
         byte[] client_response = new byte[32];
         int read = 0, nread;
-        while((nread = in.read(client_response, read, 32-read)) >= 0);
-        if(nread == -1 || !Arrays.equals(client_response, response)) {
-            // protocol error
-            sck.close();
+        try {
+            while ((nread = in.read(client_response, read, 32 - read)) >= 0) ;
+            if (nread == -1 || !Arrays.equals(client_response, response)) {
+                // protocol error
+                try {
+                    sck.close();
+                } catch (IOException e) {
+                }
+                return;
+            }
+        } catch(IOException e) {
             return;
         }
 
@@ -73,23 +96,31 @@ class ServerSession {
             hash = MessageDigest.getInstance("SHA2");
         } catch(NoSuchAlgorithmException e) {
             Log.wtf(TAG, "Cannot construct SHA2 hash", e);
-            sck.close();
+            try {
+                sck.close();
+            } catch(IOException e2) {
+                return;
+            }
             return;
         }
         pack.serializeTo(out, hash);
         byte[] computed_checksum = hash.digest();
 
         read = 0;
-        while((nread = in.read(client_response, read, 32-read)) >= 0);
-        if(nread == -1) {
-            // protocol error
+        try {
+            while ((nread = in.read(client_response, read, 32 - read)) >= 0) ;
+            if (nread == -1) {
+                // protocol error
+                sck.close();
+                return;
+            } else if (!Arrays.equals(client_response, computed_checksum)) {
+                out.write(Protocol.MT_CKSUM_ERROR);
+                // TODO: Retry on failure?
+            }
+            out.write(Protocol.MT_CKSUM_VALID);
             sck.close();
+        } catch(IOException e) {
             return;
-        } else if(!Arrays.equals(client_response, computed_checksum)) {
-            out.write(Protocol.MT_CKSUM_ERROR);
-            // TODO: Retry on failure?
         }
-        out.write(Protocol.MT_CKSUM_VALID);
-        sck.close();
     }
 }

@@ -14,6 +14,8 @@ import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import java.io.FileNotFoundException;
@@ -24,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadFactory;
 
 public class SharingServer extends Service {
     private WifiP2pManager wifiManager;
@@ -31,7 +34,6 @@ public class SharingServer extends Service {
     private BroadcastReceiver wifiReceiver;
     private List<WifiP2pDevice> listOfPeers = new ArrayList<WifiP2pDevice>();         //host list of peers from PeerListListener
     private final IBinder mBinder = new Binder();
-    private Activity activity;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -59,5 +61,10 @@ public class SharingServer extends Service {
             }
         };
         registerReceiver(wifiReceiver, intentFilter);
+    }
+
+    private void handleClient(Socket sock, byte[] key, SharePackage pkg) {
+        Thread t = new Thread(new ServerSession(sock, key, pkg));
+        t.start();
     }
 }
