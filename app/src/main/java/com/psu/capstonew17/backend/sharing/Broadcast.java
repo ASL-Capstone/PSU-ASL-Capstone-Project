@@ -20,7 +20,7 @@ public class Broadcast extends BroadcastReceiver {
     private WifiP2pManager wifiManager;
     private WifiP2pManager.Channel wifiChannel;
     private List<WifiP2pDevice> listOfPeers = new ArrayList<WifiP2pDevice>();         //host list of peers from PeerListListener
-
+    
 
     private WifiP2pManager.PeerListListener peerListener = new WifiP2pManager.PeerListListener() {
         @Override
