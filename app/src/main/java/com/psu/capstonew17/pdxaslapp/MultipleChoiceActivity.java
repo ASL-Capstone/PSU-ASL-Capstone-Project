@@ -4,6 +4,7 @@ package com.psu.capstonew17.pdxaslapp;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -107,6 +108,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         // Check to See if there is another Question in the Test
         if(currTest.hasNext()) {
             // Clear the current set of answers from the Radio Group
+            answers.clearCheck();
             answers.removeAllViews();
             // Get the Next Question
             curQuestion = currTest.next();
@@ -159,6 +161,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         if(userAnswerID != -1) {
             // Get the selected answer
             RadioButton holder = (RadioButton) findViewById(userAnswerID);
+
             // Check User answer against the current questions correct answer
             Pair<Boolean,String> result = curQuestion.answer(holder.getText().toString());
             // Case: Correct
@@ -197,6 +200,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                     // Case: User did'nt enter an answer
                     case -1:
                         Toast.makeText(this, "Pick an Answer", Toast.LENGTH_SHORT).show();
+                        return;
                 }
                 // Load the next question.
                 loadQuestion();

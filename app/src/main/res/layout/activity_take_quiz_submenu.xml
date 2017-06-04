@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,32 +22,43 @@
 
         <RadioGroup
             android:id="@+id/radioGroupQuizChoice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonMultipleChoice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:onClick="onQuizTypeClicked"
                 android:text="@string/button_multiple_choice" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonFlashCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="onQuizTypeClicked"
                 android:text="@string/button_flash_card" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonWriteUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:onClick="onQuizTypeClicked"
                 android:text="@string/button_write_up" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
         </RadioGroup>
 
         <TextView
@@ -64,44 +74,53 @@
 
         <RadioGroup
             android:id="@+id/radioGroupQuestionCount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="horizontal">
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonTenQuestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
                 android:onClick="onNumQuestionsClicked"
                 android:text="@string/button_ten_questions" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonThirtyQuestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
                 android:onClick="onNumQuestionsClicked"
                 android:text="@string/button_thirty_questions" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonFiftyQuestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1"
                 android:onClick="onNumQuestionsClicked"
                 android:text="@string/button_fifty_questions" />
-
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
             <RadioButton
                 android:id="@+id/radioButtonAllQuestions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:onClick="onNumQuestionsClicked"
                 android:text="@string/button_all_questions" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
         </RadioGroup>
 
         <TextView
@@ -119,7 +138,7 @@
             android:id="@+id/deckListView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.24">
+            android:layout_weight="1">
 
             <LinearLayout
                 android:id="@+id/deckListLayout"
@@ -129,15 +148,6 @@
 
             </LinearLayout>
         </ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foregroundGravity="bottom"
-        android:gravity="bottom"
-        android:orientation="vertical">
-
         <Button
             android:id="@+id/buttonTakeQuiz"
             android:layout_width="match_parent"
@@ -148,4 +158,4 @@
             android:text="@string/button_take_quiz" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

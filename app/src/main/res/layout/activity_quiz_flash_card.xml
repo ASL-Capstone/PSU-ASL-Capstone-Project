@@ -2,22 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="7">
 
     <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-        android:id="@+id/layout"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
+        android:id="@+id/layout"
         android:layout_height="0dp"
-        android:layout_weight="5">
-
+        android:layout_weight="5"
+        android:gravity="center_horizontal">
         <VideoView
-            android:layout_gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoView_flashCard" />
-
+            android:layout_height="match_parent"
+            android:id="@+id/videoView_flashCard"
+            android:layout_gravity="center"/>
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
     <TextView
