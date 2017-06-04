@@ -56,16 +56,19 @@
     <string name="button_use_video">Use This Video</string>
 
     <!-- Deck creation/editing strings -->
+    <string name="no_decks_msg">There aren\'t any decks to list!</string>
     <string name="deck_name_length_error">"Deck name must be at least 1 character and less than "</string>
     <string name="deck_size_error">Select at least two cards</string>
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
 
     <!-- Card creation/deletion strings -->
+    <string name="importing_video">Importing video</string>
+    <string name="card_already_exists">This card alreay exists!</string>
     <string name="card_select_deck_error">Please select at least one deck</string>
-    <string name="card_video_file_error">Error: File not exists</string>
-    <string name="card_record_video_error">Record Video Failed</string>
-    <string name="card_camera_perm_error">Camera Not Available</string>
+    <string name="card_record_video_error">Record video failed</string>
+    <string name="card_camera_perm_error">Camera not available</string>
+    <string name="card_storage_perm_error">External storage not available</string>
     <string name="card_uri_error">Error: Missing Uri!</string>
     <string name="card_name_lngth_error1">"Label length should be greater than "</string>
     <string name="card_name_lngth_error2">" characters and less than "</string>
@@ -92,8 +95,8 @@
     <string name="start_stop_edit">Edit Start/Stop time</string>
     <string name="start">start</string>
     <string name="stop">stop</string>
-    <string name="start_time_label">Start time: not set (ms)</string>
-    <string name="stop_time_label">Stop time: not set (ms)</string>
+    <string name="start_time_label">Start time: not set (sec)</string>
+    <string name="stop_time_label">Stop time: not set (sec)</string>
     <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
     <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
     <string name="menu_item_manage_card">MANAGE CARD</string>
@@ -103,7 +106,10 @@
     <string name="menu_item_manage_decks">MANAGE DECKS</string>
     <string name="menu_item_receive_decks">Receive Decks</string>
     <string name="menu_item_share">Share</string>
-    <string name="start_time_default">Start time: %1$d (ms)</string>
-    <string name="stop_time_default">Stop time: %1$d (ms)</string>
+    <string name="start_time_default">Start time: %1$f (sec)</string>
+    <string name="stop_time_default">Stop time: %1$f (sec)</string>
     <string name="seekBar_startSeeking_msg">Start seeking</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
+    <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
 </resources>

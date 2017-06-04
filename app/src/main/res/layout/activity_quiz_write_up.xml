@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6">
+        android:layout_height="wrap_content">
 
         <VideoView
             android:layout_gravity="top|center"
@@ -19,25 +18,9 @@
 
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="bottom">
-
-        <Button
-            android:layout_weight="1"
-            android:id="@+id/button_quizWriteUpSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/button_submit" />
-
-    </TableRow>
-
     <LinearLayout
-        android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center">
 
@@ -45,14 +28,28 @@
             android:id="@+id/editTextWriteUpAnswerField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/prompt_text_field"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
-            />
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:hint="@string/prompt_text_field"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
 
     </LinearLayout>
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom">
+
+        <Button
+            android:id="@+id/button_quizWriteUpSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/button_submit" />
+
+    </TableRow>
 
 
 </LinearLayout>

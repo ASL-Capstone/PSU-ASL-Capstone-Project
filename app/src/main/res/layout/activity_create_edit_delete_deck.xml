@@ -11,6 +11,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.psu.capstonew17.pdxaslapp.CreateEditDeleteDeckActivity">
 
+    <TextView
+        android:id="@+id/noDecksText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -22,10 +28,8 @@
             android:orientation="vertical"
             android:id="@+id/deckRButtons"
             android:fillViewport="true"
-            android:textColor="@android:color/black">
-        </RadioGroup>
+            android:textColor="@android:color/black"/>
     </ScrollView>
-
 
     <LinearLayout
         android:layout_width="match_parent"
