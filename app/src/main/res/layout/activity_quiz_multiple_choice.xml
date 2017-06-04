@@ -7,49 +7,13 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp"
-        android:weightSum="1"
-        >
-
-       <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
-           android:layout_width="match_parent"
-           android:id="@+id/layout"
-           android:layout_height="0dp"
-           android:layout_weight="0.6"
-           android:gravity="center_horizontal">
-           <VideoView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:id="@+id/videoViewMultiChoice"
-               android:layout_gravity="center"/>
-       </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
-
-
-        <ScrollView
+        android:layout_height="0dp">
+        <RadioGroup
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.4"
-            >
-
-            <LinearLayout
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center">
-
-                <RadioGroup
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/MultiChoiceAnswerRadioGroup">
-
-                </RadioGroup>
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-
+            android:layout_height="match_parent"
+            android:id="@+id/MultiChoiceAnswerRadioGroup">
+        </RadioGroup>
+    </ScrollView>
 
     <Button
         android:layout_alignParentBottom="true"
