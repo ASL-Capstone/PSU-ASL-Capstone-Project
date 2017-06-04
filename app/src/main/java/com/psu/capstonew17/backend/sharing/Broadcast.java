@@ -67,7 +67,7 @@ public class Broadcast extends BroadcastReceiver {
         }
     }
 
-    public WifiP2pDevice getPeer(){
+    public WifiP2pDevice getPeer(){                             //pull a peer from the front fron of the peer list list
         if(listOfPeers.size() != 0)
         {return listOfPeers.get(0);}
         return null;
