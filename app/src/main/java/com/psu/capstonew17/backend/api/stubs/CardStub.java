@@ -18,6 +18,11 @@ public class CardStub implements Card {
     private String translation;
     private List<Deck> activeDecks;
 
+    @Override
+    public int getCardId() {
+        return 0;
+    }
+
     public Video getVideo() {
         return this.video;
     }

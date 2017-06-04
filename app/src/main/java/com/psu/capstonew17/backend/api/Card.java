@@ -11,6 +11,11 @@ import java.util.List;
 public interface Card extends Parcelable {
 
     /**
+     * Get the card's id
+     */
+    int getCardId();
+
+    /**
      * Get the video associated with this card
      */
     Video getVideo();

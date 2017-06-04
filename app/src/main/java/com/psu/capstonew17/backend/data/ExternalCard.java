@@ -13,6 +13,7 @@ import com.psu.capstonew17.backend.api.*;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ class ExternalCard implements Card, EncodeableObject {
         dbHelper = ExternalCardManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(CardEntry.COLUMN_VIDEO, ((ExternalVideo) v).getVideoId());
+        values.put(CardEntry.COLUMN_VIDEO, v.getVideoId());
         db.update(
                 CardEntry.TABLE_NAME, values,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
@@ -69,7 +70,8 @@ class ExternalCard implements Card, EncodeableObject {
         );
     }
 
-    public int getId() {
+    @Override
+    public int getCardId() {
         return cardId;
     }
 
@@ -78,13 +80,31 @@ class ExternalCard implements Card, EncodeableObject {
         if(!getUsers().isEmpty()){
             throw new ObjectInUseException("Card is being used in a deck.");
         }
-        // remove SQL
+        // remove references to card
         dbHelper = ExternalCardManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(
                 CardEntry.TABLE_NAME,
                 CardEntry.COLUMN_ID + "=" + this.cardId, null
         );
+        db.delete(
+                AnswerEntry.TABLE_NAME,
+                AnswerEntry.COLUMN_CARD + "=" + this.cardId, null
+        );
+        // are there any more cards using this video?
+        String query = dbHelper.buildSelectQuery(
+                CardEntry.TABLE_NAME,
+                Arrays.asList(CardEntry.COLUMN_VIDEO + "=" + this.video.getVideoId())
+        );
+        Cursor cursor = db.rawQuery(query, null);
+        if(!cursor.moveToFirst()){
+            // no longer in use
+            File vFile = new File(((ExternalVideo) this.video).getVideoPath());
+            if(vFile.exists()){
+                vFile.delete();
+            }
+        }
+        cursor.close();
     }
 
     @Override
