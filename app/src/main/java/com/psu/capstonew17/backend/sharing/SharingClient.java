@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
+import com.psu.capstonew17.backend.api.SharingReceiveListener;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -37,6 +39,13 @@ public class SharingClient extends Service {
     private IntentFilter aIntentFilter;
     private final IBinder aBinder = new Binder();
     private Broadcast bReciever;
+    private String host;
+    private byte [] key;
+    private SharingReceiveListener listener;
+    SharingClient(byte [] key,SharingReceiveListener listener){
+        this.key = key;
+        this.listener=listener;
+    }
 
     @Override
     public void onCreate(){
@@ -69,11 +78,8 @@ public class SharingClient extends Service {
                 try {
                     Socket socket = new Socket();                //create unconnected socket
                     socket.connect(new InetSocketAddress(configuration.deviceAddress, port), 10000);  //connect socket to server with ip address (MAC address identified above), port 8080, and timeout value in ms
-                    OutputStream outStream = socket.getOutputStream();
-                    ObjectOutputStream objOut = new ObjectOutputStream(outStream);                  //graph java object to output stream
-                    objOut.writeObject(decks);                                                      //write deck to output stream
-                    objOut.close();                                                                 //close streams to release resources
-                    outStream.close();
+                    ClientSession sess = new ClientSession(socket, key, SharingClient.this);
+                    sess.run();
                 } catch (FileNotFoundException exc) {
                     exc.printStackTrace();
                 } catch (IOException exc) {
@@ -82,7 +88,7 @@ public class SharingClient extends Service {
             }
             @Override
             public void onFailure(int i) {
-                //handle
+                listener.onError(SharingReceiveListener.ErrorType.CONNECTION_FAILED);
             }
 
         });
