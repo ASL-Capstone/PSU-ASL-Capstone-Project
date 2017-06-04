@@ -1,3 +1,4 @@
+//MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
 import android.app.Activity;
@@ -14,17 +15,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
-
 import com.psu.capstonew17.backend.api.VideoManager;
 
 
 public class EditVideoActivity extends BaseActivity implements View.OnClickListener{
-    public static final String EDITED_VIDEO = "video";
-    public static final String ERROR = "ERROR_with_importing_options";
     public static final String START = "start";
     public static final String END = "end";
     public static final String QUALITY = "quality";
     public static final String CROP = "cropRegion";
+    public static final String DELETE = "deleteFromGallery?";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -32,10 +31,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     //UI
     private SeekBar seekBar; //tracks current video's progress
     private Switch start_stop_switch; // off = modify stop time; on = modify start time
+    private Switch deleteFromGalSwitch; //switch used to indicate video should be removed from gallery
+    private boolean deleteFromGal;
     private boolean endTimeSwitch; // set to value of above switch
     private Button submitButton; //attached to submit button (sends modifications to backend)
+    private Button playPauseButton;
     private TextView startTimeText; //displays current starting point of video
     private TextView endTimeText; //displays current ending point of video
+    private TextView seekPositionDisplay;
 
     //local helper variables
     private int currentProgress; //current progress of user-initiated seekBar movement
@@ -43,7 +46,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
     //Vars to pass to backend //may replace with local vars at some point
     VideoManager.ImportOptions importOptions;
-
 
     //Private inner-class used to update the seekBar
     private final Runnable onEverySecond = new Runnable() {
@@ -54,7 +56,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             }
 
             if(videoView.isPlaying()) {
-                seekBar.postDelayed(onEverySecond, 1000);
+                seekBar.postDelayed(onEverySecond, 0); //int changes "pace" of seek ball
             }
         }
     };
@@ -69,7 +71,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
         //NOTE - each layout init block will be converted to a separate local method during 'polish'
 
-        //set up as first run-through
+        //set up as first run-through; controls some error Toasts
         firstAdjustment = true;
 
         /**Set up start_stop switch
@@ -82,10 +84,27 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 endTimeSwitch = isChecked;
                 if(endTimeSwitch) {
-                    //endTimeSwitch = start_stop_switch.getShowText(); //set endTime to false if start selected; true if stop
                     Toast.makeText(getApplicationContext(), "The seek bar will now update the STOP TIME", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "The seek bar will now update the START TIME", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        /**
+         * Set up the "Delete From Gallery" swtich;
+         * Determines if the video should be removed from the gallery following the edit
+         */
+        deleteFromGalSwitch = (Switch) findViewById(R.id.DeleteFromGallerySwitch);
+        deleteFromGalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isNo) {
+                deleteFromGal = (!isNo);
+                if(deleteFromGal) {
+                    Toast.makeText(getApplicationContext(), "The video will be removed from the Gallery", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "The video will remain in the Gallery", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -99,14 +118,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         submitButton = (Button) findViewById(R.id.submitButtonEditCard);
         submitButton.setOnClickListener(this);
 
-        /*submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //UNCOMMENT once backend connected - submitEdits(view);
-                submitEdits(view);
-            }
-        });
-        */
+
+        /**
+         * Set up the seek bar position display text
+         */
+        seekPositionDisplay = (TextView) findViewById(R.id.seekDisplayEditCard);
+        seekPositionDisplay.setText(R.string.seekDisplayDefault);
 
 
         /**Set up seekBar connectivity
@@ -116,15 +133,20 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         //MOVE SEEK BAR SET-UP TO SEPARATE METHOD
         //connect seekBar to xml
         seekBar = (SeekBar) findViewById(R.id.seekBarEditVideo);
-        //seekBar.setMax(videoView.getDuration()); //set 'seekBar's max limit to videos's length
         //connect seekBar functionality to video --> video should respond to seekBar movement with these
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            Resources resources = getResources();
+
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if(fromUser) { //if seekBar movement is user-initiated, adjust video accordingly
                     videoView.seekTo(progress);
                     currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
+                else {
+                    //seekBar.setProgress(progress);
+                }
+                seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)progress/1000f)));
             }
 
             @Override
@@ -143,10 +165,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 //TO DO
-                //String startString = "Start Time: ";
-                //String stopString = "Stop Time: ";
                 Resources resources = getResources();
-                //boolean wrongOrder;
 
                 //if the switch is set to "Stop"
                 if(endTimeSwitch) {
@@ -155,7 +174,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((float)currentProgress/1000f)));
                         importOptions.endTime = currentProgress;
-                        //importOptions.endTime = videoView.getDuration();
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -169,7 +187,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((float)currentProgress/1000f)));
                         importOptions.startTime = currentProgress;
-                        //importOptions.startTime = 0;
                         firstAdjustment = false;
                         //TEST
                         displayOptions();
@@ -178,7 +195,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
-
             }
         });
 
@@ -190,9 +206,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         importOptions = new VideoManager.ImportOptions();
         //These members will eventually be set by EditVideo layout
         importOptions.cropRegion = null;
-        //importOptions.deleteAfter = false;
         importOptions.startTime = 0;
-        //importOptions.endTime = Integer.MAX_VALUE; //will get dynamically set to video duration
         importOptions.quality = 10; //default quality
 
         if(videoUri == null) {
@@ -202,16 +216,33 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    seekBar.setMax(videoView.getDuration()); 
-                    seekBar.postDelayed(onEverySecond, 1000); //1000 milli-second delay
+                public void onPrepared(final MediaPlayer mediaPlayer) {
+                    seekBar.setMax(mediaPlayer.getDuration());
+                    seekBar.postDelayed(onEverySecond, 0); //0 milli-second delay (was 1000)
+                    mediaPlayer.setLooping(true); //video will loop indefinitely
+                    //set DEFAULT max video length to original video length
+                    importOptions.endTime = mediaPlayer.getDuration();
+
+                    /**
+                     * Set up play/pause button to allow the user to replay and pause the video
+                     */
+                    playPauseButton = (Button) findViewById(R.id.PlayPauseButtonEdit);
+                    playPauseButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(mediaPlayer.isPlaying()) {
+                                mediaPlayer.pause();
+                            }
+                            else {
+                                seekBar.postDelayed(onEverySecond, 0);
+                                mediaPlayer.start();
+                            }
+                        }
+                    });
                 }
             });
-
+            
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
-
-            //set DEFAULT max video length to original video length
-            importOptions.endTime = videoView.getDuration();
 
             //calls setOnPreparedListener??
             videoView.start(); //start AFTER setting up the seek bar
@@ -228,21 +259,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         endTimeText = (TextView) findViewById(R.id.textViewStopTimeLabel);
         endTimeText.setText(R.string.stop_time_label);
 
-        /*
-        //FOR NOW, just return the un-edited video back to 'CreateCard'
-        //Will change once connected to backend, and time-cropping is functional
-        Intent returnIntent = new Intent();
-        if(videoUri != null) {
-            returnIntent.setData(videoUri);
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
-        }
-        else {
-            setResult(Activity.RESULT_CANCELED, returnIntent);
-            finish();
-        }
-        */
     }
+
+
 
 
     /**
@@ -252,23 +271,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if(R.id.submitButtonEditCard == view.getId()){
-            //UNcomment once backend is working + connected
-            submitEdits(view);
-            //FOR NOW, just return the un-edited video back to 'CreateCard'
-            //Will change once connected to backend, and time-cropping is functional
-
-            /*
-            Intent returnIntent = new Intent();
-            if(videoUri != null) {
-                returnIntent.setData(videoUri);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-            else {
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                finish();
-            }
-            */
+            submitEdits();
         }
     }
 
@@ -297,57 +300,17 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     /**
      * Called when user hits the submit button
      *
-     * *NOTE* currently not called, will un-comment in other methods, once back_end connectivity is verified
-     *
-     * @param view
      */
-    public void submitEdits(View view) {
-        //MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        //retriever.setDataSource(this, videoUri);
-        //String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+    private void submitEdits() {
         Intent returnIntent = new Intent();
-        returnIntent.setData(videoUri);
-        returnIntent.putExtra(START, importOptions.startTime);
-        returnIntent.putExtra(END, importOptions.endTime);
+        returnIntent.setData(videoUri); //video location
+        returnIntent.putExtra(START, importOptions.startTime); //user-selected start time
+        returnIntent.putExtra(END, importOptions.endTime); //user-selected stop time
         returnIntent.putExtra(CROP, importOptions.cropRegion); //will be null for MVP
-        returnIntent.putExtra(QUALITY, importOptions.quality);
-        setResult(Activity.RESULT_OK, returnIntent);
+        returnIntent.putExtra(QUALITY, importOptions.quality); //video quality (MVP default - 10)
+        returnIntent.putExtra(DELETE, deleteFromGal); //delete original video from gallery?
+        setResult(Activity.RESULT_OK, returnIntent); //indicate successful result to return to CreateCardActivity
         finish();
-        /*
-        //OUTLINE TO CONNECT TO BACKEND
-        VideoManager videoEditor = ExternalVideoManager.getInstance(this);
-        //TEST
-        //NEED TO: determine how to get video file path to pass to backend
-        videoEditor.importVideo(this, videoUri, importOptions, new VideoManager.VideoImportListener() {
-            @Override
-            public void onProgressUpdate(int current, int max) {
-                //TO DO: indicate video loading progress bar
-                //finish();
-            }
-
-            @Override
-            public void onComplete(Video vid) {
-                //TO DO: once edited, send this video back to 'CreateCardActivity'
-                Intent returnIntent = new Intent();
-                returnIntent.setData(videoUri);
-                returnIntent.putExtra(EDITED_VIDEO, vid);
-                setResult(Activity.RESULT_OK, returnIntent);
-                finish();
-            }
-
-            @Override
-            public void onFailed(Throwable err) {
-                //TO DO: indicate "Failure" to calling routine
-                Intent returnIntent = new Intent();
-                returnIntent.setData(videoUri);
-                //'err' is null -checked
-                returnIntent.putExtra(ERROR, err);
-                setResult(Activity.RESULT_CANCELED, returnIntent);
-                Toast.makeText(getApplicationContext(), "Failed to Import Video", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from backend
-                finish();
-            }
-        });
-        */
     }
 
 
