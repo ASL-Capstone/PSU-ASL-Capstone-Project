@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class SharingManager implements com.psu.capstonew17.backend.api.SharingManager{
     private static SharingManager instance = null;
-    private SharingServer serve = new SharingServer();  //create instance of SharingServer to connect to and return cards/decks to client
+    private SharingClient client = new SharingClient();  //create instance of SharingServer to connect to and return cards/decks to client
 
     public static class LinkParameters {
         String ssid;
@@ -85,7 +85,7 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
         bmap.setPixels(pix, 0, width, 0,0,width, height);
 
 
-        serve.initiateConnect(cards, decks);              //initiate connection with SharingServer
+        client.initiateConnect(cards, decks);              //initiate connection with SharingClient
         return bmap;                                      //return bitmap (QR code)
     }
 
