@@ -319,8 +319,10 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         //I can't toast here
                         @Override
                         public void onFailed(Throwable err) {
-                                videoErrorToast();
-                            }
+
+                            videoErrorToast();
+                            progressDialog.dismiss();
+                        }
                     });
                 }
                 break;
