@@ -1,5 +1,5 @@
 package com.psu.capstonew17.backend.sharing;
-
+import android.util.Log;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import java.util.List;
  */
 
 public class Broadcast extends BroadcastReceiver {
+    private static String TAG = "Broadcast Receivert ";
     private WifiP2pManager wifiManager;
     private WifiP2pManager.Channel wifiChannel;
     private List<WifiP2pDevice> listOfPeers = new ArrayList<WifiP2pDevice>();         //host list of peers from PeerListListener
@@ -42,24 +43,27 @@ public class Broadcast extends BroadcastReceiver {
             int wifiState;                                                      //to hold integer associated with currect wifi p2p state
             wifiState = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1); //retrieve intent information
             if (wifiState == wifiManager.WIFI_P2P_STATE_ENABLED) {
-
+                Log.i(TAG,"Wifi enabled");
             }
+            else{return;}
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))    //if the list of peers has changed
         {
             if (wifiManager != null) {
                 wifiManager.requestPeers(wifiChannel, peerListener);
             }                                                                        //if wifi manager has been instantiated, refresh list of peers
-            else {/*TODO: handle case where peers have not changed*/}
+            else {return;}
+
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
-            if (wifiManager == null) {
-                return;
-            }                                                                       //if not instantiated return
+            if (wifiManager == null) {return;}                                                                       //if not instantiated return
             NetworkInfo ntwkInfo = (NetworkInfo) intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
-            //get connection info if we are connected
+                                                                                                                    //get connection info if we are connected
             if (ntwkInfo.isConnected()) {
                 wifiManager.requestConnectionInfo(wifiChannel, (WifiP2pManager.ConnectionInfoListener) peerListener);
-            } else {/*TODO: handle case where we aren't connected*/ }
-        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {}
+            } else {Log.e(TAG,"Connection to peer has changed");}
+        } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
+            WifiP2pDevice dev = (WifiP2pDevice) intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_STATE);
+            Log.i(TAG,"wifi status of device changed to: "+dev.status);
+        }
     }
 
     public WifiP2pDevice getPeer(){
