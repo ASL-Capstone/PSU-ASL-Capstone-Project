@@ -63,6 +63,7 @@ class ExternalDeck implements Deck, EncodeableObject {
         );
     }
 
+    @Override
     public int getDeckId(){
         return  this.deckId;
     }
@@ -83,7 +84,7 @@ class ExternalDeck implements Deck, EncodeableObject {
 
         for(Card card: this.dbCards) {
             if(!mutableCards.contains(card)) {
-                whereArgs[1] = String.valueOf(((ExternalCard)card).getId());
+                whereArgs[1] = String.valueOf((card).getCardId());
 
                 db.delete(RelationEntry.TABLE_NAME,
                         String.format("%s = ? AND %s = ?",
@@ -98,7 +99,7 @@ class ExternalDeck implements Deck, EncodeableObject {
             if(!dbCards.contains(card)) {
                 ContentValues values = new ContentValues();
                 values.put(RelationEntry.COLUMN_DECK, deckId);
-                values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+                values.put(RelationEntry.COLUMN_CARD, card.getCardId());
                 db.insert(RelationEntry.TABLE_NAME, null, values);
             }
         }
@@ -110,21 +111,20 @@ class ExternalDeck implements Deck, EncodeableObject {
 
     @Override
     public void delete() {
-        removeCardsFromDeck();
         dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // remove references to deck
         db.delete(
                 DeckEntry.TABLE_NAME,
                 DeckEntry.COLUMN_ID + "=" + this.deckId, null
         );
-    }
-
-    private void removeCardsFromDeck(){
-        dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(
                 RelationEntry.TABLE_NAME,
                 RelationEntry.COLUMN_DECK + "=" + this.deckId, null
+        );
+        db.delete(
+                AnswerEntry.TABLE_NAME,
+                AnswerEntry.COLUMN_DECK + "=" + this.deckId, null
         );
     }
 
@@ -176,7 +176,7 @@ class ExternalDeck implements Deck, EncodeableObject {
         b.put(nameBytes);
         b.putInt(numCards);
         for(Card c : this.mutableCards){
-            b.putInt(((ExternalCard) c).getId());
+            b.putInt(c.getCardId());
         }
         return b.array();
     }

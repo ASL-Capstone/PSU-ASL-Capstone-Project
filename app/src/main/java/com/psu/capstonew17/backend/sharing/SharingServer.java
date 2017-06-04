@@ -1,16 +1,27 @@
 package com.psu.capstonew17.backend.sharing;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.NetworkInfo;
 import android.net.wifi.WpsInfo;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager;
+import android.os.Binder;
 import android.os.IBinder;
+import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.Deck;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -18,12 +29,20 @@ public class SharingServer extends Service {
     private WifiP2pManager wifiManager;
     private WifiP2pManager.Channel wifiChannel;
     private BroadcastReceiver wifiReceiver;
+    private List<WifiP2pDevice> listOfPeers = new ArrayList<WifiP2pDevice>();         //host list of peers from PeerListListener
+    private final IBinder mBinder = new Binder();
+    private Activity activity;
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        wifiManager = (WifiP2pManager)getSystemService(Context.WIFI_P2P_SERVICE);
+        wifiManager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         wifiChannel = wifiManager.initialize(this, getMainLooper(), null);
 
         // create the broadcast receiver to manage P2P state
@@ -36,24 +55,9 @@ public class SharingServer extends Service {
         wifiReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                // TODO: handle events for server side
-                String action = intent.getAction();
+                String action = intent.getAction();                                     //get current intent action
             }
         };
         registerReceiver(wifiReceiver, intentFilter);
     }
-
-    //TODO: Implement peer connect
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(wifiReceiver);
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
 }

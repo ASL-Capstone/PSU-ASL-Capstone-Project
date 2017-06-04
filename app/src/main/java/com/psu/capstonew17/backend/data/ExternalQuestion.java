@@ -39,7 +39,7 @@ class ExternalQuestion implements Question {
     }
 
     public int getCardId(){
-        return ((ExternalCard) this.card).getId();
+        return this.card.getCardId();
     }
 
     public int getDeckId(){

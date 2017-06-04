@@ -12,6 +12,10 @@ import com.psu.capstonew17.backend.api.Video;
  */
 
 public class VideoStub implements Video {
+    @Override
+    public int getVideoId(){
+        return 0;
+    }
 
     public void configurePlayer(VideoView player){
         return;

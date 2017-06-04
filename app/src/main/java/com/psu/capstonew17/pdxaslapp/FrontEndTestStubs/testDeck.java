@@ -22,6 +22,11 @@ public class testDeck implements Deck {
     }
 
     @Override
+    public int getDeckId() {
+        return 0;
+    }
+
+    @Override
     public void setName(String name) throws ObjectAlreadyExistsException{
         this.name = name;
     }
