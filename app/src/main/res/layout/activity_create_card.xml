@@ -24,15 +24,6 @@
             android:layout_weight="1"
             android:text="@string/button_get_from_gallery"
             />
-
-        <Button
-            android:id="@+id/buttonUseVIdeo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/button_edit"
-            />
-
     </TableRow>
     <Button
         android:id="@+id/button_submit"
