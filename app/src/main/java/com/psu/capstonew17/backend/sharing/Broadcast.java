@@ -28,8 +28,9 @@ public class Broadcast extends BroadcastReceiver {
             listOfPeers.clear();    //empty peer list
             listOfPeers.addAll(wifiP2pDeviceList.getDeviceList());  //repopulate with new devices
             if (listOfPeers.size() == 0) {
-                System.out.println("No devices within range");
-            }  //need to modify for android device
+                Log.i(TAG,"No peers available");
+                return;
+            }
         }
     };
 
@@ -45,13 +46,13 @@ public class Broadcast extends BroadcastReceiver {
             if (wifiState == wifiManager.WIFI_P2P_STATE_ENABLED) {
                 Log.i(TAG,"Wifi enabled");
             }
-            else{return;}
+            else{Log.e(TAG,"Wifi not enabled");return;}
         } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action))    //if the list of peers has changed
         {
             if (wifiManager != null) {
                 wifiManager.requestPeers(wifiChannel, peerListener);
             }                                                                        //if wifi manager has been instantiated, refresh list of peers
-            else {return;}
+            else {Log.e(TAG,"Wifimanager not enabled");return;}
 
         } else if (WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
             if (wifiManager == null) {return;}                                                                       //if not instantiated return
