@@ -37,7 +37,7 @@ public class ExternalTestManager implements TestManager{
         for(Deck deck : sources) {
             query = dbHelper.buildSelectQuery(
                     RelationEntry.TABLE_NAME,
-                    Arrays.asList(RelationEntry.COLUMN_DECK + "=" + ((ExternalDeck) deck).getDeckId())
+                    Arrays.asList(RelationEntry.COLUMN_DECK + "=" + deck.getDeckId())
             );
             Cursor cursor = db.rawQuery(query, null);
             List<Integer> cardIds = new ArrayList<Integer>();
@@ -55,7 +55,7 @@ public class ExternalTestManager implements TestManager{
                 else{
                     t = Question.Type.TEXT_ENTRY;
                 }
-                Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
+                Question q = new ExternalQuestion(card, t, deck.getDeckId());
                 questions.add(q);
             }
         }

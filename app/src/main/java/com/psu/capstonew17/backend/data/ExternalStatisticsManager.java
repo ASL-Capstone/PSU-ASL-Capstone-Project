@@ -72,7 +72,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = dbHelper.buildSelectQuery(
                 AnswerEntry.TABLE_NAME,
-                Arrays.asList(AnswerEntry.COLUMN_CARD + "=" + ((ExternalCard) c).getId())
+                Arrays.asList(AnswerEntry.COLUMN_CARD + "=" + c.getCardId())
         );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();
@@ -104,7 +104,7 @@ public class ExternalStatisticsManager implements StatisticsManager {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = dbHelper.buildSelectQuery(
                 AnswerEntry.TABLE_NAME,
-                Arrays.asList(AnswerEntry.COLUMN_DECK + "=" + ((ExternalDeck) d).getDeckId())
+                Arrays.asList(AnswerEntry.COLUMN_DECK + "=" + d.getDeckId())
         );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> correctCards = new ArrayList<Card>();

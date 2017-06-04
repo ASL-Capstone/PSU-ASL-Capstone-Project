@@ -39,6 +39,7 @@ class ExternalVideo implements Video, EncodeableObject {
         }
     }
 
+    @Override
     public int getVideoId(){
         return this.videoId;
     }
