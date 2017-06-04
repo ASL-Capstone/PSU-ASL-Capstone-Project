@@ -91,7 +91,6 @@ public class PreprocessingPipeline {
                 return null;
             }
 
-
             // prime the decoder
             long maxTime = inputFormat.getLong(MediaFormat.KEY_DURATION);
             {
@@ -131,6 +130,14 @@ public class PreprocessingPipeline {
             // set up a muxer
             MediaMuxer muxer;
             int videoTrackIdx;
+            try {
+                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM);
+                videoTrackIdx = muxer.addTrack(outFormat);
+            } catch(IOException e) {
+                Log.e("VPreproc", "Muxer I/O error", e);
+                cancel(false);
+                return null;
+            }
             MediaCodec encoder;
             try {
                 String cname = new MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(outFormat);
@@ -145,12 +152,9 @@ public class PreprocessingPipeline {
                 }
                 encoder = MediaCodec.createByCodecName(cname);
                 encoder.configure(outFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
-                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM);
-                videoTrackIdx = muxer.addTrack(outFormat);
             } catch(IOException e) {
-                Log.e("VPreproc", "Decoder I/O error", e);
-                cancel(false);
-                return null;
+                Log.e("VPreproc", "Codec error - falling back to copy", e);
+                return doStreamCopy(extractor, videoTrackIdx, muxer);
             }
 
             // TODO: Prep the KNN algorithm here
@@ -253,6 +257,30 @@ public class PreprocessingPipeline {
             decoder.stop();
 
             Log.d("VPreproc", "All done!");
+            return null;
+        }
+
+        private Void doStreamCopy(MediaExtractor extract, int strmIdx, MediaMuxer muxer) {
+            MediaCodec.BufferInfo bufInfo = new MediaCodec.BufferInfo();
+            int inIdx, outIdx;
+            ByteBuffer buf = ByteBuffer.allocate(8192);
+            muxer.start();
+            while(true) {
+                // try to provide input to the muxer
+                int length = extract.readSampleData(buf, 0);
+                if(length == -1) break;
+                bufInfo.presentationTimeUs = extract.getSampleTime();
+                bufInfo.offset = 0;
+                bufInfo.size = length;
+                bufInfo.flags = 0;
+                extract.advance();
+                if((bufInfo.presentationTimeUs/1000 >= options.startTime) &&
+                        (bufInfo.presentationTimeUs/1000 <= options.endTime)) {
+                    bufInfo.presentationTimeUs -= options.startTime*1000;
+                    muxer.writeSampleData(strmIdx, buf, bufInfo);
+                }
+            }
+            muxer.stop();
             return null;
         }
 
