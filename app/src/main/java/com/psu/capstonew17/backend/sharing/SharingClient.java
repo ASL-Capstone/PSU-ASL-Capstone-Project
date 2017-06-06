@@ -35,10 +35,9 @@ import static android.os.Looper.getMainLooper;
 public class SharingClient extends Service {
     private WifiP2pManager wifiManager;
     private WifiP2pManager.Channel wifiChannel;
-    private BroadcastReceiver wifiReceiver;
     private IntentFilter aIntentFilter;
     private final IBinder aBinder = new Binder();
-    private Broadcast bReciever;
+    private Broadcast bReciever = new Broadcast();
     private String host;
     private byte [] key;
     private SharingReceiveListener listener;
