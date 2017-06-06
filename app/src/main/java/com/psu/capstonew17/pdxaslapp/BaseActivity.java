@@ -51,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
             //check for external storage perms
             case REQ_EXT_STORAGE_PERMS:
                 if (grantResults.length > 0 && !(grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    //if the user refuses external storage perms send trap them! muahahahaha!
+                    //if the user refuses external storage perms then trap them! muahahahaha!
                     //(okay, not really, but don't let them continue to try to use the app)
                     Intent intent = new Intent(this, NoExtrnlStrgPrmsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
