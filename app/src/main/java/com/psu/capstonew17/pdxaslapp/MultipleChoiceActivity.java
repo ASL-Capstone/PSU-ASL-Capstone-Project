@@ -4,6 +4,8 @@ package com.psu.capstonew17.pdxaslapp;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +25,8 @@ import com.psu.capstonew17.backend.data.ExternalTestManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultipleChoiceActivity extends BaseActivity implements View.OnClickListener {
+public class MultipleChoiceActivity extends BaseActivity
+        implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
     // Names Passed into the activity from quiz selection activity.
     private ArrayList<String> deckNamesForQuiz;
     // Number of Question passed in from the quiz selection activity.
@@ -98,15 +101,20 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         submit.setOnClickListener(this);
         questionVideo = (VideoView) findViewById(R.id.videoViewMultiChoice);
         mediaController = new MediaController(this);
+
+        // Initialize UI elements
+        submit.setEnabled(false);
+        answers.setOnCheckedChangeListener(this);
+
         // Load the First Question
         loadQuestion();
-        Toast.makeText(getBaseContext(), "Loaded", Toast.LENGTH_SHORT).show();
     }
 
     protected void loadQuestion(){
         // Check to See if there is another Question in the Test
         if(currTest.hasNext()) {
             // Clear the current set of answers from the Radio Group
+            answers.clearCheck();
             answers.removeAllViews();
             // Get the Next Question
             curQuestion = currTest.next();
@@ -159,6 +167,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
         if(userAnswerID != -1) {
             // Get the selected answer
             RadioButton holder = (RadioButton) findViewById(userAnswerID);
+
             // Check User answer against the current questions correct answer
             Pair<Boolean,String> result = curQuestion.answer(holder.getText().toString());
             // Case: Correct
@@ -197,6 +206,7 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
                     // Case: User did'nt enter an answer
                     case -1:
                         Toast.makeText(this, "Pick an Answer", Toast.LENGTH_SHORT).show();
+                        return;
                 }
                 // Load the next question.
                 loadQuestion();
@@ -204,5 +214,10 @@ public class MultipleChoiceActivity extends BaseActivity implements View.OnClick
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
+        submit.setEnabled(radioGroup.getCheckedRadioButtonId() != -1);
     }
 }
