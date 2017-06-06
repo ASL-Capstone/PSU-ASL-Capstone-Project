@@ -20,6 +20,8 @@
     <string name="button_delete">Delete</string>
     <string name="button_create">Create</string>
     <string name="button_home">Home</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
@@ -64,17 +66,18 @@
 
     <!-- Card creation/deletion strings -->
     <string name="importing_video">Importing video</string>
-    <string name="card_already_exists">This card alreay exists!</string>
+    <string name="card_already_exists">There\'s already a card using this video</string>
     <string name="card_select_deck_error">Please select at least one deck</string>
     <string name="card_record_video_error">Record video failed</string>
     <string name="card_camera_perm_error">Camera not available</string>
-    <string name="card_storage_perm_error">External storage not available</string>
+    <string name="extrnl_storage_perm_error">External storage permissions denied</string>
+    <string name="closing_app">The app will now close</string>
     <string name="card_uri_error">Error: Missing Uri!</string>
     <string name="card_name_lngth_error1">"Label length should be greater than "</string>
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
     <string name="select_card">Please select a card</string>
-    <string name="deleted_decks">"The following decks were deleted: "</string>
+    <string name="deleted_decks">"The following decks will be deleted: "</string>
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
 
@@ -112,4 +115,5 @@
     <string name="play_pause">Play/Pause</string>
     <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
     <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
+    <string name="title_activity_no_extrnl_strg_prms">NoExtrnlStrgPrmsActivity</string>
 </resources>

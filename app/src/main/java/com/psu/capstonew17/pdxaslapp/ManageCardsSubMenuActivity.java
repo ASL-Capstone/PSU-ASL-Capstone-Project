@@ -34,11 +34,13 @@ public class ManageCardsSubMenuActivity extends BaseActivity implements View.OnC
             case R.id.button_create_card:
                 intent = new Intent(getApplicationContext(), CreateCardActivity.class);
                 startActivity(intent);
+                finish();
                 break;
 
             case R.id.button_delete_card:
                 intent = new Intent(getApplicationContext(), DeleteCardActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 
