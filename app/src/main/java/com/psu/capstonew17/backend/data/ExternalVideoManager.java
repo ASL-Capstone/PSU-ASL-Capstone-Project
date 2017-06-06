@@ -29,6 +29,7 @@ import java.util.UUID;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.video.PreprocessingPipeline;
+import com.psu.capstonew17.backend.video.StubPreprocessingPipeline;
 
 
 public class ExternalVideoManager implements VideoManager {
@@ -125,7 +126,7 @@ public class ExternalVideoManager implements VideoManager {
 
         PreprocessingPipeline  pipeline;
         try {
-            pipeline = new PreprocessingPipeline(ctx, outFile, video, options);
+            pipeline = new StubPreprocessingPipeline(ctx, outFile, video, options);
         } catch(IOException e) {
             handler.onFailed(e);
             return;
