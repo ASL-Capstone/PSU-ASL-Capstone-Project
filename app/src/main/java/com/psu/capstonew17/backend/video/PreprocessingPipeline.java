@@ -3,6 +3,7 @@
 package com.psu.capstonew17.backend.video;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.media.Image;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
@@ -26,12 +27,12 @@ import java.nio.ByteBuffer;
  * A pipeline of video processing steps, associated with a frame source and output file.
  */
 public class PreprocessingPipeline {
-    private File output;
-    private Uri input;
-    private VideoManager.ImportOptions options;
-    private Context ctx;
+    protected File output;
+    protected Uri input;
+    protected VideoManager.ImportOptions options;
+    protected Context ctx;
 
-    private PreprocessingListener listener = null;
+    protected PreprocessingListener listener = null;
 
     public interface PreprocessingListener {
         void onCompleted();
@@ -110,6 +111,8 @@ public class PreprocessingPipeline {
                     decoder.queueInputBuffer(inIdx, 0, length, -1, 0);
                 }
                 inputFormat = decoder.getOutputFormat();
+                srcWidth = inputFormat.getInteger(MediaFormat.KEY_WIDTH);
+                srcHeight = inputFormat.getInteger(MediaFormat.KEY_HEIGHT);
             }
 
             // figure out target width/height and format
@@ -131,13 +134,16 @@ public class PreprocessingPipeline {
             MediaMuxer muxer;
             int videoTrackIdx;
             try {
-                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM);
+                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
                 videoTrackIdx = muxer.addTrack(outFormat);
             } catch(IOException e) {
                 Log.e("VPreproc", "Muxer I/O error", e);
                 cancel(false);
                 return null;
             }
+            return doStreamCopy(extractor, videoTrackIdx, muxer);
+
+            /*
             MediaCodec encoder;
             try {
                 String cname = new MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(outFormat);
@@ -215,12 +221,14 @@ public class PreprocessingPipeline {
 
                     // copy the image into the encoder buffer
                     Image encImg = encoder.getInputImage(inIdx);
-                    encImg.getPlanes()[0].getBuffer().put(img.getPlanes()[0].getBuffer());
-                    encImg.getPlanes()[1].getBuffer().put(img.getPlanes()[1].getBuffer());
-                    encImg.getPlanes()[2].getBuffer().put(img.getPlanes()[2].getBuffer());
+                    ImageUtil.blit(img, img.getCropRect(), encImg, encImg.getCropRect());
                     encImg.setTimestamp(img.getTimestamp());
 
-                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
+                    try {
+                        encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
+                    } catch(IllegalArgumentException e) {
+                        Log.e("VPreproc", "Queue input error", e);
+                    }
                     decoder.releaseOutputBuffer(outIdx, false);
                 } else if(outIdx >= 0) {
                     Log.d("VPreproc", "Autorelease");
@@ -258,12 +266,13 @@ public class PreprocessingPipeline {
 
             Log.d("VPreproc", "All done!");
             return null;
+            */
         }
 
         private Void doStreamCopy(MediaExtractor extract, int strmIdx, MediaMuxer muxer) {
             MediaCodec.BufferInfo bufInfo = new MediaCodec.BufferInfo();
             int inIdx, outIdx;
-            ByteBuffer buf = ByteBuffer.allocate(8192);
+            ByteBuffer buf = ByteBuffer.allocate(8192*1024);
             muxer.start();
             while(true) {
                 // try to provide input to the muxer
