@@ -21,6 +21,7 @@
     <string name="button_create">Create</string>
     <string name="button_home">Home</string>
     <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
@@ -76,7 +77,7 @@
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
     <string name="select_card">Please select a card</string>
-    <string name="deleted_decks">"The following decks were deleted: "</string>
+    <string name="deleted_decks">"The following decks will be deleted: "</string>
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
 
