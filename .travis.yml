@@ -10,6 +10,7 @@ android:
         - android-24
         - android-23
         - sys-img-armeabi-v7a-android-23
+        - addon-google_apis-google-23
 
 env:
     global:
