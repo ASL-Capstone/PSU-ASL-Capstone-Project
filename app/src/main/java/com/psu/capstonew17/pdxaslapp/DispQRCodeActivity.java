@@ -93,8 +93,6 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
             imageView.setImageBitmap(qrCode);
         }
 
-
-
     }
 
     @Override

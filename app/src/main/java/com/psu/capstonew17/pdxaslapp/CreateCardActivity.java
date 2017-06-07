@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -131,7 +132,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
             //user is finished creating this card.
             case R.id.button_submit:
-                videoLabel = editText.getText().toString();
+                videoLabel = editText.getText().toString().trim();
                 //make sure that the video imported successfully
                 //and that the length of the answer is in valid range
                 if (!videoLabelCheck() || video == null){
@@ -157,7 +158,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         }
                         Log.d("Hang Debug", "about to call finish");
                         finish();
-                    //cards can't have the same answer and video!
+                        //cards can't have the same answer and video!
                     } catch (ObjectAlreadyExistsException e){
                         Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                     }
@@ -178,7 +179,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 } else {
                     Toast.makeText(this, R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
                 }
-            break;
+                break;
         }
     }
 
@@ -254,11 +255,21 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 if (resultCode == RESULT_OK) {
                     videoUri = intent.getData();
 
+
                     //let the user edit it!
                     if(videoUri != null){
-                        intent = new Intent(this, EditVideoActivity.class);
-                        intent.setData( videoUri);
-                        startActivityForResult(intent, REQUEST_EDIT_VIDEO);
+                        //Verify length of video is greater than two seconds
+                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                        retriever.setDataSource(this, videoUri);
+                        String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        if(Integer.parseInt(endTime) < 2000){
+                            Toast.makeText(this, "Video length must be at least 2 seconds", Toast.LENGTH_SHORT);
+                        }
+                        else{
+                            intent = new Intent(this, EditVideoActivity.class);
+                            intent.setData( videoUri);
+                            startActivityForResult(intent, REQUEST_EDIT_VIDEO);
+                        }
                     }
                 }
                 break;
