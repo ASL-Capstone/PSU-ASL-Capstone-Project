@@ -19,7 +19,7 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeleteCardActivity extends BaseActivity {
+public class DeleteCardActivity extends BaseActivity implements View.OnClickListener{
     private List<Card>  cards;
     private DeckManager deckManager;
     private RadioGroup  cardRG;
@@ -28,6 +28,8 @@ public class DeleteCardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_card);
+
+        findViewById(R.id.bttnCardDlt).setOnClickListener(this);
 
         deckManager = ExternalDeckManager.getInstance(this);
         cards       = deckManager.getDefaultDeck().getCards();
@@ -49,33 +51,39 @@ public class DeleteCardActivity extends BaseActivity {
         }
     }
 
+    @Override
     //user wants to delete that card they checked.
-    public void onDeleteClicked(View view) {
-        int index = cardRG.getCheckedRadioButtonId();
-        //If the checked index is -1 the user never selected a card to delete. Silly user.
-        if (index == -1) {
-            Toast.makeText(this, R.string.select_card, Toast.LENGTH_SHORT).show();
-        } else {
-            Card card = cards.get(index);
-            List<Deck> decks = card.getUsers();
-            //this will hold decks that need to be deleted because they fall below card minimum
-            List<Deck> decksToDelete = new ArrayList<>();
-            //decks that the card will just be removed from
-            List<Deck> decksToRemoveFrom = new ArrayList<>();
-            //populating lists
-            for (Deck curr : decks){
-                if(curr.getCards().size() <= CreateEditDeleteDeckActivity.MIN_CARDS)
-                    decksToDelete.add(curr);
-                else
-                    decksToRemoveFrom.add(curr);
-            }
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.bttnCardDlt:
+                int index = cardRG.getCheckedRadioButtonId();
+                //If the checked index is -1 the user never selected a card to delete. Silly user.
+                if (index == -1) {
+                Toast.makeText(this, R.string.select_card, Toast.LENGTH_SHORT).show();
+                } else {
+                    Card card = cards.get(index);
+                    List<Deck> decks = card.getUsers();
+                    //this will hold decks that need to be deleted because they fall below card minimum
+                    List<Deck> decksToDelete = new ArrayList<>();
+                    //decks that the card will just be removed from
+                    List<Deck> decksToRemoveFrom = new ArrayList<>();
 
-            //if there are decks that need to be deleted then we need to check with the user
-            if(decksToDelete.size() > 0)
-                decksDeletePrompt(card, decksToDelete, decksToRemoveFrom);
-            //if not, we can just remove the card from the decks and delete it
-            else
-                deleteCard(card, decksToRemoveFrom);
+                    //populating lists
+                    for (Deck curr : decks) {
+                        if (curr.getCards().size() <= CreateEditDeleteDeckActivity.MIN_CARDS)
+                            decksToDelete.add(curr);
+                        else
+                            decksToRemoveFrom.add(curr);
+                    }
+
+                    //if there are decks that need to be deleted then we need to check with the user
+                    if (decksToDelete.size() > 0)
+                        decksDeletePrompt(card, decksToDelete, decksToRemoveFrom);
+                        //if not, we can just remove the card from the decks and delete it
+                    else
+                        deleteCard(card, decksToRemoveFrom);
+                }
+                break;
         }
     }
 

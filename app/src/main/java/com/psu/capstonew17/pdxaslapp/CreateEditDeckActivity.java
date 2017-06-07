@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +26,7 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 /**
  * Allows user to edit existing decks
  */
-public class CreateEditDeckActivity extends BaseActivity {
+public class CreateEditDeckActivity extends BaseActivity implements View.OnClickListener {
     private Deck            deck;
     private List<Card>      allCards;
     private List<Card>      cardsInDeck;
@@ -35,7 +39,8 @@ public class CreateEditDeckActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_deck);
-        Button subButton   = (Button) findViewById(R.id.bttn_submit);
+        Button subButton    = (Button) findViewById(R.id.bttn_submit);
+        subButton.setOnClickListener(this);
         textBox     = (EditText) findViewById(R.id.deckNameField);
         deckManager = ExternalDeckManager.getInstance(this);
         allCards    = deckManager.getDefaultDeck().getCards();
@@ -86,48 +91,53 @@ public class CreateEditDeckActivity extends BaseActivity {
     }
 
     //The user is done editing the deck.
-    public void onEditSubmitClicked(View view) {
-        String deckName = textBox.getText().toString().trim();
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.bttn_submit:
+                String deckName = textBox.getText().toString().trim();
 
-        //add all of the selected cards, if there are cards that are in the deck, but the user
-        //deselected them, then they need to be removed from the deck.
-        for (int i = 0; i < cardStructs.size(); i++){
-            Card curr = allCards.get(i);
-            if (!cardsInDeck.contains(curr) && cardStructs.get(i).isChecked) {
-                cardsInDeck.add(curr);
+                //add all of the selected cards, if there are cards that are in the deck, but the user
+                //deselected them, then they need to be removed from the deck.
+                for (int i = 0; i < cardStructs.size(); i++){
+                    Card curr = allCards.get(i);
+                    if (!cardsInDeck.contains(curr) && cardStructs.get(i).isChecked) {
+                        cardsInDeck.add(curr);
 
-            } else if (cardsInDeck.contains(curr) && !cardStructs.get(i).isChecked) {
-                cardsInDeck.remove(curr);
-            }
-        }
-
-        //is the deck name length within a valid range?
-        if (TextUtils.isEmpty(deckName)
-                || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
-            stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
-            Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
-
-        //are there going to be enough cards in the deck?
-        } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
-            Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
-
-        //everything looks good, we can create the deck.
-        } else {
-            try {
-                if(editMode) {
-                    deck.setName(textBox.getText().toString().trim());
-                    deck.commit();
-                } else {
-                    deckManager.buildDeck(textBox.getText().toString().trim(), cardsInDeck);
+                    } else if (cardsInDeck.contains(curr) && !cardStructs.get(i).isChecked) {
+                        cardsInDeck.remove(curr);
+                    }
                 }
-                finish();
 
-                //darn, a deck already exists with this name!
-            } catch (ObjectAlreadyExistsException e) {
-                Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
-            }
+                //is the deck name length within a valid range?
+                if (TextUtils.isEmpty(deckName)
+                        || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append(getResources().getString(R.string.deck_name_length_error));
+                    stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
+                    Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
+
+                //are there going to be enough cards in the deck?
+                } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
+                    Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
+
+                //everything looks good, we can create or edit the deck.
+                } else {
+                    try {
+                        if (editMode) {
+                            deck.setName(textBox.getText().toString().trim());
+                            deck.commit();
+                        } else {
+                            deckManager.buildDeck(textBox.getText().toString().trim(), cardsInDeck);
+                        }
+                        finish();
+
+                    //darn, a deck already exists with this name!
+                    } catch (ObjectAlreadyExistsException e) {
+                        Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
+                    }
+                }
+                break;
         }
     }
 }

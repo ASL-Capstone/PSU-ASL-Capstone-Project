@@ -7,6 +7,7 @@ import java.util.List;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
-public class CreateEditDeleteDeckActivity extends BaseActivity{
+public class CreateEditDeleteDeckActivity extends BaseActivity implements View.OnClickListener{
     static final int        MIN_CARDS       = 2;
     static final int        MAX_STRG_LNGTH  = 50;
     static final String     CHECKED_DECK   = "checkedDeck";
@@ -31,12 +32,18 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_edit_delete_deck);
 
+        findViewById(R.id.bttnCrt).setOnClickListener(this);
+        findViewById(R.id.bttnDlt).setOnClickListener(this);
+        findViewById(R.id.bttnEdit).setOnClickListener(this);
+
         noDeckMsg = (TextView) findViewById(R.id.noDecksText);
         noDeckMsg.setText(R.string.no_decks_msg);
 
         deckManager = ExternalDeckManager.getInstance(this);
         deckRG      = (RadioGroup) findViewById(R.id.deckRButtons);
         populateRadioGroup();
+
+
     }
 
     //populates the radiogroup with decks from the DB, unchecks any selected deck.
@@ -60,41 +67,44 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
         }
     }
 
-    //the user wants to create a new deck
-    public void onCreateClicked(View view) {
+    @Override
+    public void onClick(View view) {
+        int index = deckRG.getCheckedRadioButtonId();
         Intent intent;
-        intent = new Intent(this, CreateEditDeckActivity.class);
-        startActivity(intent);
-    }
+        switch(view.getId()) {
+            //user wants to record a video for the new card
+            case R.id.bttnCrt:
+                intent = new Intent(this, CreateEditDeckActivity.class);
+                startActivity(intent);
+                break;
 
-    //the user wants to delete an existing deck
-    public void onDeleteClicked(View view) {
-        int index = deckRG.getCheckedRadioButtonId();
-        //if the index is -1 then the user hasn't selected any decks. silly user.
-        if(index == -1) {
-            Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
+            //the user wants to delete an existing deck
+            case R.id.bttnDlt:
+                //if the index is -1 then the user hasn't selected any decks. silly user.
+                if (index == -1) {
+                    Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
 
-        //delete the selected deck, repopulate the radio group so that it's accurate.
-        } else {
-            Deck selectedDeck = decks.get(index);
-            selectedDeck.delete();
-            selectedDeck.commit();
-            populateRadioGroup();
-        }
-    }
+                    //delete the selected deck, repopulate the radio group so that it's accurate.
+                } else {
+                    Deck selectedDeck = decks.get(index);
+                    selectedDeck.delete();
+                    selectedDeck.commit();
+                    populateRadioGroup();
+                }
+                break;
 
-    //the user wants to edit an existing deck.
-    public void onEditClicked(View view) {
-        int index = deckRG.getCheckedRadioButtonId();
-        //if the index is -1 then the user hasn't selected a deck. silly user
-        if(index == -1) {
-            Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
+            //the user wants to edit an existing deck.
+            case R.id.bttnEdit:
+                //if the index is -1 then the user hasn't selected a deck. silly user
+                if (index == -1) {
+                    Toast.makeText(this, R.string.deck_not_selected, Toast.LENGTH_SHORT).show();
 
-        } else {
-            Intent intent;
-            intent = new Intent(this, CreateEditDeckActivity.class);
-            intent.putExtra(CHECKED_DECK, decks.get(index).getName());
-            startActivity(intent);
+                } else {
+                    intent = new Intent(this, CreateEditDeckActivity.class);
+                    intent.putExtra(CHECKED_DECK, decks.get(index).getName());
+                    startActivity(intent);
+                }
+                break;
         }
     }
 

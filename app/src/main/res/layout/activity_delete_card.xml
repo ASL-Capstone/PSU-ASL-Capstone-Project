@@ -38,7 +38,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/bttnCardDlt"
-            android:onClick="onDeleteClicked"
             android:layout_weight="1"/>
     </LinearLayout>
 </LinearLayout>
