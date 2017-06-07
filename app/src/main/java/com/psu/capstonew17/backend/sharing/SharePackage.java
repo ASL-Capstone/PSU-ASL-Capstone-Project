@@ -1,6 +1,8 @@
 package com.psu.capstonew17.backend.sharing;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.psu.capstonew17.backend.EncodeableObject;
@@ -27,7 +29,7 @@ import java.util.Map;
 /**
  * A set of objects to be serialized/deserialized
  */
-class SharePackage {
+class SharePackage implements Parcelable{
     private List<Card> cards;
     private List<Deck> decks;
 
@@ -154,4 +156,31 @@ class SharePackage {
         }
         return sharePackage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeList(this.cards);
+        parcel.writeList(this.decks);
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            List<Card> cards = new ArrayList<Card>();
+            parcel.readList(cards, Card.class.getClassLoader());
+            List<Deck> decks = new ArrayList<Deck>();
+            parcel.readList(decks, Deck.class.getClassLoader());
+            return new SharePackage(cards, decks);
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new SharePackage[i];
+        }
+    };
 }
