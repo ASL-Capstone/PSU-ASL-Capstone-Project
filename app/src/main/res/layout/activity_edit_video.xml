@@ -88,19 +88,6 @@
             android:textColor="@color/common_google_signin_btn_text_dark_focused"
             android:visibility="visible" />
 
-        <Switch
-            android:id="@+id/DeleteFromGallerySwitch"
-            android:layout_width="match_parent"
-            android:layout_height="14dp"
-            android:checked="false"
-            android:showText="true"
-            android:splitTrack="false"
-            android:text="@string/delete_from_gallery"
-            android:textAlignment="textStart"
-            android:textOff="@string/YES"
-            android:textOn="@string/NO"
-            tools:checked="true" />
-
     </LinearLayout>
 
 
