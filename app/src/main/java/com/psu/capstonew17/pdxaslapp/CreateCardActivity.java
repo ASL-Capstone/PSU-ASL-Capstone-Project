@@ -263,7 +263,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         retriever.setDataSource(this, videoUri);
                         String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                         if(Integer.parseInt(endTime) < 2000){
-                            Toast.makeText(this, "Video length must be at least 2 seconds", Toast.LENGTH_SHORT);
+                            Toast.makeText(this, "Video length must be at least 2 seconds", Toast.LENGTH_SHORT).show();
                         }
                         else{
                             intent = new Intent(this, EditVideoActivity.class);

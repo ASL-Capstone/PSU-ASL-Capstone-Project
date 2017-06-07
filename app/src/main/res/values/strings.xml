@@ -116,4 +116,8 @@
     <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
     <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
     <string name="title_activity_no_extrnl_strg_prms">NoExtrnlStrgPrmsActivity</string>
+    <string name="CreateCard_AddDecks">Select decks to add this card to:</string>
+    <string name="CreateCard_AddVideo">Record a video or select one from gallery:</string>
+    <string name="CreateDeck_DeckName">Enter a name for the deck</string>
+    <string name="CreateDeck_SelectCards">Select cards to add to the deck (at least two)</string>
 </resources>
