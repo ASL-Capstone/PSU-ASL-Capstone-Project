@@ -12,10 +12,7 @@ import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.Question;
 import com.psu.capstonew17.backend.api.Statistics;
 import com.psu.capstonew17.backend.api.TestManager;
-import com.psu.capstonew17.backend.api.Test;
 import com.psu.capstonew17.backend.api.Video;
-import com.psu.capstonew17.backend.api.stubs.DeckManagerStub;
-import com.psu.capstonew17.backend.api.stubs.DeckStub;
 import com.psu.capstonew17.backend.data.ExternalCardManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 import com.psu.capstonew17.backend.data.ExternalStatisticsManager;
@@ -32,6 +29,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Tim on 5/13/2017.
@@ -47,11 +45,14 @@ public class TestInstrumentalTest {
     private Deck deck;
     private com.psu.capstonew17.backend.api.Test test;
     private TestManager.Options options;
-
+    private String correctAnswer = "some answer";
+    private String incorrectAnswer = "wrong answer";
+    private Random random;
 
     @Before
     public void setup() throws Exception {
         List<Card> deckCards = new ArrayList<Card>();
+        random = new Random();
 
         // set up db
         context = InstrumentationRegistry.getTargetContext();
@@ -62,10 +63,16 @@ public class TestInstrumentalTest {
         cardManager = ExternalCardManager.getInstance(context);
         Video video = mock(Video.class);
         when(video.getVideoId()).thenReturn(1);
-        deckCards.add(cardManager.buildCard(video, "some answer"));
+        deckCards.add(cardManager.buildCard(video, correctAnswer));
         Video video2 = mock(Video.class);
         when(video2.getVideoId()).thenReturn(2);
-        deckCards.add(cardManager.buildCard(video2, "some answer"));
+        deckCards.add(cardManager.buildCard(video2, correctAnswer));
+        Video video3 = mock(Video.class);
+        when(video3.getVideoId()).thenReturn(3);
+        deckCards.add(cardManager.buildCard(video3, correctAnswer));
+        Video video4 = mock(Video.class);
+        when(video4.getVideoId()).thenReturn(4);
+        deckCards.add(cardManager.buildCard(video4, correctAnswer));
 
         // build deck
         deckManager = (ExternalDeckManager) ExternalDeckManager.getInstance(context);
@@ -79,21 +86,33 @@ public class TestInstrumentalTest {
         options.mode = TestManager.OrderingMode.RANDOM;
         options.questionTypes = TestManager.Options.QUESTION_MULTIPLE_CHOICE;
         test = testManager.buildTest(Arrays.asList(deck), options);
-
-
     }
 
     @org.junit.Test
     public void takeTest() throws Exception {
+        int numCorrect = 0;
+        int numIncorrect = 0;
         while(test.hasNext()) {
             Question question = test.next();
-            assertEquals(question.getOptions().size(), 2);  // 2 cards, 1 deck
-            Pair<Boolean, String> answer = question.answer("some answer");
-            assertTrue(answer.first);
-            assertEquals(answer.second, "some answer");
+            // edge case: one deck with 4 unique cards, all with the same answer. Option size should be 4
+            assertEquals(question.getOptions().size(), 4);
+            if(random.nextBoolean()) {
+                Pair<Boolean, String> answer = question.answer(correctAnswer);
+                assertTrue(answer.first);
+                assertEquals(answer.second, correctAnswer);
+                numCorrect += 1;
+            }
+            else{
+                Pair<Boolean, String> answer = question.answer(incorrectAnswer);
+                assertFalse(answer.first);
+                assertEquals(answer.second, correctAnswer);
+                numIncorrect += 1;
+            }
+            assertEquals(test.getStats().getCorrect(), numCorrect);
+            assertEquals(test.getStats().getIncorrect(), numIncorrect);
         }
         Statistics stats = ExternalStatisticsManager.getInstance(context).forDeck(deck);
-        assertEquals(stats.getCorrect(), 2);
-        assertEquals(stats.getIncorrect(), 0);
+        assertEquals(stats.getCorrect(), numCorrect);
+        assertEquals(stats.getIncorrect(), numIncorrect);
     }
 }
