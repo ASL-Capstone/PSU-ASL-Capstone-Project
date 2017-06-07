@@ -74,10 +74,7 @@
             android:parentActivityName=".HomeActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".CreateDeckActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".EditDeckActivity"
+            android:name=".CreateEditDeckActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".DispQRCodeActivity"

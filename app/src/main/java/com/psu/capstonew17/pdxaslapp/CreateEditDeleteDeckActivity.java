@@ -63,7 +63,7 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
     //the user wants to create a new deck
     public void onCreateClicked(View view) {
         Intent intent;
-        intent = new Intent(this, CreateDeckActivity.class);
+        intent = new Intent(this, CreateEditDeckActivity.class);
         startActivity(intent);
     }
 
@@ -92,7 +92,7 @@ public class CreateEditDeleteDeckActivity extends BaseActivity{
 
         } else {
             Intent intent;
-            intent = new Intent(this, EditDeckActivity.class);
+            intent = new Intent(this, CreateEditDeckActivity.class);
             intent.putExtra(CHECKED_DECK, decks.get(index).getName());
             startActivity(intent);
         }

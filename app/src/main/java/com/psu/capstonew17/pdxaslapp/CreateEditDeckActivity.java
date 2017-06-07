@@ -8,6 +8,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -21,42 +22,54 @@ import com.psu.capstonew17.backend.data.ExternalDeckManager;
 /**
  * Allows user to edit existing decks
  */
-public class EditDeckActivity extends BaseActivity {
+public class CreateEditDeckActivity extends BaseActivity {
     private Deck            deck;
     private List<Card>      allCards;
     private List<Card>      cardsInDeck;
     private List<ListRow>   cardStructs;
     private EditText        textBox;
+    private boolean         editMode;
+    private DeckManager     deckManager;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_deck);
+        setContentView(R.layout.activity_create_edit_deck);
+        Button subButton   = (Button) findViewById(R.id.bttn_submit);
+        textBox     = (EditText) findViewById(R.id.deckNameField);
+        deckManager = ExternalDeckManager.getInstance(this);
+        allCards    = deckManager.getDefaultDeck().getCards();
+        cardStructs = new ArrayList<>();
+        textBox.setHint(R.string.CreateDeck_DeckName);
 
-        DeckManager deckManager = ExternalDeckManager.getInstance(this);
-        allCards                = deckManager.getDefaultDeck().getCards();
-        cardStructs             = new ArrayList<>();
-
-        //get the index of the selected deck to edit
-        String checkedDeck = "";
+        //if there's a bundle to grab, then the user is editing a deck
         if(getIntent().hasExtra(CreateEditDeleteDeckActivity.CHECKED_DECK)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                checkedDeck = bundle.getString(CreateEditDeleteDeckActivity.CHECKED_DECK);
+                //get the selected deck to edit
+                deck = deckManager.getDecks(bundle.getString(CreateEditDeleteDeckActivity.CHECKED_DECK)).get(0);
+                //get all the card in the deck the user is editing
+                cardsInDeck = deck.getCards();
+                //this will affect what happens when the user hits submit or create
+                //in this case the deck will be updated and commited
+                editMode = true;
+                //button should say "submit" if the user is editing
+                subButton.setText(R.string.button_submit);
+                //set the edit text box to the name of the deck
+                textBox.append(deck.getName());
             }
+        //if not, then they're creating a deck
+        } else {
+            //this is a new deck, so there aren't any card currently
+            cardsInDeck = new ArrayList<>();
+            //since this is being set to false a new deck will be created when the user hits create/submit
+            editMode    = false;
+            //the user is creating, so the button should say "create"
+            subButton.setText(R.string.button_create);
         }
 
-        List<Deck>  deckList       = deckManager.getDecks(checkedDeck);
-
-        deck        = deckList.get(0);
-        cardsInDeck = deck.getCards();
-
-        //set the edit text box to the name of the deck
-        textBox = (EditText) findViewById(R.id.editDeckNameField);
-        textBox.setText(deck.getName());
-
         //create the CardStructs and set them to selected if the specific card
-        //already exists in the deck
+        //already exists in the deck. fi this is a new deck then they will all be set to false
         for (Card curr : allCards) {
             Boolean contains    = cardsInDeck.contains(curr);
             ListRow cardStruct  = new ListRow(curr.getAnswer(), contains);
@@ -77,7 +90,7 @@ public class EditDeckActivity extends BaseActivity {
         String deckName = textBox.getText().toString().trim();
 
         //add all of the selected cards, if there are cards that are in the deck, but the user
-        //deselected then they need to be removed from the deck.
+        //deselected them, then they need to be removed from the deck.
         for (int i = 0; i < cardStructs.size(); i++){
             Card curr = allCards.get(i);
             if (!cardsInDeck.contains(curr) && cardStructs.get(i).isChecked) {
@@ -102,19 +115,18 @@ public class EditDeckActivity extends BaseActivity {
 
         //everything looks good, we can create the deck.
         } else {
-            if (!TextUtils.equals(deckName, deck.getName())) {
-                try {
+            try {
+                if(editMode) {
                     deck.setName(textBox.getText().toString().trim());
                     deck.commit();
-                    finish();
+                } else {
+                    deckManager.buildDeck(textBox.getText().toString().trim(), cardsInDeck);
+                }
+                finish();
 
                 //darn, a deck already exists with this name!
-                } catch (ObjectAlreadyExistsException e) {
-                    Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                deck.commit();
-                finish();
+            } catch (ObjectAlreadyExistsException e) {
+                Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
             }
         }
     }
