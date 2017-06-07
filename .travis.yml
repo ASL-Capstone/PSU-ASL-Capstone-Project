@@ -7,23 +7,26 @@ android:
         - platform-tools
         - tools
         - build-tools-25.0.2
-        - android-23
-        - sys-img-armeabi-v7a-android-23
-#        - extra-android-m2repository
-#        - extra-google-m2repository
+        - android-24
+        - addon-google_apis-google-24
+        - extra-google-m2repository
+        - extra-android-m2repository
+        - sys-img-armeabi-v7a-google_apis-24
 
 env:
-    - ANDROID_HOME=$HOME/android-sdk
+    global:
+        - ANDROID_HOME=$HOME/android-sdk
+        - ADB_INSTALL_TIMEOUT=20
 
 before_script:
-    - android list targets
-    - echo no | android create avd --force -n test -t android-23 --abi armeabi-v7a
-    - emulator -avd test -no-skin -no-audio -no-window &
+    #- android list targets
+    - echo no | android create avd --force -n test -t "android-24" --abi "google_apis/armeabi-v7a"
+    - emulator -avd test -no-window
     - android-wait-for-emulator
-    - adb shell input keyevent 82 &
+      #- adb shell input keyevent 82 &
 
 script:
-    - android list targets
+    #- android list targets
     - ./gradlew build connectedCheck
 
 before_install:
@@ -31,34 +34,35 @@ before_install:
     - mkdir -p "$ANDROID_HOME/licenses"
     - mkdir -p "$HOME/android-sdk-dl"
     - mkdir -p "$HOME/android-sdk"
+    - touch "/home/travis/.android/emu-update-last-check.ini"
     - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
     - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
 
-install:
+      #install:
     # Download android SDK tools if not present
-    - if test ! -e $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; then curl https://dl.google.com/android/repository/tools_r25.2.5-linux.zip > $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; fi
-    - unzip -n $HOME/android-sdk-dl/tools_r25.2.5-linux.zip -d $HOME/android-sdk
+    #- if test ! -e $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; then curl https://dl.google.com/android/repository/tools_r25.2.5-linux.zip > $HOME/android-sdk-dl/tools_r25.2.5-linux.zip; fi
+    #- unzip -n $HOME/android-sdk-dl/tools_r25.2.5-linux.zip -d $HOME/android-sdk
     
     # Install/update SDK components
-    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
-    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
-    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-24'
-    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
-    - echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
+    #- echo y | $HOME/android-sdk/tools/bin/sdkmanager 'tools'
+    #- echo y | $HOME/android-sdk/tools/bin/sdkmanager 'build-tools;25.0.2'
+    #- echo y | $HOME/android-sdk/tools/bin/sdkmanager 'platforms;android-23'
+    #- echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;android;m2repository'
+    #- echo y | $HOME/android-sdk/tools/bin/sdkmanager 'extras;google;m2repository'
 
-before_cache:
-    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
-    - rm -rf $HOME/.gradle/caches/*/plugin-resolution
-    - rm -f $HOME/.gradle/caches/*/classAnalysis
-    - rm -f $HOME/.gradle/caches/*/jarSnapshots
+    #before_cache:
+    #- rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+    #- rm -rf $HOME/.gradle/caches/*/plugin-resolution
+    #- rm -f $HOME/.gradle/caches/*/classAnalysis
+    #- rm -f $HOME/.gradle/caches/*/jarSnapshots
 
-cache:
-    directories:
-        - $HOME/.gradle/caches
-        - $HOME/.gradle/wrapper
-        - $HOME/.android/build-cache
-        - $HOME/android-sdk
-        - $HOME/android-sdk-dl
+      #cache:
+      #directories:
+      # - $HOME/.gradle/caches
+      # - $HOME/.gradle/wrapper
+      # - $HOME/.android/build-cache
+      # - $HOME/android-sdk
+      # - $HOME/android-sdk-dl
 
 licenses:
     - 'android-sdk-preview-license-.+'
