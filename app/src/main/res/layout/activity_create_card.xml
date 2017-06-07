@@ -32,12 +32,6 @@
             />
     </TableRow>
 
-    <Button
-        android:id="@+id/button_submit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_create" />
-
     <EditText
         android:id="@+id/edit_text_video_answer"
         android:layout_width="match_parent"
@@ -49,6 +43,7 @@
         android:background="@drawable/background_dark_border"
         android:layout_margin="3dp"
         android:ems="10"
+        android:imeOptions="actionDone"
         android:inputType="text" />
 
     <VideoView
@@ -70,6 +65,12 @@
         android:layout_height="0dp"
         android:layout_weight=".5"
         />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_create" />
 
 
 </LinearLayout>
