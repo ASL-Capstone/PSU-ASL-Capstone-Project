@@ -14,15 +14,15 @@
     <EditText
         android:id="@+id/deckNameField"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/background4"
+        android:layout_height="50dp"
         android:gravity="center"
         android:hint="@string/CreateDeck_DeckName"
+        android:textColorHint="@color/lightGray"
+        android:background="@drawable/background_dark_border"
+        android:layout_margin="3dp"
+        android:ems="10"
         android:imeOptions="actionDone"
-        android:inputType="text"
-        tools:ignore="HardcodedText,LabelFor,TextFields" />
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/textView4"
@@ -33,8 +33,7 @@
     <include layout="@layout/list_items"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
 
     <Button
         android:id="@+id/bttn_submit"

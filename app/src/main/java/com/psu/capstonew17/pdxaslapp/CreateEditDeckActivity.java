@@ -45,7 +45,6 @@ public class CreateEditDeckActivity extends BaseActivity implements View.OnClick
         deckManager = ExternalDeckManager.getInstance(this);
         allCards    = deckManager.getDefaultDeck().getCards();
         cardStructs = new ArrayList<>();
-        textBox.setHint(R.string.CreateDeck_DeckName);
 
         //if there's a bundle to grab, then the user is editing a deck
         if(getIntent().hasExtra(CreateEditDeleteDeckActivity.CHECKED_DECK)) {
