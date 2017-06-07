@@ -26,6 +26,10 @@ class ExternalTest implements Test {
         this.statistics = statistics;
     }
 
+    public List<Question> getQuestions(){
+        return this.questions;
+    }
+
     @Override
     public Statistics getStats() {
         return statistics;

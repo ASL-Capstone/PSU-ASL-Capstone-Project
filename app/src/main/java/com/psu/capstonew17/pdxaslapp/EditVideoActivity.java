@@ -143,15 +143,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                     videoView.seekTo(progress);
                     currentProgress = progress; //NEED TO CHECK >> MAY NEED TO CONVERT progress TO milliseconds (*1000 to convert??)
                 }
-                else {
-                    //seekBar.setProgress(progress);
-                }
                 seekPositionDisplay.setText(String.format(resources.getString(R.string.seekDisplayEditCard), ((float)progress/1000f)));
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                //TO DO
+                //TO DO-->used for testing the seekbar functionality
                 if(endTimeSwitch) {
                     //This Toast is just for testing purposes
                     //Toast.makeText(getApplicationContext(), "Starting to seek - this will update STOP TIME crop", Toast.LENGTH_SHORT).show();
@@ -211,7 +208,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
 
         if(videoUri == null) {
             importOptions.endTime = 0;
-            Toast.makeText(this, "From EditCard: No URI Passed", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
+            Toast.makeText(this, "EditCard: No Video Found", Toast.LENGTH_SHORT).show(); //pop-up indicating No video passed from 'CreateCardActivity'
         } else {
             //set up video view to initialize 'seekBar' when the video is loaded
             videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -243,11 +240,8 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             });
             
             videoView.setVideoURI(videoUri); //set view to locate current video needing to be edited
-
-            //calls setOnPreparedListener??
             videoView.start(); //start AFTER setting up the seek bar
         } //end of 'else' //videoUri != null case
-
 
 
         /**Set up start and end time textViews
@@ -260,8 +254,6 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         endTimeText.setText(R.string.stop_time_label);
 
     }
-
-
 
 
     /**

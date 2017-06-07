@@ -7,10 +7,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -40,8 +40,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private static final int REQUEST_EDIT_VIDEO = 2;
 
     //cases for the perm request result struct
-    private static final int REQ_CAMERA_PERMS       = 1;
-    private static final int REQ_EXT_STORAGE_PERMS  = 2;
+    private static final int REQ_EXT_STORAGE_PERMS  = 1;
+    private static final int REQ_CAMERA_PERMS       = 2;
 
     //min and max length of an answer for a card
     private static final int MIN_LABEL_LENGTH   = 3;
@@ -127,18 +127,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
             //user wants to use a video from the gallery. check for external storage perms.
             //if we don't have them, then request them.
             case R.id.buttonFromGallery:
-                if (PackageManager.PERMISSION_GRANTED ==
-                        ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    dispatchGalleryIntent();
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                            REQ_EXT_STORAGE_PERMS);
-                }
+                dispatchGalleryIntent();
                 break;
 
             //user is finished creating this card.
             case R.id.button_submit:
-                videoLabel = editText.getText().toString();
+                videoLabel = editText.getText().toString().trim();
                 //make sure that the video imported successfully
                 //and that the length of the answer is in valid range
                 if (!videoLabelCheck() || video == null){
@@ -148,8 +142,10 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 } else {
                     CardManager cardManager = ExternalCardManager.getInstance(this);
                     try {
+                        Log.d("Hang Debug", "trying to make card");
                         //video and label look good, create the card.
                         Card card = cardManager.buildCard(video, videoLabel);
+                        Log.d("Hang Debug", "card made");
                         //add the card to all of the selected decks.
                         for(int i = 0; i < listRows.size(); i++){
                             ListRow curr = listRows.get(i);
@@ -160,10 +156,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                                 slctdDeck.commit();
                             }
                         }
+                        Log.d("Hang Debug", "about to call finish");
                         finish();
-                    //this exception should actually never be thrown, cards are not unique.
+                        //cards can't have the same answer and video!
                     } catch (ObjectAlreadyExistsException e){
-                        Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT);
+                        Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
@@ -172,27 +169,17 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     //gets the result of any perms we requested
     @Override
-    public void onRequestPermissionsResult(int requestCode, String perms[], int[] grantResults){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] perms, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, perms, grantResults);
         switch(requestCode) {
             //if we needed camera perms
-            case REQ_CAMERA_PERMS: {
+            case REQ_CAMERA_PERMS:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     dispatchTakeVideoIntent();
                 } else {
                     Toast.makeText(this, R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
                 }
-            }
-            break;
-
-            //if we needed external storage perms
-            case REQ_EXT_STORAGE_PERMS: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    dispatchGalleryIntent();
-                } else {
-                    Toast.makeText(this, R.string.card_storage_perm_error, Toast.LENGTH_SHORT).show();
-                }
-            }
-            break;
+                break;
         }
     }
 
@@ -268,11 +255,21 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 if (resultCode == RESULT_OK) {
                     videoUri = intent.getData();
 
+
                     //let the user edit it!
                     if(videoUri != null){
-                        intent = new Intent(this, EditVideoActivity.class);
-                        intent.setData( videoUri);
-                        startActivityForResult(intent, REQUEST_EDIT_VIDEO);
+                        //Verify length of video is greater than two seconds
+                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                        retriever.setDataSource(this, videoUri);
+                        String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+                        if(Integer.parseInt(endTime) < 2000){
+                            Toast.makeText(this, "Video length must be at least 2 seconds", Toast.LENGTH_SHORT);
+                        }
+                        else{
+                            intent = new Intent(this, EditVideoActivity.class);
+                            intent.setData( videoUri);
+                            startActivityForResult(intent, REQUEST_EDIT_VIDEO);
+                        }
                     }
                 }
                 break;
@@ -319,7 +316,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         //I can't toast here
                         @Override
                         public void onFailed(Throwable err) {
-
                             videoErrorToast();
                             progressDialog.dismiss();
                         }

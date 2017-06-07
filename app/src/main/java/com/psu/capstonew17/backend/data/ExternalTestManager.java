@@ -66,6 +66,14 @@ public class ExternalTestManager implements TestManager{
         if(opts.count < questions.size()){
             numQuestions = opts.count;
         }
-        return new ExternalTest(questions.subList(0, numQuestions), null);
+        Statistics stats = null;
+        if(opts.recordStats){
+            stats = new ExternalStatistics(new ArrayList<Card>(), new ArrayList<Card>(), 0l);
+        }
+        ExternalTest test = new ExternalTest(questions.subList(0, numQuestions), stats);
+        for(Question q : test.getQuestions()){
+            ((ExternalQuestion) q).addToTest(test);
+        }
+        return new ExternalTest(questions.subList(0, numQuestions), stats);
     }
 }

@@ -68,13 +68,8 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
             finish();
             return;
         }
-        // Testing params passed in
-        // TODO Remove after testing
-        for (int i = 0; i < deckNamesForQuiz.size(); ++i){
-            Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
-        }
+
         // Get the generic Test
-        // TODO Test the actual backend quiz generation
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
             Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
@@ -95,7 +90,6 @@ public class FlashCardActivity extends BaseActivity implements View.OnClickListe
         // Check to See if there is another Question in the Test
         vidDisplay.setVisibility(View.INVISIBLE);
         if(currTest.hasNext()) {
-            // TODO hook video up
             curQuestion = currTest.next();
             Pair<Boolean,String> answerReturn = curQuestion.answer(" ");
             String correctAnswer = answerReturn.second;
