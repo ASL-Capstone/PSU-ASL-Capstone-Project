@@ -1,6 +1,10 @@
 //MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
+/**
+ * Created by Josh Aldridge
+ */
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -295,6 +299,19 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      *
      */
     private void submitEdits() {
+        /**
+         * If the video is an invalid length
+         */
+        if(!timeSelectionCheck(importOptions.startTime, importOptions.endTime)) {
+            if(videoView.getDuration() <= 30000) {
+                importOptions.startTime = 0; //zero
+                importOptions.endTime = videoView.getDuration(); //to the length of the video
+            } else {
+                importOptions.startTime = 0; //zero
+                importOptions.endTime = 30000; //to the max length
+            }
+        }
+
         Intent returnIntent = new Intent();
         returnIntent.setData(videoUri); //video location
         returnIntent.putExtra(START, importOptions.startTime); //user-selected start time
