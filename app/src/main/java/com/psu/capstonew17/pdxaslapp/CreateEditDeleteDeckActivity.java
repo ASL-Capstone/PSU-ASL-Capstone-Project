@@ -23,7 +23,6 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
     static final String     CHECKED_DECK   = "checkedDeck";
 
     private RadioGroup  deckRG;
-    private TextView    noDeckMsg;
     private List<Deck>  decks;
     private DeckManager deckManager;
 
@@ -35,9 +34,6 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
         findViewById(R.id.bttnCrt).setOnClickListener(this);
         findViewById(R.id.bttnDlt).setOnClickListener(this);
         findViewById(R.id.bttnEdit).setOnClickListener(this);
-
-        noDeckMsg = (TextView) findViewById(R.id.noDecksText);
-        noDeckMsg.setText(R.string.no_decks_msg);
 
         deckManager = ExternalDeckManager.getInstance(this);
         deckRG      = (RadioGroup) findViewById(R.id.deckRButtons);
@@ -55,9 +51,9 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
         //if there aren't any decks then display a message so that the user doesn't think
         //that this menu is broken
         if(decks.size() > 0)
-            noDeckMsg.setVisibility(View.GONE);
+            findViewById(R.id.noDecksText).setVisibility(View.GONE);
         else
-            noDeckMsg.setVisibility(View.VISIBLE);
+            findViewById(R.id.noDecksText).setVisibility(View.VISIBLE);
 
         for (int i = 0; i < decks.size(); i++) {
             RadioButton currRad = new RadioButton(this);

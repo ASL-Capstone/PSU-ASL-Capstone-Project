@@ -12,10 +12,16 @@
     tools:context="com.psu.capstonew17.pdxaslapp.CreateEditDeleteDeckActivity">
 
     <TextView
+        android:id="@+id/selectDeckText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_deck" />
+
+    <TextView
         android:id="@+id/noDecksText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|top"/>
+        android:text="@string/no_decks_msg"/>
 
     <ScrollView
         android:layout_width="match_parent"

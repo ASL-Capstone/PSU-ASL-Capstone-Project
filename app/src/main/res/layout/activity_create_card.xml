@@ -60,6 +60,12 @@
         android:layout_height="wrap_content"
         android:text="@string/CreateCard_AddDecks" />
 
+    <TextView
+        android:id="@+id/noDecksText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_decks_msg"/>
+
     <include layout="@layout/list_items"
         android:layout_width="match_parent"
         android:layout_height="0dp"

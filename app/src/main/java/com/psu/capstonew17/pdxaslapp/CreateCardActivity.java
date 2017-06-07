@@ -98,6 +98,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         //get the list of all decks in the db
         deckList = ExternalDeckManager.getInstance(this).getDecks(null);
+        if (deckList.size() > 0)
+            findViewById(R.id.noDecksText).setVisibility(View.GONE);
 
         listRows = new ArrayList<>();
         //populate the list rows for the list view.

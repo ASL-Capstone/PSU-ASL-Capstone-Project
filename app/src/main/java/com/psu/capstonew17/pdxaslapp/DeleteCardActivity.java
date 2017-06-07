@@ -43,6 +43,12 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
         cardRG.clearCheck();
         cardRG.removeAllViews();
         cards = deckManager.getDefaultDeck().getCards();
+
+        if (cards.size() > 0)
+            findViewById(R.id.noCardsText).setVisibility(View.GONE);
+        else
+            findViewById(R.id.noCardsText).setVisibility(View.VISIBLE);
+
         for (int i = 0; i < cards.size(); i++) {
             RadioButton currRad = new RadioButton(this);
             currRad.setId(i);

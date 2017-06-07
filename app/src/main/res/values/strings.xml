@@ -68,6 +68,8 @@
     <string name="deck_size_error">Select at least two cards</string>
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
+    <string name="select_deck">Select a deck to edit or delete:</string>
+    <string name="no_cards">There aren\'t any cards to list!</string>
 
     <!-- Card creation/deletion strings -->
     <string name="importing_video">Importing video</string>
@@ -82,6 +84,7 @@
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
     <string name="select_card">Please select a card</string>
+    <string name="select_card_delete">Select a card to delete:</string>
     <string name="deleted_decks">"The following decks will be deleted: "</string>
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
