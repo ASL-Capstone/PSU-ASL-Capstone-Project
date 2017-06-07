@@ -84,7 +84,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
         Intent intent;
 
         switch (view.getId()) {
-            //
+            // start scanning process
             case R.id.buttonScanQR:
                 qrScan.initiateScan();
                 break;

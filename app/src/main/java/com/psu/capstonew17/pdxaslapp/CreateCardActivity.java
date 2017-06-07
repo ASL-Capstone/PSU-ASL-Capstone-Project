@@ -132,7 +132,7 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
             //user is finished creating this card.
             case R.id.button_submit:
-                videoLabel = editText.getText().toString();
+                videoLabel = editText.getText().toString().trim();
                 //make sure that the video imported successfully
                 //and that the length of the answer is in valid range
                 if (!videoLabelCheck() || video == null){

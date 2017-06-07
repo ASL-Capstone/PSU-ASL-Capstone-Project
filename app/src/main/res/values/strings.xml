@@ -18,7 +18,12 @@
     <string name="button_share">Share</string>
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
+    <string name="button_delete_card">Delete Card</string>
     <string name="button_create">Create</string>
+    <string name="button_receive_deck">Receive Deck</string>
+    <string name="button_share_deck">Share Deck</string>
+    <string name="button_create_edit_delete_deck">Create/Edit/Delete Decks</string>
+    <string name="button_create_card">Create Card</string>
     <string name="button_home">Home</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
