@@ -303,10 +303,12 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
          * If the video is an invalid length
          */
         if(!timeSelectionCheck(importOptions.startTime, importOptions.endTime)) {
+            //if the video is less than 30 seconds
             if(videoView.getDuration() <= 30000) {
                 importOptions.startTime = 0; //zero
                 importOptions.endTime = videoView.getDuration(); //to the length of the video
             } else {
+                //if the video is LONGER than 30 seconds
                 importOptions.startTime = 0; //zero
                 importOptions.endTime = 30000; //to the max length
             }
