@@ -46,12 +46,12 @@
         android:inputType="text" />
 
     <VideoView
-        android:layout_gravity="center"
+        android:id="@+id/videoView_create_card"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight=".5"
+        android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:id="@+id/videoView_create_card" />
+        android:layout_weight=".5" />
 
     <include layout="@layout/list_items"
         android:layout_width="match_parent"
