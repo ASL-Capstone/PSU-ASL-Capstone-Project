@@ -40,6 +40,7 @@ public class NavigationFlowTest {
 
     @Test
     public void navigationTest(){
+        // make sure to have all requirement permission (memory,...)
 
         onView(withId(R.id.button_take_quiz)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();

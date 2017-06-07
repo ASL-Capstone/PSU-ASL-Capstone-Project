@@ -64,15 +64,8 @@ public class MultipleChoiceActivity extends BaseActivity
             finish();
             return;
         }
-        // Testing params passed in
-        // TODO Remove after testing
-        Toast.makeText(this, "Number of Questions: " + numQuestions, Toast.LENGTH_SHORT).show();
-        for (int i = 0; i < deckNamesForQuiz.size(); ++i){
-            Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
-        }
+
         // Get the generic Test
-        // TODO Test the actual backend quiz generation
-        // Used for test generation when the back end is hooked in.
         ArrayList<Deck> decksForQuiz;
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
@@ -125,7 +118,7 @@ public class MultipleChoiceActivity extends BaseActivity
                 add.setText(answer);
                 answers.addView(add);
             }
-            //TODO Test video
+            // Test video
             curQuestion.getVideo().configurePlayer(questionVideo);
             questionVideo.setOnErrorListener(new MediaPlayer.OnErrorListener() {
                 @Override
