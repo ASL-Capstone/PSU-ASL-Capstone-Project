@@ -40,7 +40,9 @@ public class NavigationFlowTest {
 
     @Test
     public void navigationTest(){
+        // make sure to have all requirement permission (memory,...)
 
+        // test go to choose quiz
         onView(withId(R.id.button_take_quiz)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_take_quiz)).perform(click());
@@ -48,6 +50,7 @@ public class NavigationFlowTest {
         Intents.release();
         pressBack();
 
+        // go to manage deck
         onView(withId(R.id.button_manage_decks)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_manage_decks)).perform(click());
@@ -67,6 +70,7 @@ public class NavigationFlowTest {
         intended(hasComponent(ManageDecksSubMenuActivity.class.getName()));
         Intents.release();
 
+        // on manage deck, go to receive deck
         onView(withId(R.id.button_receive_deck)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_receive_deck)).perform(click());
@@ -74,11 +78,13 @@ public class NavigationFlowTest {
         Intents.release();
         pressBack(); // home screen now
 
+        // on home screen now, go to manage deck
         Intents.init();
         onView(withId(R.id.button_manage_decks)).perform(click());
         intended(hasComponent(ManageDecksSubMenuActivity.class.getName()));
         Intents.release();
 
+        // go to share deck
         onView(withId(R.id.button_share_deck)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_share_deck)).perform(click());
@@ -93,6 +99,7 @@ public class NavigationFlowTest {
         intended(hasComponent(ManageCardsSubMenuActivity.class.getName()));
         Intents.release();
 
+        // on manage card, go to create card
         onView(withId(R.id.button_create_card)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_create_card)).perform(click());
@@ -100,12 +107,18 @@ public class NavigationFlowTest {
         Intents.release();
         pressBack();        // manage card screen
 
+        // on home, go to manage card
+        Intents.init();
+        onView(withId(R.id.button_manage_cards)).perform(click());
+        intended(hasComponent(ManageCardsSubMenuActivity.class.getName()));
+        Intents.release();
+
+        // check and go to delete card
         onView(withId(R.id.button_delete_card)).check(matches(ViewMatchers.isDisplayed()));
         Intents.init();
         onView(withId(R.id.button_delete_card)).perform(click());
         intended(hasComponent(DeleteCardActivity.class.getName()));
         Intents.release();
-        pressBack();
         pressBack();
 
 

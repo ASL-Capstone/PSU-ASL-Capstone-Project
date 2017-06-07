@@ -52,7 +52,6 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         bttSubmit = (Button) this.findViewById(R.id.button_quizWriteUpSubmit);
         bttSubmit.setOnClickListener(this);
         mediaController = new MediaController(this);
-        //TODO Test enter key works identically to submit
         bttSubmit.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View view, int keyCode, KeyEvent keyevent) {
                 //If the keyevent is a key-down event on the "enter" button
@@ -78,13 +77,8 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
             finish();
             return;
         }
-        // Testing params passed in
-        // TODO Remove after testing
-        for (int i = 0; i < deckNamesForQuiz.size(); ++i) {
-            Toast.makeText(this, "Selected Deck " + deckNamesForQuiz.get(i), Toast.LENGTH_SHORT).show();
-        }
+
         // Get the generic Test
-        // TODO Test the actual backend quiz generation
         decksForQuiz = new ArrayList<>();
         for (String name : deckNamesForQuiz){
             Deck toAdd = ExternalDeckManager.getInstance(this).getDecks(name).get(0);
@@ -127,9 +121,8 @@ public class WriteUpActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     protected void processQuestion() {
-        String input = answerInput.getText().toString();
+        String input = answerInput.getText().toString().trim();
         Pair<Boolean, String> answerReturn = curQuestion.answer(input);
         String correctAnswer = answerReturn.second;
         if (answerReturn.first) {

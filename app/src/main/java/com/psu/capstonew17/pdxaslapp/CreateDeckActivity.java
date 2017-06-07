@@ -86,7 +86,7 @@ public class CreateDeckActivity extends BaseActivity {
         //everything looks good, we can create the deck
         } else {
             try {
-                deckManager.buildDeck(textBox.getText().toString(), cardsInDeck);
+                deckManager.buildDeck(textBox.getText().toString().trim(), cardsInDeck);
                 finish();
 
             //Poo, the deck already exists. This means that the name the user entered isn't unique.

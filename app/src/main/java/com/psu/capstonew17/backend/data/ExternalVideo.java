@@ -9,7 +9,6 @@ import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.api.*;
-import com.psu.capstonew17.pdxaslapp.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

@@ -33,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.68"
-            android:text="TextView"
             android:textAlignment="center" />
 
         <ImageView

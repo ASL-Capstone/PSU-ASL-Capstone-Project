@@ -19,10 +19,8 @@ import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 /**
- * Created by ichel on 4/28/2017.
  * Allows user to edit existing decks
  */
-
 public class EditDeckActivity extends BaseActivity {
     private Deck            deck;
     private List<Card>      allCards;
@@ -106,7 +104,7 @@ public class EditDeckActivity extends BaseActivity {
         } else {
             if (!TextUtils.equals(deckName, deck.getName())) {
                 try {
-                    deck.setName(textBox.getText().toString());
+                    deck.setName(textBox.getText().toString().trim());
                     deck.commit();
                     finish();
 
