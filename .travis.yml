@@ -13,7 +13,7 @@ env:
     - ANDROID_HOME=$HOME/android-sdk
 
 script:
-    - ./gradlew build
+    - ./gradlew build connectedCheck
 
 before_install:
     - chmod +x gradlew
@@ -58,3 +58,4 @@ branches:
     only:
         - master
         - Develop
+        - travis-ci
