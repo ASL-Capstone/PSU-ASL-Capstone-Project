@@ -176,7 +176,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "stop time must be AFTER start time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "invalid video length (Must be between 2 and 30 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -189,7 +189,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "start time must be BEFORE end time (total time at least 2 seconds)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "invalid video length (Must be between 2 and 30 seconds)", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -273,7 +273,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
      * @return false, if the time crop region selected is less than 2000 ms (2 Seconds)
      */
     private boolean timeSelectionCheck(int startTime, int endTime) {
-        return ((endTime - startTime) >= 2000);
+        return ((endTime - startTime) >= 2000 && (endTime - startTime) <= 30000);
     }
 
 
