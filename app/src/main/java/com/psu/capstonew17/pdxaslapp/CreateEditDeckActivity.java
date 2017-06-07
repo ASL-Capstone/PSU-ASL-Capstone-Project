@@ -46,6 +46,9 @@ public class CreateEditDeckActivity extends BaseActivity implements View.OnClick
         allCards    = deckManager.getDefaultDeck().getCards();
         cardStructs = new ArrayList<>();
 
+        if (allCards.size() > 0)
+            findViewById(R.id.noCardsText).setVisibility(View.GONE);
+        
         //if there's a bundle to grab, then the user is editing a deck
         if(getIntent().hasExtra(CreateEditDeleteDeckActivity.CHECKED_DECK)) {
             Bundle bundle = getIntent().getExtras();
