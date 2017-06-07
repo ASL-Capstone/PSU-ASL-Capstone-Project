@@ -3,13 +3,9 @@ jdk: oraclejdk8
 
 android:
     components:
-        - tools
         - platform-tools
-        - tools
-        - addon-google_apis-google-24
-        - sys-img-armeabi-v7a-google_apis-24
-#        - extra-android-m2repository
-#        - extra-google-m2repository
+        - addon-google_apis-google-25
+        - sys-img-armeabi-v7a-google_apis-25
 
 env:
     global:
@@ -18,7 +14,7 @@ env:
 
 before_script:
     - android list targets
-    - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a --tag google_apis
+    - echo no | android create avd --force -n test -t android-25 --abi armeabi-v7a --tag google_apis
     - emulator -avd test -no-skin -no-audio -no-window &
     - android-wait-for-emulator
     - adb shell input keyevent 82 &
