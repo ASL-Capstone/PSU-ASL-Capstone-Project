@@ -42,6 +42,11 @@ public class BaseAssetsImporter {
      */
     private static final char RAW_SPACER = '_';
 
+    /**
+     * string pattern to replace with a question mark
+     */
+    private static final String RAW_QUESTION_PATTERN = "__question__";
+
     public static void importAssets(Context context){
         MessageDigest digest;
         try {
@@ -60,7 +65,8 @@ public class BaseAssetsImporter {
             String rName = f.getName();
             if(rName.startsWith(RAW_PREFIX)) {
                 File rFile = new File("android.resource://" + context.getPackageName() + "/raw/" + rName);
-                String cardAndDeckNames = rName.substring(RAW_PREFIX.length(), rName.length());
+                String parsedName = rName.replaceAll(RAW_QUESTION_PATTERN, "?");
+                String cardAndDeckNames = parsedName.substring(RAW_PREFIX.length(), parsedName.length());
                 String cardName = cardAndDeckNames.split(RAW_DELIMITER, 2)[0];
                 cardName = cardName.replace(RAW_SPACER, ' ');
                 String deckName = cardAndDeckNames.split(RAW_DELIMITER, 2)[1];

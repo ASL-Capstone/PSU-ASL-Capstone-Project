@@ -23,7 +23,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     public static final String END = "end";
     public static final String QUALITY = "quality";
     public static final String CROP = "cropRegion";
-    public static final String DELETE = "deleteFromGallery?";
+    //public static final String DELETE = "deleteFromGallery?";
 
     private Uri videoUri;
     private VideoView videoView;
@@ -31,7 +31,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
     //UI
     private SeekBar seekBar; //tracks current video's progress
     private Switch start_stop_switch; // off = modify stop time; on = modify start time
-    private Switch deleteFromGalSwitch; //switch used to indicate video should be removed from gallery
+    //private Switch deleteFromGalSwitch; //switch used to indicate video should be removed from gallery
     private boolean deleteFromGal;
     private boolean endTimeSwitch; // set to value of above switch
     private Button submitButton; //attached to submit button (sends modifications to backend)
@@ -96,6 +96,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
          * Set up the "Delete From Gallery" swtich;
          * Determines if the video should be removed from the gallery following the edit
          */
+        /*
         deleteFromGalSwitch = (Switch) findViewById(R.id.DeleteFromGallerySwitch);
         deleteFromGalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -108,7 +109,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
-
+        */
 
         /**Set up the submit button
          *  - connect to button
@@ -300,7 +301,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
         returnIntent.putExtra(END, importOptions.endTime); //user-selected stop time
         returnIntent.putExtra(CROP, importOptions.cropRegion); //will be null for MVP
         returnIntent.putExtra(QUALITY, importOptions.quality); //video quality (MVP default - 10)
-        returnIntent.putExtra(DELETE, deleteFromGal); //delete original video from gallery?
+        //returnIntent.putExtra(DELETE, deleteFromGal); //delete original video from gallery?
         setResult(Activity.RESULT_OK, returnIntent); //indicate successful result to return to CreateCardActivity
         finish();
     }
