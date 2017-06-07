@@ -40,7 +40,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     private static final int REQUEST_EDIT_VIDEO = 2;
 
     //cases for the perm request result struct
-    private static final int REQ_EXT_STORAGE_PERMS  = 1;
     private static final int REQ_CAMERA_PERMS       = 2;
 
     //min and max length of an answer for a card
@@ -51,9 +50,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     //activity elements
     private Button          bttSubmit;
-    private Button          bttGetVideo;
-    private Button          bttRecordVideo;
-    private ListView        listView;
     private Uri             videoUri;
     private EditText        editText;
     private VideoView       videoView;
@@ -71,6 +67,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_card);
+
+
+        Button          bttGetVideo;
+        Button          bttRecordVideo;
+        ListView        listView;
 
         //submit button should be invisible until a video has been imported.
         bttSubmit = (Button) findViewById(R.id.button_submit);
@@ -240,13 +241,6 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttSubmit.setVisibility(View.GONE);
     }
 
-    //something went wrong while importing the video.
-    //couldn't Toast in onFailed, and I'm lazy.
-    protected void videoErrorToast(){
-        Toast.makeText(this,
-                R.string.import_video_error, Toast.LENGTH_SHORT).show();
-    }
-
     //get the results from activities that...
     // ...return results...
     @Override
@@ -317,10 +311,10 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                         }
 
                         //if importing fails.
-                        //I can't toast here
                         @Override
                         public void onFailed(Throwable err) {
-                            videoErrorToast();
+                           Toast.makeText(CreateCardActivity.this,
+                                   R.string.import_video_error, Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
                     });
