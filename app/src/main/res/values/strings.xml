@@ -88,6 +88,7 @@
     <string name="deleted_decks">"The following decks will be deleted: "</string>
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
+    <string name="video_delete_safe">It is now safe to delete the video from the gallery</string>
 
     <!-- Edit Card/Share Card strings -->
     <string name="button_record">Record</string>

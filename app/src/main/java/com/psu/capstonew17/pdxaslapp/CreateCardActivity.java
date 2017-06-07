@@ -312,6 +312,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                             video = vid;
                             startVideo();
                             progressDialog.dismiss();
+                            Toast.makeText(CreateCardActivity.this,
+                                    R.string.video_delete_safe, Toast.LENGTH_LONG).show();
                         }
 
                         //if importing fails.
