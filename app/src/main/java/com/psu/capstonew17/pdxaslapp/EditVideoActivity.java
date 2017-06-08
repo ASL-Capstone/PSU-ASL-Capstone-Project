@@ -87,33 +87,9 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 endTimeSwitch = isChecked;
-                if(endTimeSwitch) {
-                    Toast.makeText(getApplicationContext(), "The seek bar will now update the STOP TIME", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "The seek bar will now update the START TIME", Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
-
-        /**
-         * Set up the "Delete From Gallery" swtich;
-         * Determines if the video should be removed from the gallery following the edit
-         */
-        /*
-        deleteFromGalSwitch = (Switch) findViewById(R.id.DeleteFromGallerySwitch);
-        deleteFromGalSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isNo) {
-                deleteFromGal = (!isNo);
-                if(deleteFromGal) {
-                    Toast.makeText(getApplicationContext(), "The video will be removed from the Gallery", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "The video will remain in the Gallery", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        */
 
         /**Set up the submit button
          *  - connect to button
@@ -173,12 +149,11 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 if(endTimeSwitch) {
                     //checks is first attempt to adjust OR ensures that endtime comes AFTER start time
                     if(firstAdjustment || timeSelectionCheck(importOptions.startTime, currentProgress)) {
-                        Toast.makeText(getApplicationContext(), "Setting STOP TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         endTimeText.setText(String.format(resources.getString(R.string.stop_time_default), ((float)currentProgress/1000f)));
                         importOptions.endTime = currentProgress;
                         firstAdjustment = false;
                         //TEST
-                        displayOptions();
+                        //displayOptions();
                     }
                     else {
                         Toast.makeText(getApplicationContext(), R.string.bad_video_length, Toast.LENGTH_SHORT).show();
@@ -186,15 +161,14 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                 }
                 else {
                     if(firstAdjustment || timeSelectionCheck(currentProgress, importOptions.endTime)) {
-                        Toast.makeText(getApplicationContext(), "Setting START TIME crop to: " + currentProgress, Toast.LENGTH_SHORT).show();
                         startTimeText.setText(String.format(resources.getString(R.string.start_time_default), ((float)currentProgress/1000f)));
                         importOptions.startTime = currentProgress;
                         firstAdjustment = false;
                         //TEST
-                        displayOptions();
+                        //displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "invalid video length (Must be between 2 and 30 seconds)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.bad_video_length, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
