@@ -241,6 +241,13 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttSubmit.setVisibility(View.GONE);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (video != null)
+            startVideo();
+    }
+
     //get the results from activities that...
     // ...return results...
     @Override
