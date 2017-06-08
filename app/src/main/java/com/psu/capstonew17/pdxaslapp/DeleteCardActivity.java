@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
-import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.api.ObjectInUseException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
@@ -82,12 +81,9 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
                             decksToRemoveFrom.add(curr);
                     }
 
-                    //if there are decks that need to be deleted then we need to check with the user
-                    if (decksToDelete.size() > 0)
-                        decksDeletePrompt(card, decksToDelete, decksToRemoveFrom);
-                        //if not, we can just remove the card from the decks and delete it
-                    else
-                        deleteCard(card, decksToRemoveFrom);
+                    // prompt and delete card
+                    cardDeletePrompt(card, decksToDelete, decksToRemoveFrom);
+
                 }
                 break;
         }
@@ -96,6 +92,10 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
     //removes the card from any decks that it is a member of (decks that are being deleted shouldn't
     // be in decksToRemoveFrom list)
     public void deleteCard(Card card, List<Deck> decksToRemoveFrom){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+
+
         try {
             for (Deck curr : decksToRemoveFrom) {
                 curr.getCards().remove(card);
@@ -118,17 +118,24 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
         }
     }
 
-    //the message that is displayed when one or more decks need to be deleted.
-    public void decksDeletePrompt(final Card card, final List<Deck> decksToDelete,
+    //the message that is displayed to confirm delete card
+    // it also handle when one or more decks need to be deleted.
+    public void cardDeletePrompt(final Card card, final List<Deck> decksToDelete,
                                   final List<Deck> decksToRemoveFrom) {
         //building the message to be displayed
         StringBuilder sb = new StringBuilder();
-        sb.append(getResources().getString(R.string.deleted_decks));
-        for (int i = 0; i < decksToDelete.size(); i++){
-            sb.append(decksToDelete.get(i).getName());
-            if (i < decksToDelete.size() - 1)
-                sb.append(", ");
+        sb.append(getResources().getString(R.string.prompt_deleted_card));
+
+        if (decksToDelete.size() > 0) {
+            sb.append("\n");
+            sb.append(getResources().getString(R.string.deleted_decks));
+            for (int i = 0; i < decksToDelete.size(); i++){
+                sb.append(decksToDelete.get(i).getName());
+                if (i < decksToDelete.size() - 1)
+                    sb.append(", ");
+            }
         }
+
         //create the alert
         AlertDialog.Builder builder = new AlertDialog.Builder(this).setCancelable(false);
         builder.setMessage(sb.toString());
@@ -136,8 +143,12 @@ public class DeleteCardActivity extends BaseActivity implements View.OnClickList
             //if they want continue then go ahead and delte the decks and the card
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //delete the decks
-                deleteDecks(decksToDelete);
+
+                //delete the decks that contain <= 2 cards
+                if (decksToDelete.size() > 0) {
+                    deleteDecks(decksToDelete);
+                }
+
                 //remove the card from the other decks and delete the card
                 deleteCard(card, decksToRemoveFrom);
             }

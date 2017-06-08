@@ -4,13 +4,16 @@ package com.psu.capstonew17.pdxaslapp;
 
 import java.util.List;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
@@ -80,10 +83,13 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
 
                     //delete the selected deck, repopulate the radio group so that it's accurate.
                 } else {
-                    Deck selectedDeck = decks.get(index);
-                    selectedDeck.delete();
-                    selectedDeck.commit();
-                    populateRadioGroup();
+
+                    deleteDeck(index);
+
+//                    Deck selectedDeck = decks.get(index);
+//                    selectedDeck.delete();
+//                    selectedDeck.commit();
+//                    populateRadioGroup();
                 }
                 break;
 
@@ -101,6 +107,42 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
                 break;
         }
     }
+
+    // prompt confirmation with user and delete deck
+    public void deleteDeck(final int index) {
+        //building the message to be displayed
+        StringBuilder sb = new StringBuilder();
+        sb.append(getResources().getString(R.string.prompt_deleted_deck));
+
+        //create the alert
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setCancelable(false);
+        builder.setMessage(sb.toString());
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            //if they want continue then go ahead and delte the decks and the card
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // delete deck
+                Deck selectedDeck = decks.get(index);
+                selectedDeck.delete();
+                selectedDeck.commit();
+                populateRadioGroup();
+
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            //if not then don't do anything
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //show the alert dialog
+        builder.create().show();
+    }
+
 
     @Override
     //we need to repopulate the radio group after returning from creating or editing a deck
