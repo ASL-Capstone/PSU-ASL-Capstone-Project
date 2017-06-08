@@ -71,9 +71,9 @@ public class PreprocessingPipeline {
             int srcWidth, srcHeight;
             int videoTrack = -1;
             extractor = new MediaExtractor();
+            MediaFormat trackFmt = null;
             try {
                 extractor.setDataSource(ctx, in, null);
-                MediaFormat trackFmt = null;
                 for (int i = 0; i < extractor.getTrackCount(); i++) {
                     trackFmt = extractor.getTrackFormat(i);
                     if (trackFmt.getString(MediaFormat.KEY_MIME).startsWith("video")) {
@@ -83,15 +83,21 @@ public class PreprocessingPipeline {
                     }
                 }
                 if (videoTrack == -1) throw new RuntimeException("No video tracks available");
-                srcWidth = trackFmt.getInteger(MediaFormat.KEY_WIDTH);
-                srcHeight = trackFmt.getInteger(MediaFormat.KEY_HEIGHT);
                 decoder = MediaCodec.createDecoderByType(trackFmt.getString(MediaFormat.KEY_MIME));
                 inputFormat = trackFmt;
             } catch(IOException e) {
                 cancel(false);
                 return null;
             }
+            srcWidth = trackFmt.getInteger(MediaFormat.KEY_WIDTH);
+            srcHeight = trackFmt.getInteger(MediaFormat.KEY_HEIGHT);
 
+            // try to figure out what orientation the source video uses
+            int rotation = 0;
+            if(trackFmt.containsKey(MediaFormat.KEY_ROTATION))
+                rotation = trackFmt.getInteger(MediaFormat.KEY_ROTATION);
+
+            /*
             // prime the decoder
             long maxTime = inputFormat.getLong(MediaFormat.KEY_DURATION);
             {
@@ -111,12 +117,15 @@ public class PreprocessingPipeline {
                     decoder.queueInputBuffer(inIdx, 0, length, -1, 0);
                 }
                 inputFormat = decoder.getOutputFormat();
-                srcWidth = inputFormat.getInteger(MediaFormat.KEY_WIDTH);
-                srcHeight = inputFormat.getInteger(MediaFormat.KEY_HEIGHT);
+                //srcWidth = inputFormat.getInteger(MediaFormat.KEY_WIDTH);
+                //srcHeight = inputFormat.getInteger(MediaFormat.KEY_HEIGHT);
             }
+            */
 
             // figure out target width/height and format
             //int tgtWidth = srcWidth/2, tgtHeight = srcHeight/2;
+            MediaFormat outFormat = trackFmt;
+            /*
             int tgtWidth = srcWidth, tgtHeight = srcHeight; // TODO: Resizing
             MediaFormat outFormat = MediaFormat.createVideoFormat("video/x-vnd.on2.vp8", tgtWidth, tgtHeight);
             outFormat.setInteger(MediaFormat.KEY_BIT_RATE, 20*1024*1024); // 20 Mbps
@@ -129,6 +138,7 @@ public class PreprocessingPipeline {
                 outFormat.setInteger(MediaFormat.KEY_CAPTURE_RATE, 60);
             }
             outFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 60);
+            */
 
             // set up a muxer
             MediaMuxer muxer;
@@ -141,7 +151,10 @@ public class PreprocessingPipeline {
                 cancel(false);
                 return null;
             }
-            return doStreamCopy(extractor, videoTrackIdx, muxer);
+            muxer.setOrientationHint(rotation); // configure output orientation
+            Void res = doStreamCopy(extractor, videoTrackIdx, muxer);
+            extractor.release();
+            return res;
 
             /*
             MediaCodec encoder;
@@ -271,8 +284,7 @@ public class PreprocessingPipeline {
 
         private Void doStreamCopy(MediaExtractor extract, int strmIdx, MediaMuxer muxer) {
             MediaCodec.BufferInfo bufInfo = new MediaCodec.BufferInfo();
-            int inIdx, outIdx;
-            ByteBuffer buf = ByteBuffer.allocate(8192*1024);
+            ByteBuffer buf = ByteBuffer.allocate(8192*1024); // transfer in 8K units
             muxer.start();
             while(true) {
                 // try to provide input to the muxer
@@ -281,15 +293,12 @@ public class PreprocessingPipeline {
                 bufInfo.presentationTimeUs = extract.getSampleTime();
                 bufInfo.offset = 0;
                 bufInfo.size = length;
-                bufInfo.flags = 0;
+                bufInfo.flags = extract.getSampleFlags();
+                muxer.writeSampleData(strmIdx, buf, bufInfo);
                 extract.advance();
-                if((bufInfo.presentationTimeUs/1000 >= options.startTime) &&
-                        (bufInfo.presentationTimeUs/1000 <= options.endTime)) {
-                    bufInfo.presentationTimeUs -= options.startTime*1000;
-                    muxer.writeSampleData(strmIdx, buf, bufInfo);
-                }
             }
             muxer.stop();
+            muxer.release();
             return null;
         }
 
