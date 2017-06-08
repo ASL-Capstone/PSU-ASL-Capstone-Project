@@ -181,7 +181,7 @@ public class EditVideoActivity extends BaseActivity implements View.OnClickListe
                         displayOptions();
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "invalid video length (Must be between 2 and 30 seconds)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.bad_video_length, Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {

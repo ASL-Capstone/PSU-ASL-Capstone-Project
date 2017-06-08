@@ -89,6 +89,8 @@
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
     <string name="video_delete_safe">It is now safe to delete the video from the gallery</string>
+    <string name="video_too_short">Video length must be at least 2 seconds</string>
+    <string name="bad_video_length">invalid video length (Must be between 2 and 30 seconds)</string>
 
     <!-- Edit Card/Share Card strings -->
     <string name="button_record">Record</string>
