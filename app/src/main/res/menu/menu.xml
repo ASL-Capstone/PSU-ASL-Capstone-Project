@@ -21,20 +21,10 @@
                 android:showAsAction="never" />
         </menu>
     </item>
-    <item android:title="@string/menu_item_manage_decks"
-        android:id="@+id/item_sub_menu_manage_decks"
-        android:showAsAction="never"
-        tools:ignore="AppCompatResource">
-        <menu >
-            <item android:title="@string/menu_item_create_edit_delete_decks"
-                android:id="@+id/item_ced_decks"
-                android:showAsAction="never" />
-            <item android:title="@string/menu_item_share"
-                android:id="@+id/item_share"
-                android:showAsAction="never" />
-            <item android:title="@string/menu_item_receive_decks"
-                android:id="@+id/item_receive"
-                android:showAsAction="never" />
-        </menu>
-    </item>
+
+    <item android:title="@string/menu_item_create_edit_delete_decks"
+        android:id="@+id/item_ced_decks"
+        android:showAsAction='never'
+        tools:ignore="AppCompatResource" />
+
 </menu>

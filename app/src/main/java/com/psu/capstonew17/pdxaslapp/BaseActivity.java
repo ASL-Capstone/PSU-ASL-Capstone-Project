@@ -88,18 +88,6 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
-
-            case R.id.item_receive:
-                intent = new Intent(this, ReceiveDeckActivity.class);
-                startActivity(intent);
-                finish();
-                break;
-
-            case R.id.item_share:
-                intent = new Intent(this, ShareDeckActivity.class);
-                startActivity(intent);
-                finish();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }

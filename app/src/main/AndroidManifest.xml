@@ -44,9 +44,6 @@
             android:name=".WriteUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManageDecksSubMenuActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ManageCardsSubMenuActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -58,12 +55,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CreateEditDeleteDeckActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ReceiveDeckActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".CompleteQuizActivity"

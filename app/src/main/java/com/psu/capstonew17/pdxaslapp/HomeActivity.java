@@ -55,7 +55,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 break;
 
             case R.id.button_manage_decks:
-                intent = new Intent(getApplicationContext(), ManageDecksSubMenuActivity.class);
+                intent = new Intent(getApplicationContext(), CreateEditDeleteDeckActivity.class);
                 startActivity(intent);
                 break;
 
