@@ -85,11 +85,6 @@ public class CreateEditDeleteDeckActivity extends BaseActivity implements View.O
                 } else {
 
                     deleteDeck(index);
-
-//                    Deck selectedDeck = decks.get(index);
-//                    selectedDeck.delete();
-//                    selectedDeck.commit();
-//                    populateRadioGroup();
                 }
                 break;
 
