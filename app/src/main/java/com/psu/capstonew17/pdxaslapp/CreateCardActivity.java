@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -228,6 +229,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     //poorly named, this actually starts the video and makes hidden views visible
     protected void startVideo(){
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
         video.configurePlayer(videoView);
         videoView.setVisibility(View.VISIBLE);
         bttSubmit.setVisibility(View.VISIBLE);
