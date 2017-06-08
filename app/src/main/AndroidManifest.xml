@@ -63,9 +63,6 @@
             android:name=".ReceiveDeckActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditVideoActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ShareDeckActivity"
             android:screenOrientation="portrait" />
         <activity
