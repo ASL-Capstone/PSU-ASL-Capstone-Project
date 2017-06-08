@@ -105,7 +105,9 @@ class ExternalQuestion implements Question {
     @Override
     public Pair<Boolean, String> answer(String answer) {
         Boolean correct = false;
-        if(answer.equals(this.card.getAnswer())){
+        String correctAnswer = this.card.getAnswer().replaceAll("[^a-zA-Z0-9\\s]", "");
+        String strippedAnswer = answer.replaceAll("[^a-zA-Z0-9\\s]", "");
+        if(strippedAnswer.equalsIgnoreCase(correctAnswer)){
             correct = true;
         }
         dbHelper = ExternalTestManager.INSTANCE.getDbHelper();
