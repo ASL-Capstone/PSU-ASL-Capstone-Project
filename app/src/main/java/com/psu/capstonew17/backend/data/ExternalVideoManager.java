@@ -46,7 +46,7 @@ public class ExternalVideoManager implements VideoManager {
         return dbHelper;
     }
 
-    Video getVideo(int id){
+    public Video getVideo(int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String query = dbHelper.buildSelectQuery(
                 VideoEntry.TABLE_NAME,
