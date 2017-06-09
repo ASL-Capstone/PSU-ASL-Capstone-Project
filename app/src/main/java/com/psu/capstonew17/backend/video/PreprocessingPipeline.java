@@ -294,8 +294,10 @@ public class PreprocessingPipeline {
                 bufInfo.offset = 0;
                 bufInfo.size = length;
                 bufInfo.flags = extract.getSampleFlags();
+                /*
                 if((bufInfo.presentationTimeUs/1000 >= options.startTime) &&
                         (bufInfo.presentationTimeUs/1000 <= options.endTime))
+                    */
                     muxer.writeSampleData(strmIdx, buf, bufInfo);
                 extract.advance();
             }

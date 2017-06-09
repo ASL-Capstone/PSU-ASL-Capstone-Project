@@ -126,7 +126,7 @@ public class ExternalVideoManager implements VideoManager {
 
         PreprocessingPipeline  pipeline;
         try {
-            pipeline = new StubPreprocessingPipeline(ctx, outFile, video, options);
+            pipeline = new PreprocessingPipeline(ctx, outFile, video, options);
         } catch(IOException e) {
             handler.onFailed(e);
             return;
