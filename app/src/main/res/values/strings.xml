@@ -68,6 +68,8 @@
     <string name="deck_size_error">Select at least two cards</string>
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
+    <string name="select_deck">Select a deck to edit or delete:</string>
+    <string name="no_cards">There aren\'t any cards to list!</string>
 
     <!-- Card creation/deletion strings -->
     <string name="importing_video">Importing video</string>
@@ -82,9 +84,15 @@
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
     <string name="select_card">Please select a card</string>
+    <string name="select_card_delete">Select a card to delete:</string>
     <string name="deleted_decks">"The following decks will be deleted: "</string>
     <string name="import_video_error">Problem importing video</string>
     <string name="card_in_use_error">Card is still in use</string>
+    <string name="video_delete_safe">It is now safe to delete the video from the gallery</string>
+    <string name="video_too_short">Video length must be at least 2 seconds</string>
+    <string name="bad_video_length">invalid video length (Must be between 2 and 30 seconds)</string>
+    <string name="prompt_deleted_card">Delete selected card?</string>
+    <string name="prompt_deleted_deck">Delete selected deck?</string>
 
     <!-- Edit Card/Share Card strings -->
     <string name="button_record">Record</string>
@@ -109,7 +117,7 @@
     <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
     <string name="menu_item_manage_card">MANAGE CARD</string>
     <string name="menu_item_create_card">Create Card</string>
-    <string name="menu_item_create_edit_delete_decks">Create/Edit/Delete Decks</string>
+    <string name="menu_item_create_edit_delete_decks">MANAGE DECKS</string>
     <string name="menu_item_delete_card">Delete Card</string>
     <string name="menu_item_manage_decks">MANAGE DECKS</string>
     <string name="menu_item_receive_decks">Receive Decks</string>
@@ -121,4 +129,8 @@
     <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
     <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
     <string name="title_activity_no_extrnl_strg_prms">NoExtrnlStrgPrmsActivity</string>
+    <string name="CreateCard_AddDecks">Select decks to add this card to:</string>
+    <string name="CreateCard_AddVideo">Record a video or select one from gallery:</string>
+    <string name="CreateDeck_DeckName">Enter a name for the deck</string>
+    <string name="CreateDeck_SelectCards">Select cards to add to the deck (at least two)</string>
 </resources>

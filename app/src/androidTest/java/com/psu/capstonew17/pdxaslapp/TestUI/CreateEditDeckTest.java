@@ -8,7 +8,7 @@ import android.support.test.runner.AndroidJUnit4;
 import android.widget.Button;
 
 import com.psu.capstonew17.pdxaslapp.CreateCardActivity;
-import com.psu.capstonew17.pdxaslapp.CreateDeckActivity;
+import com.psu.capstonew17.pdxaslapp.CreateEditDeckActivity;
 import com.psu.capstonew17.pdxaslapp.HomeActivity;
 import com.psu.capstonew17.pdxaslapp.R;
 import com.psu.capstonew17.pdxaslapp.TakeQuizSubMenuActivity;
@@ -30,12 +30,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
-public class CreateDeckTest {
+public class CreateEditDeckTest {
 
     @Rule
-    public ActivityTestRule<CreateDeckActivity> mActivityActivityTestRule
+    public ActivityTestRule<CreateEditDeckActivity> mActivityActivityTestRule
             = new ActivityTestRule<>(
-            CreateDeckActivity.class,
+            CreateEditDeckActivity.class,
             true,
             false);
 
@@ -44,10 +44,10 @@ public class CreateDeckTest {
         Intent intent = new Intent();
         mActivityActivityTestRule.launchActivity(intent);
 
-        onView(withId(R.id.createDeckNameField)).perform(replaceText("deck x"), closeSoftKeyboard());
-        onView(withId(R.id.createDeckNameField)).check(matches(withText("deck x")));
+        onView(withId(R.id.deckNameField)).perform(replaceText("deck x"), closeSoftKeyboard());
+        onView(withId(R.id.deckNameField)).check(matches(withText("deck x")));
 
-        onView(withId(R.id.bttn_create_done)).check(matches(ViewMatchers.isDisplayed()));
+        onView(withId(R.id.bttn_submit)).check(matches(ViewMatchers.isDisplayed()));
         onView(withId(R.id.list_items)).check(matches(ViewMatchers.isDisplayed()));
 
     }

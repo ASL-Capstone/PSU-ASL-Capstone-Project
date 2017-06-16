@@ -2,18 +2,17 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,24 +35,22 @@ import java.util.List;
 
 public class CreateCardActivity extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
     //cases for the activity result struct
-    private static final int GET_VIDEO          = 1;
-    private static final int REQUEST_EDIT_VIDEO = 2;
+    private static final int GET_VIDEO = 1;
 
     //cases for the perm request result struct
-    private static final int REQ_EXT_STORAGE_PERMS  = 1;
-    private static final int REQ_CAMERA_PERMS       = 2;
+    private static final int REQ_CAMERA_PERMS = 2;
 
     //min and max length of an answer for a card
-    private static final int MIN_LABEL_LENGTH   = 3;
-    private static final int MAX_LABEL_LENGTH   = 250;
+    private static final int MIN_LABEL_LENGTH = 3;
+    private static final int MAX_LABEL_LENGTH = 250;
+
+    private static final int MIN_VIDEO_LENGTH = 2000;
+    private static final int MAX_VIDEO_LENGTH = 30000;
 
     private static final String SELECT_VIDEO = "Select Video";
 
     //activity elements
     private Button          bttSubmit;
-    private Button          bttGetVideo;
-    private Button          bttRecordVideo;
-    private ListView        listView;
     private Uri             videoUri;
     private EditText        editText;
     private VideoView       videoView;
@@ -71,6 +68,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_card);
+
+
+        Button      bttGetVideo;
+        Button      bttRecordVideo;
+        ListView    listView;
 
         //submit button should be invisible until a video has been imported.
         bttSubmit = (Button) findViewById(R.id.button_submit);
@@ -98,6 +100,8 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
         //get the list of all decks in the db
         deckList = ExternalDeckManager.getInstance(this).getDecks(null);
+        if (deckList.size() > 0)
+            findViewById(R.id.noDecksText).setVisibility(View.GONE);
 
         listRows = new ArrayList<>();
         //populate the list rows for the list view.
@@ -141,11 +145,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
                 } else {
                     CardManager cardManager = ExternalCardManager.getInstance(this);
+
                     try {
-                        Log.d("Hang Debug", "trying to make card");
                         //video and label look good, create the card.
                         Card card = cardManager.buildCard(video, videoLabel);
-                        Log.d("Hang Debug", "card made");
+
                         //add the card to all of the selected decks.
                         for(int i = 0; i < listRows.size(); i++){
                             ListRow curr = listRows.get(i);
@@ -156,9 +160,9 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                                 slctdDeck.commit();
                             }
                         }
-                        Log.d("Hang Debug", "about to call finish");
                         finish();
-                        //cards can't have the same answer and video!
+
+                    //cards can't have the same video!
                     } catch (ObjectAlreadyExistsException e){
                         Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                     }
@@ -225,6 +229,12 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
 
     //poorly named, this actually starts the video and makes hidden views visible
     protected void startVideo(){
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
         video.configurePlayer(videoView);
         videoView.setVisibility(View.VISIBLE);
         bttSubmit.setVisibility(View.VISIBLE);
@@ -238,11 +248,11 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttSubmit.setVisibility(View.GONE);
     }
 
-    //something went wrong while importing the video.
-    //couldn't Toast in onFailed, and I'm lazy.
-    protected void videoErrorToast(){
-        Toast.makeText(this,
-                R.string.import_video_error, Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (video != null)
+            startVideo();
     }
 
     //get the results from activities that...
@@ -255,71 +265,62 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
                 if (resultCode == RESULT_OK) {
                     videoUri = intent.getData();
 
-
-                    //let the user edit it!
                     if(videoUri != null){
                         //Verify length of video is greater than two seconds
                         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
                         retriever.setDataSource(this, videoUri);
-                        String endTime = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                        if(Integer.parseInt(endTime) < 2000){
-                            Toast.makeText(this, "Video length must be at least 2 seconds", Toast.LENGTH_SHORT);
+                        int endTime = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                        if(endTime < MIN_VIDEO_LENGTH || endTime > MAX_VIDEO_LENGTH){
+                            Toast.makeText(this, R.string.bad_video_length, Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            intent = new Intent(this, EditVideoActivity.class);
-                            intent.setData( videoUri);
-                            startActivityForResult(intent, REQUEST_EDIT_VIDEO);
+                            //if they had previously imported a video but changed their minds and imported
+                            //a different video then we need to stop payback of the old one and hide some
+                            //views while the new one imports.
+                            stopVideo();
+
+                            //lets get the import options the user wants
+                            VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
+                            imo.startTime   = 0;
+                            imo.endTime     = endTime;
+                            imo.quality     = 20;
+                            imo.cropRegion  = null;
+
+                            //block with a spin wheel while the video is imported
+                            progressDialog.show();
+
+                            //now we can import the new video.
+                            video = null;
+                            VideoManager vm = ExternalVideoManager.getInstance(this);
+                            vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
+                                //this is behaving weirdly with a horizontal progress bar, so for now I'm
+                                //ignoring it in favor of a spin wheel
+                                @Override
+                                public void onProgressUpdate(int current, int max) {
+                                }
+
+                                //this is called when the import has completed
+                                //we get the video, display it and the submit button,
+                                //and then hide the progress dialog.
+                                @Override
+                                public void onComplete(Video vid) {
+                                    video = vid;
+                                    startVideo();
+                                    progressDialog.dismiss();
+                                    Toast.makeText(CreateCardActivity.this,
+                                            R.string.video_delete_safe, Toast.LENGTH_LONG).show();
+                                }
+
+                                //if importing fails.
+                                @Override
+                                public void onFailed(Throwable err) {
+                                    Toast.makeText(CreateCardActivity.this,
+                                            R.string.import_video_error, Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+                            });
                         }
                     }
-                }
-                break;
-
-            //They're done editing it! What are the import options now?
-            case REQUEST_EDIT_VIDEO:
-                if (resultCode == Activity.RESULT_OK) {
-                    //if they had previously imported a video but changed their minds and imported
-                    //a different video then we need to stop payback of the old one and hide some
-                    //views while the new one imports.
-                    stopVideo();
-
-                    //lets get the import options the user wants
-                    VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
-                    Bundle bundle = intent.getExtras();
-                    imo.startTime   = bundle.getInt(EditVideoActivity.START);
-                    imo.endTime     = bundle.getInt(EditVideoActivity.END);
-                    imo.quality     = bundle.getInt(EditVideoActivity.QUALITY);
-                    imo.cropRegion  = bundle.getParcelable(EditVideoActivity.CROP);
-
-                    VideoManager vm = ExternalVideoManager.getInstance(this);
-                    //block with a spin wheel while the video is imported
-                    progressDialog.show();
-                    //now we can import the new video.
-                    //this is tempermental on samsung devices
-                    vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
-                        //this is behaving weirdly with a horizontal progress bar, so for now I'm
-                        //ignoring it in favor of a spin wheel
-                        @Override
-                        public void onProgressUpdate(int current, int max) {
-                        }
-
-                        //this is called when the import has completed
-                        //we get the video, display it and the submit button,
-                        //and then hide the progress dialog.
-                        @Override
-                        public void onComplete(Video vid) {
-                            video = vid;
-                            startVideo();
-                            progressDialog.dismiss();
-                        }
-
-                        //if importing fails.
-                        //I can't toast here
-                        @Override
-                        public void onFailed(Throwable err) {
-                            videoErrorToast();
-                            progressDialog.dismiss();
-                        }
-                    });
                 }
                 break;
         }

@@ -11,9 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import com.psu.capstonew17.pdxaslapp.CreateEditDeleteDeckActivity;
 import com.psu.capstonew17.pdxaslapp.HomeActivity;
 import com.psu.capstonew17.pdxaslapp.ManageCardsSubMenuActivity;
-import com.psu.capstonew17.pdxaslapp.ManageDecksSubMenuActivity;
 import com.psu.capstonew17.pdxaslapp.R;
 import com.psu.capstonew17.pdxaslapp.TakeQuizSubMenuActivity;
 
@@ -83,7 +83,7 @@ public class HomeActivityTest {
 
         Intents.init();
         onView(withId(R.id.button_manage_decks)).perform(click());
-        intended(hasComponent(ManageDecksSubMenuActivity.class.getName()));
+        intended(hasComponent(CreateEditDeleteDeckActivity.class.getName()));
         Intents.release();
 
         pressBack();
