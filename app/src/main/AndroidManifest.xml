@@ -71,11 +71,6 @@
             android:name=".NoExtrnlStrgPrmsActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name="com.psu.capstonew17.backend.sharing.SharingServer"
-            android:enabled="true"
-            android:exported="false" />
-
     </application>
 
 </manifest>

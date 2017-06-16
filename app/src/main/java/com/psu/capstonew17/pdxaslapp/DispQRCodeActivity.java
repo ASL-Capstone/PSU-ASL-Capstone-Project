@@ -13,14 +13,13 @@ import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.SharingTransmitListener;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
-import com.psu.capstonew17.backend.sharing.SharingManager;
 
 import java.util.List;
 
 
 public class DispQRCodeActivity extends BaseActivity implements View.OnClickListener {
     private Button exit; //The exit to home button
-    private Bitmap qrCode; //Holds the qrCode bitmap
+    private Bitmap qrCode = null; //Holds the qrCode bitmap
     private TextView downloads; //The display for how many downloads there have been
     private int downloadCount; //Counter for how many downloads there have been
     private ImageView imageView; //View for the bitmap
@@ -81,12 +80,6 @@ public class DispQRCodeActivity extends BaseActivity implements View.OnClickList
         };
 
         //Call method to share the decks/Get the QR code
-        com.psu.capstonew17.backend.api.SharingManager sharer = SharingManager.getInstance();
-        SharingManager.TxOptions ops = new SharingManager.TxOptions();
-        ops.timeout = 360;
-        ops.maxTargets = 30;
-        qrCode = sharer.transmit(null, decks,ops, listener);
-
 
         //Set the QR code
         if(qrCode != null) {
