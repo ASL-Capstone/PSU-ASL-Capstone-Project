@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/CreateCard_AddVideo" />
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -15,8 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/button_record"
-            />
+            android:text="@string/button_record" />
 
         <Button
             android:id="@+id/buttonFromGallery"
@@ -25,15 +30,6 @@
             android:layout_weight="1"
             android:text="@string/button_get_from_gallery"
             />
-
-        <Button
-            android:id="@+id/buttonUseVIdeo"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="@string/button_edit"
-            />
-
     </TableRow>
 
     <EditText
@@ -47,24 +43,40 @@
         android:background="@drawable/background_dark_border"
         android:layout_margin="3dp"
         android:ems="10"
+        android:imeOptions="actionDone"
         android:inputType="text" />
 
     <VideoView
-        android:id="@+id/videoView"
-        android:layout_width="match_parent"
-        android:layout_height="328dp"
-        android:visibility="invisible" />
+        android:id="@+id/videoView_create_card"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:layout_weight=".5" />
 
-
-    <include layout="@layout/submit_button"
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        />
+        android:layout_height="wrap_content"
+        android:text="@string/CreateCard_AddDecks" />
+
+    <TextView
+        android:id="@+id/noDecksText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_decks_msg"/>
 
     <include layout="@layout/list_items"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".5"
         />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_create" />
 
 
 </LinearLayout>

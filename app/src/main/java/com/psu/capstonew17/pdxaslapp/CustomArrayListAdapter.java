@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Created by Chelsea on 4/29/2017.
  * Use this as the listview adapter.
  */
 

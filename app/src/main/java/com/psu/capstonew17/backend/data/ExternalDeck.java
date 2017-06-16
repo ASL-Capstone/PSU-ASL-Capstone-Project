@@ -4,20 +4,32 @@ package com.psu.capstonew17.backend.data;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
+import com.psu.capstonew17.backend.EncodeableObject;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.api.*;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-class ExternalDeck implements Deck {
+class ExternalDeck implements Deck, EncodeableObject {
     private int deckId;
     private String deckName;
     private List<Card> mutableCards, dbCards;
 
     private AslDbHelper dbHelper;
+
+    private ExternalDeck(int deckId, String deckName, List<Card> db, List<Card> mutable){
+        this.deckId = deckId;
+        this.deckName = deckName;
+        this.dbCards = db;
+        this.mutableCards = mutable;
+    }
 
     public ExternalDeck(int deckId, String deckName, List<Card> cards){
         this.deckId = deckId;
@@ -34,6 +46,9 @@ class ExternalDeck implements Deck {
 
     @Override
     public void setName(String name) throws ObjectAlreadyExistsException {
+        if(this.deckName.equals(name)){
+            return;
+        }
         if(ExternalDeckManager.INSTANCE.deckExists(name)){
             throw new ObjectAlreadyExistsException("The deck '" + name + "' already exists.");
         }
@@ -48,6 +63,7 @@ class ExternalDeck implements Deck {
         );
     }
 
+    @Override
     public int getDeckId(){
         return  this.deckId;
     }
@@ -68,7 +84,7 @@ class ExternalDeck implements Deck {
 
         for(Card card: this.dbCards) {
             if(!mutableCards.contains(card)) {
-                whereArgs[1] = String.valueOf(((ExternalCard)card).getId());
+                whereArgs[1] = String.valueOf((card).getCardId());
 
                 db.delete(RelationEntry.TABLE_NAME,
                         String.format("%s = ? AND %s = ?",
@@ -83,7 +99,7 @@ class ExternalDeck implements Deck {
             if(!dbCards.contains(card)) {
                 ContentValues values = new ContentValues();
                 values.put(RelationEntry.COLUMN_DECK, deckId);
-                values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+                values.put(RelationEntry.COLUMN_CARD, card.getCardId());
                 db.insert(RelationEntry.TABLE_NAME, null, values);
             }
         }
@@ -95,21 +111,20 @@ class ExternalDeck implements Deck {
 
     @Override
     public void delete() {
-        removeCardsFromDeck();
         dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
+        // remove references to deck
         db.delete(
                 DeckEntry.TABLE_NAME,
                 DeckEntry.COLUMN_ID + "=" + this.deckId, null
         );
-    }
-
-    private void removeCardsFromDeck(){
-        dbHelper = ExternalDeckManager.INSTANCE.getDbHelper();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete(
                 RelationEntry.TABLE_NAME,
                 RelationEntry.COLUMN_DECK + "=" + this.deckId, null
+        );
+        db.delete(
+                AnswerEntry.TABLE_NAME,
+                AnswerEntry.COLUMN_DECK + "=" + this.deckId, null
         );
     }
 
@@ -117,5 +132,52 @@ class ExternalDeck implements Deck {
     public boolean equals(Object obj) {
         if(!(obj instanceof ExternalDeck)) return false;
         return deckId == ((ExternalDeck)obj).deckId;
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            int id = parcel.readInt();
+            String name = parcel.readString();
+            List<Card> mutable = new ArrayList<Card>();
+            parcel.readTypedList(mutable, ExternalCard.CREATOR);
+            List<Card> db = new ArrayList<Card>();
+            parcel.readTypedList(db, ExternalCard.CREATOR);
+
+            return new ExternalDeck(id, name, db, mutable);
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new ExternalDeck[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(deckId);
+        parcel.writeString(deckName);
+        parcel.writeTypedList(mutableCards);
+        parcel.writeTypedList(dbCards);
+    }
+
+    @Override
+    public byte[] encodeToByteArray() throws IOException {
+        byte [] nameBytes = this.deckName.getBytes();
+        int numCards = this.mutableCards.size();
+        ByteBuffer b = ByteBuffer.allocate(12 + nameBytes.length + (numCards*4));
+        b.putInt(this.deckId);
+        b.putInt(nameBytes.length);
+        b.put(nameBytes);
+        b.putInt(numCards);
+        for(Card c : this.mutableCards){
+            b.putInt(c.getCardId());
+        }
+        return b.array();
     }
 }

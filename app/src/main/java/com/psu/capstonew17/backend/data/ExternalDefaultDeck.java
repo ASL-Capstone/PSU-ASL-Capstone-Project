@@ -2,6 +2,8 @@ package com.psu.capstonew17.backend.data;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
@@ -23,6 +25,11 @@ public class ExternalDefaultDeck implements Deck {
     }
 
     @Override
+    public int getDeckId() {
+        return deckId;
+    }
+
+    @Override
     public void setName(String name) throws ObjectAlreadyExistsException {
         return;
     }
@@ -34,9 +41,14 @@ public class ExternalDefaultDeck implements Deck {
         String query = dbHelper.buildSelectQuery(AslDbContract.CardEntry.TABLE_NAME, null);
         Cursor cursor = db.rawQuery(query, null);
         List<Card> cards = new ArrayList<Card>();
+        List<Integer> cardIds = new ArrayList<Integer>();
         while(cursor.moveToNext()){
-            int cardId = cursor.getInt(cursor.getColumnIndex(AslDbContract.CardEntry.COLUMN_ID));
-            cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
+            int id = cursor.getInt(cursor.getColumnIndex(AslDbContract.CardEntry.COLUMN_ID));
+            cardIds.add(id);
+        }
+        cursor.close();
+        for(Integer i : cardIds){
+            cards.add(ExternalCardManager.INSTANCE.getCard(i));
         }
         return cards;
     }
@@ -55,5 +67,26 @@ public class ExternalDefaultDeck implements Deck {
     public boolean equals(Object obj) {
         if(!(obj instanceof ExternalDefaultDeck)) return false;
         return true;
+    }
+
+    public static Parcelable.Creator CREATOR = new Creator() {
+        @Override
+        public Object createFromParcel(Parcel parcel) {
+            return new ExternalDefaultDeck();
+        }
+
+        @Override
+        public Object[] newArray(int i) {
+            return new ExternalDefaultDeck[i];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
     }
 }

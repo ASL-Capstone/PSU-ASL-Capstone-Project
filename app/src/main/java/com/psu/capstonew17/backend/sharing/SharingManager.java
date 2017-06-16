@@ -1,26 +1,21 @@
 package com.psu.capstonew17.backend.sharing;
-
+import android.app.Activity;
 import android.graphics.Bitmap;
-
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.encoder.Encoder;
-import com.google.zxing.qrcode.encoder.QRCode;
 import com.google.zxing.BarcodeFormat;
-
 import com.psu.capstonew17.backend.api.Card;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.SharingReceiveListener;
 import com.psu.capstonew17.backend.api.SharingTransmitListener;
-
 import java.util.List;
 import java.util.Random;
 
 /**
  * Created by noahz on 4/28/17.
  */
-public class SharingManager implements com.psu.capstonew17.backend.api.SharingManager {
+public class SharingManager implements com.psu.capstonew17.backend.api.SharingManager{
     private static SharingManager instance = null;
 
     public static class LinkParameters {
@@ -35,8 +30,7 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
         return instance;
     }
 
-    private SharingManager() {
-    }
+    private SharingManager(){}
 
     /**
      * Generate a random string of given length, where each character is within the printable ASCII
@@ -54,7 +48,7 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
     }
 
     @Override
-    public Bitmap transmit(List<Card> cards, List<Deck> decks, TxOptions opts, SharingTransmitListener listener) {
+    public Bitmap transmit(List<Card> cards, final List<Deck> decks, TxOptions opts, SharingTransmitListener listener) {
         int timeout = opts.timeout;
         int maxTargets = opts.maxTargets;
 
@@ -66,7 +60,6 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
         param.netPassword = randomString(rand, 32);
 
         // generate QR code
-        // TODO: figure out ZXing
         String ParamTotal = param.ssid + param.keySource + param.netPassword;   //concat param strings
         QRCodeWriter writer = new QRCodeWriter();
         BitMatrix bmat = null;
@@ -89,11 +82,17 @@ public class SharingManager implements com.psu.capstonew17.backend.api.SharingMa
 
         Bitmap bmap = Bitmap.createBitmap(width,height,Bitmap.Config.RGB_565);
         bmap.setPixels(pix, 0, width, 0,0,width, height);
-        return bmap;
-    }
 
+        SharePackage toSend = new SharePackage(cards,decks);
+        byte [] key = param.keySource.getBytes();
+        SharingServer startServer = new SharingServer(key,toSend);
+        return bmap;                                      //return bitmap (QR code)
+    }
 
     @Override
     public void receive(String code, RxOptions opts, SharingReceiveListener listener) {
+        String k = code.substring(16, 48);
+        byte [] key = k.getBytes();
+        SharingClient client = new SharingClient(key,listener);             //initiate connection with SharingClient
     }
 }

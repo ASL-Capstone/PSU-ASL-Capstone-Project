@@ -22,7 +22,8 @@ public class ExternalDeckManager implements DeckManager{
     private AslDbHelper dbHelper;
 
     public static DeckManager getInstance(Context context){
-        INSTANCE.dbHelper = new AslDbHelper(context);
+        INSTANCE.dbHelper = AslDbHelper.getInstance(context);
+        ExternalCardManager.getInstance(context);
         return INSTANCE;
     }
 
@@ -38,9 +39,14 @@ public class ExternalDeckManager implements DeckManager{
         );
         Cursor cursor = db.rawQuery(query, null);
         List<Card> cards = new ArrayList<Card>();
+        List<Integer> cardIds = new ArrayList<Integer>();
         while(cursor.moveToNext()){
-            int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
-            cards.add(ExternalCardManager.INSTANCE.getCard(cardId));
+            int id = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
+            cardIds.add(id);
+        }
+        cursor.close();
+        for(Integer id : cardIds){
+            cards.add(ExternalCardManager.INSTANCE.getCard(id));
         }
         return cards;
     }
@@ -53,15 +59,16 @@ public class ExternalDeckManager implements DeckManager{
         );
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
-            String deckName = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
-            return new ExternalDeck(id, deckName, getCardsForDeck(id));
+            String name = cursor.getString(cursor.getColumnIndex(DeckEntry.COLUMN_NAME));
+            cursor.close();
+            return new ExternalDeck(id, name, getCardsForDeck(id));
         }
+        cursor.close();
         return null;
     }
 
     public Deck getDeck(String name)
     {
-        Deck deck = null;
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = dbHelper.buildSelectQuery(
                 DeckEntry.TABLE_NAME,
@@ -70,10 +77,11 @@ public class ExternalDeckManager implements DeckManager{
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()){
             int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
-            deck = new ExternalDeck(deckId, name, getCardsForDeck(deckId));
+            cursor.close();
+            return new ExternalDeck(deckId, name, getCardsForDeck(deckId));
         }
         cursor.close();
-        return deck;
+        return null;
     }
 
     public boolean deckExists(String name){
@@ -99,11 +107,16 @@ public class ExternalDeckManager implements DeckManager{
             SQLiteDatabase db = dbHelper.getReadableDatabase();
             String query = dbHelper.buildSelectQuery(DeckEntry.TABLE_NAME, null);
             Cursor cursor = db.rawQuery(query, null);
+            List<Integer> deckIds = new ArrayList<Integer>();
             while(cursor.moveToNext()){
                 int deckId = cursor.getInt(cursor.getColumnIndex(DeckEntry.COLUMN_ID));
-                decks.add(getDeck(deckId));
+                deckIds.add(deckId);
             }
             cursor.close();
+            for(Integer id : deckIds) {
+                decks.add(getDeck(id));
+            }
+            return decks;
         }
         Deck namedDeck = getDeck(name);
         if(namedDeck != null){
@@ -125,7 +138,7 @@ public class ExternalDeckManager implements DeckManager{
         for(Card card : cards){
             values = new ContentValues();
             values.put(RelationEntry.COLUMN_DECK, deckId);
-            values.put(RelationEntry.COLUMN_CARD, ((ExternalCard) card).getId());
+            values.put(RelationEntry.COLUMN_CARD, card.getCardId());
             db.insert(RelationEntry.TABLE_NAME, null, values);
         }
         return new ExternalDeck(deckId, name, cards);
