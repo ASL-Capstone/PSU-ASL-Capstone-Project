@@ -2,12 +2,16 @@
 package com.psu.capstonew17.pdxaslapp;
 
 import android.Manifest;
-import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
@@ -17,52 +21,63 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.psu.capstonew17.backend.api.Card;
+import com.psu.capstonew17.backend.api.CardManager;
 import com.psu.capstonew17.backend.api.Deck;
 import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.api.Video;
+import com.psu.capstonew17.backend.api.VideoManager;
 import com.psu.capstonew17.backend.data.ExternalCardManager;
-import com.psu.capstonew17.pdxaslapp.FrontEndTestStubs.TestingStubs;
+import com.psu.capstonew17.backend.data.ExternalDeckManager;
+import com.psu.capstonew17.backend.data.ExternalVideoManager;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class CreateCardActivity extends BaseActivity implements View.OnClickListener {
-    private ListView listView;
-    private ListRow row;
-    private List<ListRow> list = new ArrayList<>();
-    private List<Integer> selectedIndex;
+public class CreateCardActivity extends BaseActivity implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+    //cases for the activity result struct
+    private static final int GET_VIDEO = 1;
 
-    private CustomArrayListAdapter myAdapter;
-    private Uri videoUri;
-    private File videoFile;
+    //cases for the perm request result struct
+    private static final int REQ_CAMERA_PERMS = 2;
 
-    static final int REQUEST_VIDEO_CAPTURE = 1;
-    static final int REQUEST_TAKE_GALLERY_VIDEO = 1;
-    static final int REQUEST_EDIT_VIDEO = 3;
+    //min and max length of an answer for a card
+    private static final int MIN_LABEL_LENGTH = 3;
+    private static final int MAX_LABEL_LENGTH = 250;
 
-    static final int MIN_LABEL_LENGTH = 3;
-    static final int MAX_LABEL_LENGTH = 250;
+    private static final int MIN_VIDEO_LENGTH = 2000;
+    private static final int MAX_VIDEO_LENGTH = 30000;
 
-    private final String SELECT_VIDEO = "Select Video";
+    private static final String SELECT_VIDEO = "Select Video";
 
-    private Button bttSubmit;
-    private Button bttGetVideo;
-    private Button bttRecordVideo;
-    private Button bttUseVideo;
-    private EditText editText;
-    private VideoView videoView;
+    //activity elements
+    private Button          bttSubmit;
+    private Uri             videoUri;
+    private EditText        editText;
+    private VideoView       videoView;
+    private ProgressDialog  progressDialog;
 
-    private String videoLabel;
+    //a list for the listview and a list for all of the decks
+    private List<ListRow>   listRows;
+    private List<Deck>      deckList;
+
+    //card attributes
+    private String  videoLabel;
+    private Video   video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_card);
 
+
+        Button      bttGetVideo;
+        Button      bttRecordVideo;
+        ListView    listView;
+
+        //submit button should be invisible until a video has been imported.
         bttSubmit = (Button) findViewById(R.id.button_submit);
-        bttSubmit.setText("Create");
+        bttSubmit.setText(R.string.button_submit);
+        bttSubmit.setVisibility(View.GONE);
         bttSubmit.setOnClickListener(this);
 
         bttGetVideo = (Button) findViewById(R.id.buttonFromGallery);
@@ -71,103 +86,113 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         bttRecordVideo = (Button) findViewById(R.id.buttonRecordVideo);
         bttRecordVideo.setOnClickListener(this);
 
-        bttUseVideo = (Button) findViewById(R.id.buttonUseVIdeo);
-        bttUseVideo.setOnClickListener(this);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage(getResources().getString(R.string.importing_video));
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCanceledOnTouchOutside(false);
 
         editText = (EditText) findViewById(R.id.edit_text_video_answer);
         editText.setOnClickListener(this);
 
-        videoView = (VideoView) findViewById (R.id.videoView);
+        videoView = (VideoView) findViewById (R.id.videoView_create_card);
+        videoView.setVisibility(View.GONE);
 
-        //ArrayList<Deck> decksList = new ArrayList<>(ExternalDeckManager.getInstance(this).getDecks(null));
+        //get the list of all decks in the db
+        deckList = ExternalDeckManager.getInstance(this).getDecks(null);
+        if (deckList.size() > 0)
+            findViewById(R.id.noDecksText).setVisibility(View.GONE);
 
-        //get Decks from current testing
-        ArrayList<Deck> deckList = new ArrayList<>(TestingStubs.manyDecks());
+        listRows = new ArrayList<>();
+        //populate the list rows for the list view.
+        for (int i = 0; i < deckList.size(); i++)
+            listRows.add(new ListRow(deckList.get(i).getName(), false));
 
-        for (int i = 0; i < deckList.size(); ++i) {
-            ListRow listRow = new ListRow(deckList.get(i).getName() , false);
-            list.add(listRow);
-        }
-
+        //create the list view.
         listView = (ListView) findViewById(R.id.list_items);
-        myAdapter =  new CustomArrayListAdapter(this, 0, list);
-        listView.setAdapter(myAdapter);
-
-
-        // hide views
-        bttSubmit.setVisibility(View.GONE);
-//        listView.setVisibility(View.GONE);
-
+        listView.setAdapter(new CustomArrayListAdapter(this, R.layout.list_row, listRows));
     }
 
     @Override
     public void onClick(View view) {
-
-        Intent intent;
         switch(view.getId()) {
+            //user wants to record a video for the new card
             case R.id.buttonRecordVideo:
-                if(this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) &&
-                        PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
+                //check perms, if we don't have then then request them
+                if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA) &&
+                        PackageManager.PERMISSION_GRANTED ==
+                                ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)) {
                     dispatchTakeVideoIntent();
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),
-                            R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQ_CAMERA_PERMS);
                 }
                 break;
+
+            //user wants to use a video from the gallery. check for external storage perms.
+            //if we don't have them, then request them.
             case R.id.buttonFromGallery:
-                intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,SELECT_VIDEO),
-                        REQUEST_TAKE_GALLERY_VIDEO);
-
-                break;
-            case R.id.buttonUseVIdeo:
-                //TODO Package video URI and call edit video intent
-
-                if(videoUri != null){
-                    intent = new Intent(this, EditVideoActivity.class);
-                    intent.setData( videoUri);
-//                    startActivity(intent);
-                    startActivityForResult(intent, REQUEST_EDIT_VIDEO);
-                    finish();
-                }
+                dispatchGalleryIntent();
                 break;
 
-            /*case R.id.button_submit:
-                videoLabel = editText.getText().toString();
+            //user is finished creating this card.
+            case R.id.button_submit:
+                videoLabel = editText.getText().toString().trim();
+                //make sure that the video imported successfully
+                //and that the length of the answer is in valid range
+                if (!videoLabelCheck() || video == null){
+                    Toast.makeText(this,
+                            R.string.import_video_error, Toast.LENGTH_SHORT).show();
 
-                if (!(videoLabelCheck() && videoFileCheck() && deckSelectedCheck()))
-                    return;
-/*
-                try {
-                    // not sure what videoId to assign, so make it random for testing
-                    Random random = new Random();
-                    int videoId = random.nextInt();
-                    //Video video = new ExternalVideo(videoId, videoFile);
+                } else {
+                    CardManager cardManager = ExternalCardManager.getInstance(this);
 
-                    //Card aCard = ExternalCardManager.getInstance(this).buildCard(video, videoLabel);
+                    try {
+                        //video and label look good, create the card.
+                        Card card = cardManager.buildCard(video, videoLabel);
 
-                    for (int index: selectedIndex) {
-                        // TODO for each deck add aCard to that deck
+                        //add the card to all of the selected decks.
+                        for(int i = 0; i < listRows.size(); i++){
+                            ListRow curr = listRows.get(i);
+                            if (curr.isChecked){
+                                Deck slctdDeck = deckList.get(i);
+                                List<Card> cards = slctdDeck.getCards();
+                                cards.add(card);
+                                slctdDeck.commit();
+                            }
+                        }
+                        finish();
+
+                    //cards can't have the same video!
+                    } catch (ObjectAlreadyExistsException e){
+                        Toast.makeText(this, R.string.card_already_exists, Toast.LENGTH_SHORT).show();
                     }
-
-                } catch (ObjectAlreadyExistsException e) {
-                    Toast.makeText(this, "Error: Card already exist!", Toast.LENGTH_SHORT).show();
                 }
-
                 break;
-                */
-
-
         }
     }
 
-    private boolean videoLabelCheck() {
+    //gets the result of any perms we requested
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] perms, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, perms, grantResults);
+        switch(requestCode) {
+            //if we needed camera perms
+            case REQ_CAMERA_PERMS:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakeVideoIntent();
+                } else {
+                    Toast.makeText(this, R.string.card_camera_perm_error, Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
 
-        videoLabel = editText.getText().toString();
+    //if the label the correct length?
+    private boolean videoLabelCheck() {
+        //trim it to remove leading or training white space when you get it
+        videoLabel = editText.getText().toString().trim();
         if (videoLabel.length() < MIN_LABEL_LENGTH || videoLabel.length() > MAX_LABEL_LENGTH) {
+            //the user's answer is too short or long, let them now so they can fix it.
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(getResources().getString(R.string.card_name_lngth_error1));
             stringBuilder.append(MIN_LABEL_LENGTH);
@@ -180,86 +205,125 @@ public class CreateCardActivity extends BaseActivity implements View.OnClickList
         return true;
     }
 
-    private boolean videoFileCheck() {
-        if (videoUri == null) {
-            Toast.makeText(this, R.string.card_uri_error, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        videoFile = new File(videoUri.getPath());
-        if (videoFile == null || videoFile.exists()==false) {
-            Toast.makeText(this, R.string.card_video_file_error, Toast.LENGTH_SHORT).show();
-        }
-
-        return true;
+    //call/display the gallery so that the user can select a video.
+    private void dispatchGalleryIntent() {
+        Intent intent = new Intent();
+        intent.setType("video/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, SELECT_VIDEO),
+                GET_VIDEO);
     }
 
-    private boolean deckSelectedCheck() {
-
-        if (listView.getVisibility() == View.GONE) {
-            listView.setVisibility(View.VISIBLE);
-            Toast.makeText(this, R.string.card_select_deck_error, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        // update list
-         selectedIndex = new ArrayList<Integer>();
-        for (int i = 0; i < list.size(); ++i) {
-            if (row.isChecked) {
-                selectedIndex.add(i);
-            }
-        }
-
-        if (selectedIndex == null || selectedIndex.size() < 1) {
-            Toast.makeText(this, R.string.card_select_deck_error, Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
-    }
-
-
+    //call/display the camera so that the user can record a video.
+    //"Alright Mr. DeMille, I'm ready for my closeup!"
     private void dispatchTakeVideoIntent() {
         Intent takeVideoIntent = new Intent();
         takeVideoIntent.setAction(MediaStore.ACTION_VIDEO_CAPTURE);
         if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
-        }
-        else{
+            startActivityForResult(takeVideoIntent, GET_VIDEO);
+        } else{
             Toast.makeText(getApplicationContext(),
                     R.string.card_record_video_error, Toast.LENGTH_SHORT).show();
         }
+    }
 
+    //poorly named, this actually starts the video and makes hidden views visible
+    protected void startVideo(){
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        video.configurePlayer(videoView);
+        videoView.setVisibility(View.VISIBLE);
+        bttSubmit.setVisibility(View.VISIBLE);
+        videoView.start();
+    }
+
+    //poorly named, this actually starts the video and hides views
+    protected void stopVideo(){
+        videoView.stopPlayback();
+        videoView.setVisibility(View.GONE);
+        bttSubmit.setVisibility(View.GONE);
     }
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        if (video != null)
+            startVideo();
+    }
+
+    //get the results from activities that...
+    // ...return results...
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
         switch (requestCode) {
-
-            case REQUEST_VIDEO_CAPTURE:
+            //We be getting a video! yay!
+            case GET_VIDEO:
                 if (resultCode == RESULT_OK) {
                     videoUri = intent.getData();
-                    videoView.setVisibility(View.VISIBLE);
-                    videoView.setVideoURI(videoUri);
-                    videoView.start();
-                    bttSubmit.setVisibility(View.VISIBLE);
+
+                    if(videoUri != null){
+                        //Verify length of video is greater than two seconds
+                        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+                        retriever.setDataSource(this, videoUri);
+                        int endTime = Integer.parseInt(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION));
+                        if(endTime < MIN_VIDEO_LENGTH || endTime > MAX_VIDEO_LENGTH){
+                            Toast.makeText(this, R.string.bad_video_length, Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            //if they had previously imported a video but changed their minds and imported
+                            //a different video then we need to stop payback of the old one and hide some
+                            //views while the new one imports.
+                            stopVideo();
+
+                            //lets get the import options the user wants
+                            VideoManager.ImportOptions imo = new VideoManager.ImportOptions();
+                            imo.startTime   = 0;
+                            imo.endTime     = endTime;
+                            imo.quality     = 20;
+                            imo.cropRegion  = null;
+
+                            //block with a spin wheel while the video is imported
+                            progressDialog.show();
+
+                            //now we can import the new video.
+                            video = null;
+                            VideoManager vm = ExternalVideoManager.getInstance(this);
+                            vm.importVideo(this, videoUri, imo, new VideoManager.VideoImportListener() {
+                                //this is behaving weirdly with a horizontal progress bar, so for now I'm
+                                //ignoring it in favor of a spin wheel
+                                @Override
+                                public void onProgressUpdate(int current, int max) {
+                                }
+
+                                //this is called when the import has completed
+                                //we get the video, display it and the submit button,
+                                //and then hide the progress dialog.
+                                @Override
+                                public void onComplete(Video vid) {
+                                    video = vid;
+                                    startVideo();
+                                    progressDialog.dismiss();
+                                    Toast.makeText(CreateCardActivity.this,
+                                            R.string.video_delete_safe, Toast.LENGTH_LONG).show();
+                                }
+
+                                //if importing fails.
+                                @Override
+                                public void onFailed(Throwable err) {
+                                    Toast.makeText(CreateCardActivity.this,
+                                            R.string.import_video_error, Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                }
+                            });
+                        }
+                    }
                 }
                 break;
-
-            case REQUEST_EDIT_VIDEO:
-                if (resultCode == Activity.RESULT_OK) {
-                    videoUri = intent.getData();
-                    videoView.setVisibility(View.VISIBLE);
-                    videoView.setVideoURI(videoUri);
-                    videoView.start();
-                    bttSubmit.setVisibility(View.VISIBLE);
-                }
-                break;
-
         }
-
-
     }
 }
 

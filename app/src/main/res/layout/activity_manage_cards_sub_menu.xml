@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <TextView
         android:gravity="center"
@@ -15,13 +17,13 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:text="Create Card"
+        android:text="@string/button_create_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_create_card" />
 
     <Button
-        android:text="Delete Card"
+        android:text="@string/button_delete_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_delete_card" />

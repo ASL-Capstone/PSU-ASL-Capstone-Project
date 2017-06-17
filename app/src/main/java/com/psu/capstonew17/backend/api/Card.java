@@ -2,12 +2,18 @@
 
 package com.psu.capstonew17.backend.api;
 
+import android.os.Parcelable;
 import java.util.List;
 
 /**
  * Public interface for card objects.
  */
-public interface Card {
+public interface Card extends Parcelable {
+
+    /**
+     * Get the card's id
+     */
+    int getCardId();
 
     /**
      * Get the video associated with this card

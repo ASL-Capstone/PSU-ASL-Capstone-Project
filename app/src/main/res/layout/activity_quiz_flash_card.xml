@@ -2,23 +2,34 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="7">
 
     <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
+        android:layout_width="match_parent"
         android:id="@+id/layout"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:gravity="center_horizontal">
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/videoView_flashCard"
+            android:layout_gravity="center"/>
+    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+
+    <TextView
+        android:id="@+id/textView_FlashCardAnswer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5">
-
-        <VideoView
-            android:layout_gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoView_flashCard" />
-
-    </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:hint="@string/prompt_text_field"
+        android:padding="8dp"
+        android:text=""
+        android:textSize="18sp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -41,19 +52,6 @@
             android:text="@string/button_flash_card_next_question" />
 
     </TableRow>
-
-    <TextView
-        android:id="@+id/textView_FlashCardAnswer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:layout_weight="1"
-        android:background="@drawable/background6"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text=""
-        android:textSize="18sp" />
 
 
 </LinearLayout>

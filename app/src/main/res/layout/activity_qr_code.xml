@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="top|bottom"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textShareLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.68"
+            android:clickable="false"
+            android:contextClickable="false"
+            android:cursorVisible="false"
+            android:text="@string/share_label"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textIsSelectable="false"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/TextDeckName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.68"
+            android:textAlignment="center" />
+
+        <ImageView
+            android:id="@+id/qrCodeView"
+            android:layout_width="match_parent"
+            android:layout_height="349dp"
+            app:srcCompat="@drawable/background3" />
+
+        <TextView
+            android:id="@+id/textSharedCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.68"
+            android:allowUndo="false"
+            android:clickable="false"
+            android:isScrollContainer="false"
+            android:linksClickable="false"
+            android:longClickable="false"
+            android:nestedScrollingEnabled="false"
+            android:password="false"
+            android:phoneNumber="false"
+            android:saveEnabled="false"
+            android:scrollHorizontally="false"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textIsSelectable="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:foregroundGravity="bottom"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_QR_code_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foregroundGravity="bottom"
+            android:text="@string/button_home" />
+
+    </LinearLayout>
+
+</LinearLayout>

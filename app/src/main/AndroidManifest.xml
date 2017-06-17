@@ -2,16 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.psu.capstonew17.pdxaslapp">
 
-    <uses-permission android:name="android.permission.RECORD_VIDEO" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -41,9 +44,6 @@
             android:name=".WriteUpActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManageDecksSubMenuActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".ManageCardsSubMenuActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -57,30 +57,20 @@
             android:name=".CreateEditDeleteDeckActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReceiveDeckActivity"
+            android:name=".CompleteQuizActivity"
+            android:parentActivityName=".HomeActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".CreateEditDeckActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".EditVideoActivity"
+            android:name=".DispQRCodeActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ShareDeckActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".CompleteQuizActivity"
-                  android:parentActivityName=".HomeActivity"
-                  android:screenOrientation="portrait">
-        </activity>
 
         <activity
-            android:name=".CreateDeckActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".EditDeckActivity"
+            android:name=".NoExtrnlStrgPrmsActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name="com.psu.capstonew17.backend.sharing.SharingServer"
-            android:enabled="true"
-            android:exported="false"></service>
     </application>
 
 </manifest>

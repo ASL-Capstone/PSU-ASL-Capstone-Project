@@ -2,54 +2,51 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="7">
 
     <com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout
         android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6">
-
+        android:layout_weight="5"
+        android:gravity="center_horizontal">
         <VideoView
-            android:layout_gravity="top|center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:id="@+id/videoViewWriteUpQuiz" />
-
+            android:id="@+id/videoViewWriteUpQuiz"
+            android:layout_gravity="center"/>
     </com.psu.capstonew17.pdxaslapp.VideoAspectRatioLayout>
 
     <LinearLayout
-        android:layout_weight="4"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/editTextWriteUpAnswerField"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/prompt_text_field"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
-            />
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:hint="@string/prompt_text_field"
+            android:imeOptions="actionDone"
+            android:inputType="text" />
 
     </LinearLayout>
 
-
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:gravity="bottom">
 
         <Button
-            android:layout_weight="1"
             android:id="@+id/button_quizWriteUpSubmit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:text="@string/button_submit" />
 
     </TableRow>

@@ -18,8 +18,15 @@
     <string name="button_share">Share</string>
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
+    <string name="button_delete_card">Delete Card</string>
     <string name="button_create">Create</string>
+    <string name="button_receive_deck">Receive Deck</string>
+    <string name="button_share_deck">Share Deck</string>
+    <string name="button_create_edit_delete_deck">Create/Edit/Delete Decks</string>
+    <string name="button_create_card">Create Card</string>
     <string name="button_home">Home</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 
     <!-- Buttons for quiz selection submenu -->
     <string name="button_multiple_choice">Multiple Choice</string>
@@ -30,6 +37,7 @@
     <string name="button_ten_questions">10</string>
     <string name="button_thirty_questions">30</string>
     <string name="button_fifty_questions">50</string>
+    <string name="button_all_questions">All</string>
 
     <!-- Labels -->
     <string name="label_choose_quiz_type">Choose Quiz Type</string>
@@ -55,22 +63,74 @@
     <string name="button_use_video">Use This Video</string>
 
     <!-- Deck creation/editing strings -->
+    <string name="no_decks_msg">There aren\'t any decks to list!</string>
     <string name="deck_name_length_error">"Deck name must be at least 1 character and less than "</string>
     <string name="deck_size_error">Select at least two cards</string>
     <string name="deck_already_exists_error">Deck already exists</string>
     <string name="deck_not_selected">Select a deck</string>
+    <string name="select_deck">Select a deck to edit or delete:</string>
+    <string name="no_cards">There aren\'t any cards to list!</string>
 
     <!-- Card creation/deletion strings -->
+    <string name="importing_video">Importing video</string>
+    <string name="card_already_exists">There\'s already a card using this video</string>
     <string name="card_select_deck_error">Please select at least one deck</string>
-    <string name="card_video_file_error">Error: File not exists</string>
-    <string name="card_record_video_error">Record Video Failed</string>
-    <string name="card_camera_perm_error">Camera Not Available</string>
+    <string name="card_record_video_error">Record video failed</string>
+    <string name="card_camera_perm_error">Camera not available</string>
+    <string name="extrnl_storage_perm_error">External storage permissions denied</string>
+    <string name="closing_app">The app will now close</string>
     <string name="card_uri_error">Error: Missing Uri!</string>
     <string name="card_name_lngth_error1">"Label length should be greater than "</string>
     <string name="card_name_lngth_error2">" characters and less than "</string>
     <string name="select_video">Select video</string>
+    <string name="select_card">Please select a card</string>
+    <string name="select_card_delete">Select a card to delete:</string>
+    <string name="deleted_decks">"The following decks will be deleted: "</string>
+    <string name="import_video_error">Problem importing video</string>
+    <string name="card_in_use_error">Card is still in use</string>
+    <string name="video_delete_safe">It is now safe to delete the video from the gallery</string>
+    <string name="video_too_short">Video length must be at least 2 seconds</string>
+    <string name="bad_video_length">invalid video length (Must be between 2 and 30 seconds)</string>
+    <string name="prompt_deleted_card">Delete selected card?</string>
+    <string name="prompt_deleted_deck">Delete selected deck?</string>
 
+    <!-- Edit Card/Share Card strings -->
     <string name="button_record">Record</string>
     <string name="button_get_from_gallery">Gallery</string>
     <string name="button_edit_video">Edit</string>
+    <string name="share_label">Scan QR Code To Share</string>
+    <string name="deck_error">No Deck Selected</string>
+    <string name="shared_counter">Successful Downloads</string>
+    <string name="button_scan_qr_code">Scan QR Code</string>
+    <string name="delete_from_gallery">Delete From Gallery?</string>
+    <string name="NO">No</string>
+    <string name="YES">Yes</string>
+    <string name="Dont_delete_from_gal">Save to Gallery</string>
+    <string name="textview">TextView</string>
+    <string name="togglebutton">ToggleButton</string>
+    <string name="start_stop_edit">Edit Start/Stop time</string>
+    <string name="start">start</string>
+    <string name="stop">stop</string>
+    <string name="start_time_label">Start time: not set (sec)</string>
+    <string name="stop_time_label">Stop time: not set (sec)</string>
+    <string name="prompt_start_scanning">Press Scan Button to Start Scanning Process</string>
+    <string name="menu_item_choose_quiz">CHOOSE QUIZ</string>
+    <string name="menu_item_manage_card">MANAGE CARD</string>
+    <string name="menu_item_create_card">Create Card</string>
+    <string name="menu_item_create_edit_delete_decks">MANAGE DECKS</string>
+    <string name="menu_item_delete_card">Delete Card</string>
+    <string name="menu_item_manage_decks">MANAGE DECKS</string>
+    <string name="menu_item_receive_decks">Receive Decks</string>
+    <string name="menu_item_share">Share</string>
+    <string name="start_time_default">Start time: %1$f (sec)</string>
+    <string name="stop_time_default">Stop time: %1$f (sec)</string>
+    <string name="seekBar_startSeeking_msg">Start seeking</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="seekDisplayEditCard">Seek Position: %1$f (seconds)</string>
+    <string name="seekDisplayDefault">Seek Position: 0.0 (seconds)</string>
+    <string name="title_activity_no_extrnl_strg_prms">NoExtrnlStrgPrmsActivity</string>
+    <string name="CreateCard_AddDecks">Select decks to add this card to:</string>
+    <string name="CreateCard_AddVideo">Record a video or select one from gallery:</string>
+    <string name="CreateDeck_DeckName">Enter a name for the deck</string>
+    <string name="CreateDeck_SelectCards">Select cards to add to the deck (at least two)</string>
 </resources>

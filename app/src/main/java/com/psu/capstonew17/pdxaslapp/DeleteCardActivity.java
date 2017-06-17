@@ -1,7 +1,9 @@
 //MIT License Copyright 2017 PSU ASL Capstone Team
 package com.psu.capstonew17.pdxaslapp;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,9 +15,10 @@ import com.psu.capstonew17.backend.api.DeckManager;
 import com.psu.capstonew17.backend.api.ObjectInUseException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DeleteCardActivity extends BaseActivity {
+public class DeleteCardActivity extends BaseActivity implements View.OnClickListener{
     private List<Card>  cards;
     private DeckManager deckManager;
     private RadioGroup  cardRG;
@@ -25,17 +28,26 @@ public class DeleteCardActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_card);
 
-        //get Decks from current testing
+        findViewById(R.id.bttnCardDlt).setOnClickListener(this);
+
         deckManager = ExternalDeckManager.getInstance(this);
         cards       = deckManager.getDefaultDeck().getCards();
         cardRG      = (RadioGroup) findViewById(R.id.cardRButtons);
         populateRadioGroup();
     }
 
+    //clear the checked card, populate the radiogroup again
+    //called when activity is created and after a card is deleted
     public void populateRadioGroup(){
         cardRG.clearCheck();
         cardRG.removeAllViews();
         cards = deckManager.getDefaultDeck().getCards();
+
+        if (cards.size() > 0)
+            findViewById(R.id.noCardsText).setVisibility(View.GONE);
+        else
+            findViewById(R.id.noCardsText).setVisibility(View.VISIBLE);
+
         for (int i = 0; i < cards.size(); i++) {
             RadioButton currRad = new RadioButton(this);
             currRad.setId(i);
@@ -44,24 +56,113 @@ public class DeleteCardActivity extends BaseActivity {
         }
     }
 
-    public void onDeleteClicked(View view) {
-        int index = cardRG.getCheckedRadioButtonId();
-        if (index == -1) {
-            Toast.makeText(this, "Select a Deck", Toast.LENGTH_SHORT).show();
-        } else {
-            try {
-                Card card = cards.get(index);
-                List<Deck> decks = card.getUsers();
-                for (Deck curr : decks){
-                    List<Card> cardsInDeck = curr.getCards();
-                    cardsInDeck.remove(card);
-                    curr.commit();
+    @Override
+    //user wants to delete that card they checked.
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.bttnCardDlt:
+                int index = cardRG.getCheckedRadioButtonId();
+                //If the checked index is -1 the user never selected a card to delete. Silly user.
+                if (index == -1) {
+                Toast.makeText(this, R.string.select_card, Toast.LENGTH_SHORT).show();
+                } else {
+                    Card card = cards.get(index);
+                    List<Deck> decks = card.getUsers();
+                    //this will hold decks that need to be deleted because they fall below card minimum
+                    List<Deck> decksToDelete = new ArrayList<>();
+                    //decks that the card will just be removed from
+                    List<Deck> decksToRemoveFrom = new ArrayList<>();
+
+                    //populating lists
+                    for (Deck curr : decks) {
+                        if (curr.getCards().size() <= CreateEditDeleteDeckActivity.MIN_CARDS)
+                            decksToDelete.add(curr);
+                        else
+                            decksToRemoveFrom.add(curr);
+                    }
+
+                    // prompt and delete card
+                    cardDeletePrompt(card, decksToDelete, decksToRemoveFrom);
+
                 }
-                card.delete();
-                populateRadioGroup();
-            } catch(ObjectInUseException e) {
-                Toast.makeText(this, "Error: card still exists in deck", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    //removes the card from any decks that it is a member of (decks that are being deleted shouldn't
+    // be in decksToRemoveFrom list)
+    public void deleteCard(Card card, List<Deck> decksToRemoveFrom){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+
+
+
+        try {
+            for (Deck curr : decksToRemoveFrom) {
+                curr.getCards().remove(card);
+                curr.commit();
+            }
+            card.delete();
+        //for some reason there is still a deck(s) that this card is a member of
+        }catch (ObjectInUseException e) {
+            Toast.makeText(this, R.string.card_in_use_error, Toast.LENGTH_SHORT).show();
+        }
+        //populate the radiogroup to reflect the change
+        populateRadioGroup();
+    }
+
+    public void deleteDecks(List<Deck> decksToDelete){
+        //deletes decks
+        for (Deck curr : decksToDelete){
+            curr.delete();
+            curr.commit();
+        }
+    }
+
+    //the message that is displayed to confirm delete card
+    // it also handle when one or more decks need to be deleted.
+    public void cardDeletePrompt(final Card card, final List<Deck> decksToDelete,
+                                  final List<Deck> decksToRemoveFrom) {
+        //building the message to be displayed
+        StringBuilder sb = new StringBuilder();
+        sb.append(getResources().getString(R.string.prompt_deleted_card));
+
+        if (decksToDelete.size() > 0) {
+            sb.append("\n");
+            sb.append(getResources().getString(R.string.deleted_decks));
+            for (int i = 0; i < decksToDelete.size(); i++){
+                sb.append(decksToDelete.get(i).getName());
+                if (i < decksToDelete.size() - 1)
+                    sb.append(", ");
             }
         }
+
+        //create the alert
+        AlertDialog.Builder builder = new AlertDialog.Builder(this).setCancelable(false);
+        builder.setMessage(sb.toString());
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            //if they want continue then go ahead and delte the decks and the card
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                //delete the decks that contain <= 2 cards
+                if (decksToDelete.size() > 0) {
+                    deleteDecks(decksToDelete);
+                }
+
+                //remove the card from the other decks and delete the card
+                deleteCard(card, decksToRemoveFrom);
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            //if not then don't do anything
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //show the alert dialog
+        builder.create().show();
     }
 }

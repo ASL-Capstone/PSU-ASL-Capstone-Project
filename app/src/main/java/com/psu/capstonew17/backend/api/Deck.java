@@ -2,16 +2,22 @@
 
 package com.psu.capstonew17.backend.api;
 
+import android.os.Parcelable;
 import java.util.List;
 
 /**
  * Public interface for mutable decks of cards.
  */
-public interface Deck {
+public interface Deck extends Parcelable {
     /**
      * Get the deck's title
      */
     String getName();
+
+    /**
+     * Get the deck's id
+     */
+    int getDeckId();
 
     /**
      * Modify the deck's title. If the new title is already being used

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Pair;
 import java.util.List;
 
+import com.psu.capstonew17.backend.api.Video;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 
 public class AslDbHelper extends SQLiteOpenHelper {
@@ -71,8 +72,15 @@ public class AslDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "asl.db";
+    public static AslDbHelper INSTANCE;
 
-    public AslDbHelper(Context context){
+    public static AslDbHelper getInstance(Context context){
+        if(INSTANCE == null){
+            INSTANCE = new AslDbHelper(context);
+        }
+        return INSTANCE;
+    }
+    private AslDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -97,6 +105,14 @@ public class AslDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DROP_CARD);
         db.execSQL(SQL_DROP_ANSWER);
         db.execSQL(SQL_DROP_RELATION);
+    }
+
+    public void clearTables(SQLiteDatabase db){
+        db.execSQL("DELETE FROM " + VideoEntry.TABLE_NAME);
+        db.execSQL("DELETE FROM " + CardEntry.TABLE_NAME);
+        db.execSQL("DELETE FROM " + DeckEntry.TABLE_NAME);
+        db.execSQL("DELETE FROM " + AnswerEntry.TABLE_NAME);
+        db.execSQL("DELETE FROM " + RelationEntry.TABLE_NAME);
     }
 
     public String buildSelectQuery(String tableName, List<String> whereConditions){

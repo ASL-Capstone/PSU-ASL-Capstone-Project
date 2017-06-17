@@ -21,12 +21,12 @@ class ExternalStatistics implements Statistics{
 
     @Override
     public List<Card> getCorrectCards() {
-        return null;
+        return this.correctCards;
     }
 
     @Override
     public List<Card> getIncorrectCards() {
-        return null;
+        return this.incorrectCards;
     }
 
     @Override
