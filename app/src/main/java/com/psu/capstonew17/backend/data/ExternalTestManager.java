@@ -37,12 +37,17 @@ public class ExternalTestManager implements TestManager{
         for(Deck deck : sources) {
             query = dbHelper.buildSelectQuery(
                     RelationEntry.TABLE_NAME,
-                    Arrays.asList(RelationEntry.COLUMN_DECK + "=" + ((ExternalDeck) deck).getDeckId())
+                    Arrays.asList(RelationEntry.COLUMN_DECK + "=" + deck.getDeckId())
             );
             Cursor cursor = db.rawQuery(query, null);
-            while(cursor.moveToNext()){
+            List<Integer> cardIds = new ArrayList<Integer>();
+            while(cursor.moveToNext()) {
                 int cardId = cursor.getInt(cursor.getColumnIndex(RelationEntry.COLUMN_CARD));
-                Card card = ExternalCardManager.INSTANCE.getCard(cardId);
+                cardIds.add(cardId);
+            }
+            cursor.close();
+            for(Integer id : cardIds){
+                Card card = ExternalCardManager.INSTANCE.getCard(id);
                 Question.Type t;
                 if(opts.questionTypes == opts.QUESTION_MULTIPLE_CHOICE){
                     t = Question.Type.MULTIPLE_CHOICE;
@@ -50,10 +55,9 @@ public class ExternalTestManager implements TestManager{
                 else{
                     t = Question.Type.TEXT_ENTRY;
                 }
-                Question q = new ExternalQuestion(card, t, ((ExternalDeck) deck).getDeckId());
+                Question q = new ExternalQuestion(card, t, deck.getDeckId());
                 questions.add(q);
             }
-            cursor.close();
         }
         if(opts.mode.equals(OrderingMode.RANDOM)){
             Collections.shuffle(questions);
@@ -62,6 +66,14 @@ public class ExternalTestManager implements TestManager{
         if(opts.count < questions.size()){
             numQuestions = opts.count;
         }
-        return new ExternalTest(questions.subList(0, numQuestions), null);
+        Statistics stats = null;
+        if(opts.recordStats){
+            stats = new ExternalStatistics(new ArrayList<Card>(), new ArrayList<Card>(), 0l);
+        }
+        ExternalTest test = new ExternalTest(questions.subList(0, numQuestions), stats);
+        for(Question q : test.getQuestions()){
+            ((ExternalQuestion) q).addToTest(test);
+        }
+        return new ExternalTest(questions.subList(0, numQuestions), stats);
     }
 }

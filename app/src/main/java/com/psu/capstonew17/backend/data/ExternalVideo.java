@@ -2,6 +2,7 @@
 
 package com.psu.capstonew17.backend.data;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.VideoView;
@@ -17,19 +18,44 @@ import java.io.RandomAccessFile;
 class ExternalVideo implements Video, EncodeableObject {
     private File videoFile;
     private int videoId;
+    private String uriPath;
+
+    private final String RAW_RESOURCE_FILE_PREFIX = "/android.resource:/";
+    private final String RAW_RESOURCE_URI_PREFIX = "android.resource://";
 
     public ExternalVideo(int videoId, File videoFile){
         this.videoId = videoId;
         this.videoFile = videoFile;
+        String path = videoFile.getAbsolutePath();
+        if(path.startsWith(RAW_RESOURCE_FILE_PREFIX)){
+            // this is a raw resource
+            path = path.substring(RAW_RESOURCE_FILE_PREFIX.length(), path.length());
+            this.uriPath = RAW_RESOURCE_URI_PREFIX.concat(path);
+        }
+        else {
+            // this is a file in storage
+            this.uriPath = null;
+        }
     }
 
+    @Override
     public int getVideoId(){
         return this.videoId;
     }
 
+    public String getVideoPath(){
+        return this.videoFile.getAbsolutePath();
+    }
+
     @Override
     public void configurePlayer(VideoView player) {
-        player.setVideoPath(videoFile.getPath());
+        if(uriPath != null){
+            Uri uri = Uri.parse(uriPath);
+            player.setVideoURI(uri);
+        }
+        else {
+            player.setVideoPath(videoFile.getPath());
+        }
     }
 
     public static Parcelable.Creator CREATOR = new Creator() {

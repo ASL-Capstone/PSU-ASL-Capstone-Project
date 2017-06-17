@@ -17,19 +17,19 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:text="Create/Edit/Delete Decks"
+        android:text="@string/button_create_edit_delete_deck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_ced_decks" />
 
     <Button
-        android:text="Receive Deck"
+        android:text="@string/button_receive_deck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_receive_deck" />
 
     <Button
-        android:text="Share Deck"
+        android:text="@string/button_share_deck"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/button_share_deck" />

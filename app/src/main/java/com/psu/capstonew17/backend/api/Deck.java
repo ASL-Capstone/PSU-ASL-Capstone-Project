@@ -15,6 +15,11 @@ public interface Deck extends Parcelable {
     String getName();
 
     /**
+     * Get the deck's id
+     */
+    int getDeckId();
+
+    /**
      * Modify the deck's title. If the new title is already being used
      * by another deck, an exception will be thrown.
      */

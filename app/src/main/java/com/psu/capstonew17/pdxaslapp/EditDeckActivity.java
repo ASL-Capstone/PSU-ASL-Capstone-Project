@@ -19,17 +19,14 @@ import com.psu.capstonew17.backend.api.ObjectAlreadyExistsException;
 import com.psu.capstonew17.backend.data.ExternalDeckManager;
 
 /**
- * Created by ichel on 4/28/2017.
  * Allows user to edit existing decks
  */
-
 public class EditDeckActivity extends BaseActivity {
     private Deck            deck;
     private List<Card>      allCards;
     private List<Card>      cardsInDeck;
     private List<ListRow>   cardStructs;
     private EditText        textBox;
-    private final String    CHECKED_DECK   = "checkedDeck";
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +39,10 @@ public class EditDeckActivity extends BaseActivity {
 
         //get the index of the selected deck to edit
         String checkedDeck = "";
-        if(getIntent().hasExtra(CHECKED_DECK)) {
+        if(getIntent().hasExtra(CreateEditDeleteDeckActivity.CHECKED_DECK)) {
             Bundle bundle = getIntent().getExtras();
             if (bundle != null) {
-                checkedDeck = bundle.getString(CHECKED_DECK);
+                checkedDeck = bundle.getString(CreateEditDeleteDeckActivity.CHECKED_DECK);
             }
         }
 
@@ -67,7 +64,7 @@ public class EditDeckActivity extends BaseActivity {
         }
 
         //set list view option, set adapter
-        ListView cardListView = (ListView)findViewById(R.id.editCardListView);
+        ListView cardListView = (ListView)findViewById(R.id.list_items);
         cardListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         CustomArrayListAdapter adapter =
                 new CustomArrayListAdapter(this, R.layout.list_row, cardStructs);
@@ -75,10 +72,12 @@ public class EditDeckActivity extends BaseActivity {
         cardListView.setItemsCanFocus(false);
     }
 
-    //TODO: constrict length of text entered in edit text
+    //The user is done editing the deck.
     public void onEditSubmitClicked(View view) {
         String deckName = textBox.getText().toString().trim();
 
+        //add all of the selected cards, if there are cards that are in the deck, but the user
+        //deselected then they need to be removed from the deck.
         for (int i = 0; i < cardStructs.size(); i++){
             Card curr = allCards.get(i);
             if (!cardsInDeck.contains(curr) && cardStructs.get(i).isChecked) {
@@ -89,6 +88,7 @@ public class EditDeckActivity extends BaseActivity {
             }
         }
 
+        //is the deck name length within a valid range?
         if (TextUtils.isEmpty(deckName)
                 || deckName.length() > CreateEditDeleteDeckActivity.MAX_STRG_LNGTH) {
             StringBuilder stringBuilder = new StringBuilder();
@@ -96,16 +96,19 @@ public class EditDeckActivity extends BaseActivity {
             stringBuilder.append(CreateEditDeleteDeckActivity.MAX_STRG_LNGTH);
             Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
 
-
+        //are there going to be enough cards in the deck?
         } else if (cardsInDeck.size() < CreateEditDeleteDeckActivity.MIN_CARDS) {
             Toast.makeText(this, R.string.deck_size_error, Toast.LENGTH_SHORT).show();
 
+        //everything looks good, we can create the deck.
         } else {
             if (!TextUtils.equals(deckName, deck.getName())) {
                 try {
-                    deck.setName(textBox.getText().toString());
+                    deck.setName(textBox.getText().toString().trim());
                     deck.commit();
                     finish();
+
+                //darn, a deck already exists with this name!
                 } catch (ObjectAlreadyExistsException e) {
                     Toast.makeText(this, R.string.deck_already_exists_error, Toast.LENGTH_SHORT).show();
                 }

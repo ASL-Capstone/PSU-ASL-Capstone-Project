@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 
 import com.psu.capstonew17.backend.api.*;
@@ -15,9 +16,7 @@ import com.psu.capstonew17.backend.api.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +29,7 @@ import java.util.UUID;
 import com.psu.capstonew17.backend.db.AslDbContract.*;
 import com.psu.capstonew17.backend.db.AslDbHelper;
 import com.psu.capstonew17.backend.video.PreprocessingPipeline;
+import com.psu.capstonew17.backend.video.StubPreprocessingPipeline;
 
 
 public class ExternalVideoManager implements VideoManager {
@@ -46,7 +46,7 @@ public class ExternalVideoManager implements VideoManager {
         return dbHelper;
     }
 
-    Video getVideo(int id){
+    public Video getVideo(int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         String query = dbHelper.buildSelectQuery(
                 VideoEntry.TABLE_NAME,
@@ -91,7 +91,7 @@ public class ExternalVideoManager implements VideoManager {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             String query = dbHelper.buildSelectQuery(
                     VideoEntry.TABLE_NAME,
-                    Arrays.asList(VideoEntry.COLUMN_SHA + "='" + sha.toString() + "'")
+                    Arrays.asList(VideoEntry.COLUMN_SHA + "='" + Base64.encodeToString(sha, Base64.DEFAULT) + "'")
             );
             Cursor cursor = db.rawQuery(query, null);
             if(cursor.moveToFirst()){
@@ -105,7 +105,7 @@ public class ExternalVideoManager implements VideoManager {
                 // create the new video
                 ContentValues values = new ContentValues();
                 values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
-                values.put(VideoEntry.COLUMN_SHA, sha.toString());
+                values.put(VideoEntry.COLUMN_SHA, Base64.encodeToString(sha, Base64.DEFAULT));
                 int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
                 video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
             }
@@ -164,7 +164,7 @@ public class ExternalVideoManager implements VideoManager {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 String query = dbHelper.buildSelectQuery(
                         VideoEntry.TABLE_NAME,
-                        Arrays.asList(VideoEntry.COLUMN_SHA + "='" + sha.toString() + "'")
+                        Arrays.asList(VideoEntry.COLUMN_SHA + "='" + Base64.encodeToString(sha, Base64.DEFAULT) + "'")
                 );
                 Video video;
                 Cursor cursor = db.rawQuery(query, null);
@@ -179,7 +179,7 @@ public class ExternalVideoManager implements VideoManager {
                     // create the new video
                     ContentValues values = new ContentValues();
                     values.put(VideoEntry.COLUMN_PATH, outFile.getAbsolutePath());
-                    values.put(VideoEntry.COLUMN_SHA, sha.toString());
+                    values.put(VideoEntry.COLUMN_SHA, Base64.encodeToString(sha, Base64.DEFAULT));
                     int videoId = (int) db.insert(VideoEntry.TABLE_NAME, null, values);
                     video = new ExternalVideo(videoId, outFile.getAbsoluteFile());
                 }

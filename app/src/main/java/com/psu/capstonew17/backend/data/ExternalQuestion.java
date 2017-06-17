@@ -24,7 +24,7 @@ class ExternalQuestion implements Question {
     private int questionId;
     private List<String> options;
     private static int OPTION_SIZE = 4;
-
+    private Test test;  // Test this question is part of
     private AslDbHelper dbHelper;
 
     public ExternalQuestion(Card card, Type type, int deckId){
@@ -38,8 +38,12 @@ class ExternalQuestion implements Question {
         this.questionId = id;
     }
 
+    public void addToTest(Test test){
+        this.test = test;
+    }
+
     public int getCardId(){
-        return ((ExternalCard) this.card).getId();
+        return this.card.getCardId();
     }
 
     public int getDeckId(){
@@ -73,12 +77,22 @@ class ExternalQuestion implements Question {
             }
             if(answers.size() < OPTION_SIZE){
                 this.options.addAll(answers);
+                Collections.shuffle(this.options);
                 return this.options;
             }
             this.options.add(this.card.getAnswer());
-            while(this.options.size() < OPTION_SIZE){
+            int optionsTried = 0;
+            while(this.options.size() < OPTION_SIZE && optionsTried <= answers.size()){
                 String option = answers.get(random.nextInt(answers.size()));
                 if(!this.options.contains(option)){
+                    this.options.add(option);
+                }
+                optionsTried += 1;
+            }
+            if(this.options.size() < OPTION_SIZE){
+                // edge case: we have 4 or more different cards with the same answer
+                while(this.options.size() < OPTION_SIZE){
+                    String option = answers.get(random.nextInt(answers.size()));
                     this.options.add(option);
                 }
             }
@@ -91,7 +105,9 @@ class ExternalQuestion implements Question {
     @Override
     public Pair<Boolean, String> answer(String answer) {
         Boolean correct = false;
-        if(answer.equals(this.card.getAnswer())){
+        String correctAnswer = this.card.getAnswer().replaceAll("[^a-zA-Z0-9\\s]", "");
+        String strippedAnswer = answer.replaceAll("[^a-zA-Z0-9\\s]", "");
+        if(strippedAnswer.equalsIgnoreCase(correctAnswer)){
             correct = true;
         }
         dbHelper = ExternalTestManager.INSTANCE.getDbHelper();
@@ -103,6 +119,18 @@ class ExternalQuestion implements Question {
                 AnswerEntry.TABLE_NAME, values,
                 AnswerEntry.COLUMN_ID + "=" + this.questionId, null
         );
+        Statistics stats = null;
+        if(this.test != null){
+            stats = this.test.getStats();
+        }
+        if(stats != null){
+            if(correct){
+                stats.getCorrectCards().add(this.card);
+            }
+            else{
+                stats.getIncorrectCards().add(this.card);
+            }
+        }
         return new Pair<Boolean, String>(correct, this.card.getAnswer());
     }
 }

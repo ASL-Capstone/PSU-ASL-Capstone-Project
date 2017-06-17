@@ -3,6 +3,7 @@
 package com.psu.capstonew17.backend.video;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.media.Image;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
@@ -26,12 +27,12 @@ import java.nio.ByteBuffer;
  * A pipeline of video processing steps, associated with a frame source and output file.
  */
 public class PreprocessingPipeline {
-    private File output;
-    private Uri input;
-    private VideoManager.ImportOptions options;
-    private Context ctx;
+    protected File output;
+    protected Uri input;
+    protected VideoManager.ImportOptions options;
+    protected Context ctx;
 
-    private PreprocessingListener listener = null;
+    protected PreprocessingListener listener = null;
 
     public interface PreprocessingListener {
         void onCompleted();
@@ -70,9 +71,9 @@ public class PreprocessingPipeline {
             int srcWidth, srcHeight;
             int videoTrack = -1;
             extractor = new MediaExtractor();
+            MediaFormat trackFmt = null;
             try {
                 extractor.setDataSource(ctx, in, null);
-                MediaFormat trackFmt = null;
                 for (int i = 0; i < extractor.getTrackCount(); i++) {
                     trackFmt = extractor.getTrackFormat(i);
                     if (trackFmt.getString(MediaFormat.KEY_MIME).startsWith("video")) {
@@ -82,16 +83,21 @@ public class PreprocessingPipeline {
                     }
                 }
                 if (videoTrack == -1) throw new RuntimeException("No video tracks available");
-                srcWidth = trackFmt.getInteger(MediaFormat.KEY_WIDTH);
-                srcHeight = trackFmt.getInteger(MediaFormat.KEY_HEIGHT);
                 decoder = MediaCodec.createDecoderByType(trackFmt.getString(MediaFormat.KEY_MIME));
                 inputFormat = trackFmt;
             } catch(IOException e) {
                 cancel(false);
                 return null;
             }
+            srcWidth = trackFmt.getInteger(MediaFormat.KEY_WIDTH);
+            srcHeight = trackFmt.getInteger(MediaFormat.KEY_HEIGHT);
 
+            // try to figure out what orientation the source video uses
+            int rotation = 0;
+            if(trackFmt.containsKey(MediaFormat.KEY_ROTATION))
+                rotation = trackFmt.getInteger(MediaFormat.KEY_ROTATION);
 
+            /*
             // prime the decoder
             long maxTime = inputFormat.getLong(MediaFormat.KEY_DURATION);
             {
@@ -111,10 +117,15 @@ public class PreprocessingPipeline {
                     decoder.queueInputBuffer(inIdx, 0, length, -1, 0);
                 }
                 inputFormat = decoder.getOutputFormat();
+                //srcWidth = inputFormat.getInteger(MediaFormat.KEY_WIDTH);
+                //srcHeight = inputFormat.getInteger(MediaFormat.KEY_HEIGHT);
             }
+            */
 
             // figure out target width/height and format
             //int tgtWidth = srcWidth/2, tgtHeight = srcHeight/2;
+            MediaFormat outFormat = trackFmt;
+            /*
             int tgtWidth = srcWidth, tgtHeight = srcHeight; // TODO: Resizing
             MediaFormat outFormat = MediaFormat.createVideoFormat("video/x-vnd.on2.vp8", tgtWidth, tgtHeight);
             outFormat.setInteger(MediaFormat.KEY_BIT_RATE, 20*1024*1024); // 20 Mbps
@@ -127,10 +138,25 @@ public class PreprocessingPipeline {
                 outFormat.setInteger(MediaFormat.KEY_CAPTURE_RATE, 60);
             }
             outFormat.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, 60);
+            */
 
             // set up a muxer
             MediaMuxer muxer;
             int videoTrackIdx;
+            try {
+                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
+                videoTrackIdx = muxer.addTrack(outFormat);
+            } catch(IOException e) {
+                Log.e("VPreproc", "Muxer I/O error", e);
+                cancel(false);
+                return null;
+            }
+            muxer.setOrientationHint(rotation); // configure output orientation
+            Void res = doStreamCopy(extractor, videoTrackIdx, muxer);
+            extractor.release();
+            return res;
+
+            /*
             MediaCodec encoder;
             try {
                 String cname = new MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(outFormat);
@@ -145,12 +171,9 @@ public class PreprocessingPipeline {
                 }
                 encoder = MediaCodec.createByCodecName(cname);
                 encoder.configure(outFormat, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
-                muxer = new MediaMuxer(out.getPath(), MediaMuxer.OutputFormat.MUXER_OUTPUT_WEBM);
-                videoTrackIdx = muxer.addTrack(outFormat);
             } catch(IOException e) {
-                Log.e("VPreproc", "Decoder I/O error", e);
-                cancel(false);
-                return null;
+                Log.e("VPreproc", "Codec error - falling back to copy", e);
+                return doStreamCopy(extractor, videoTrackIdx, muxer);
             }
 
             // TODO: Prep the KNN algorithm here
@@ -211,12 +234,14 @@ public class PreprocessingPipeline {
 
                     // copy the image into the encoder buffer
                     Image encImg = encoder.getInputImage(inIdx);
-                    encImg.getPlanes()[0].getBuffer().put(img.getPlanes()[0].getBuffer());
-                    encImg.getPlanes()[1].getBuffer().put(img.getPlanes()[1].getBuffer());
-                    encImg.getPlanes()[2].getBuffer().put(img.getPlanes()[2].getBuffer());
+                    ImageUtil.blit(img, img.getCropRect(), encImg, encImg.getCropRect());
                     encImg.setTimestamp(img.getTimestamp());
 
-                    encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
+                    try {
+                        encoder.queueInputBuffer(inIdx, 0, bufInfo.size, -1, 0);
+                    } catch(IllegalArgumentException e) {
+                        Log.e("VPreproc", "Queue input error", e);
+                    }
                     decoder.releaseOutputBuffer(outIdx, false);
                 } else if(outIdx >= 0) {
                     Log.d("VPreproc", "Autorelease");
@@ -253,6 +278,31 @@ public class PreprocessingPipeline {
             decoder.stop();
 
             Log.d("VPreproc", "All done!");
+            return null;
+            */
+        }
+
+        private Void doStreamCopy(MediaExtractor extract, int strmIdx, MediaMuxer muxer) {
+            MediaCodec.BufferInfo bufInfo = new MediaCodec.BufferInfo();
+            ByteBuffer buf = ByteBuffer.allocate(8192*1024); // transfer in 8K units
+            muxer.start();
+            while(true) {
+                // try to provide input to the muxer
+                int length = extract.readSampleData(buf, 0);
+                if(length == -1) break;
+                bufInfo.presentationTimeUs = extract.getSampleTime();
+                bufInfo.offset = 0;
+                bufInfo.size = length;
+                bufInfo.flags = extract.getSampleFlags();
+                /*
+                if((bufInfo.presentationTimeUs/1000 >= options.startTime) &&
+                        (bufInfo.presentationTimeUs/1000 <= options.endTime))
+                    */
+                    muxer.writeSampleData(strmIdx, buf, bufInfo);
+                extract.advance();
+            }
+            muxer.stop();
+            muxer.release();
             return null;
         }
 

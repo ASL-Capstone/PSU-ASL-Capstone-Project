@@ -46,6 +46,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
             // if qrcode has nothing in it
             if (scanResult.getContents() == null) {
                 Toast.makeText(this, "Result Not Found", Toast.LENGTH_SHORT).show();
+            // get qr code, handle receive dekc
             } else {
                 textView.setText("Scan Successful");
 
@@ -83,7 +84,7 @@ public class ReceiveDeckActivity extends BaseActivity implements View.OnClickLis
         Intent intent;
 
         switch (view.getId()) {
-            //
+            // start scanning process
             case R.id.buttonScanQR:
                 qrScan.initiateScan();
                 break;

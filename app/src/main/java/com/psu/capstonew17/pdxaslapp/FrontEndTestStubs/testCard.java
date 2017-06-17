@@ -19,6 +19,11 @@ public class testCard implements Card {
     protected String a;
 
     @Override
+    public int getCardId() {
+        return 0;
+    }
+
+    @Override
     public Video getVideo() {
         return this.v;
     }
